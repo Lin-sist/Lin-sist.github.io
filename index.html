@@ -145,7 +145,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/25/HELLO-WORLD-0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -159,7 +159,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/06/25/HELLO-WORLD-0/" class="post-title-link" itemprop="url">HELLO WORLD</a>
+            <a href="/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">关于Java连接MySQL数据库</a>
         </h2>
 
         <div class="post-meta">
@@ -171,6 +171,13 @@
 
               <time title="Created: 2025-06-25 19:01:01" itemprop="dateCreated datePublished" datetime="2025-06-25T19:01:01+08:00">2025-06-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-06-27 16:02:42" itemprop="dateModified" datetime="2025-06-27T16:02:42+08:00">2025-06-27</time>
+              </span>
 
           
 
@@ -183,7 +190,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="JDBC连接一般流程"><a href="#JDBC连接一般流程" class="headerlink" title="JDBC连接一般流程"></a>JDBC连接一般流程</h1><p>1.<strong>加载&#x2F;注册驱动</strong>（<code>DriverManager</code>负责）<br>2.<strong>获取连接</strong>（<code>DriverManager</code>的<code>getConnection</code>方法返回<code>Connection</code>对象）<br>3.<strong>创建Statement&#x2F;PrepareStatement</strong>(<code>Connection</code>对象的方法)<br>4.<strong>执行SQL语句</strong>（<code>Statement</code>或<code>PreparedStatement</code>对象的方法）<br>5.<strong>处理结果集</strong>（如果SQL语句返回结果）<br>6.<strong>关闭资源</strong>（按照<code>ResultSet</code> -&gt; <code>Statement</code> -&gt; <code>Connection</code> 的顺序关闭，确保资源释放，通常在<code>finally</code>块完成）<br>7.<strong>处理异常</strong>（<code>SQLException</code>用于捕获和处理上述过程中可能出现的任何数据库相关的错误）</p>
+<h1 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h1><pre><code>package com.linsist;
+
+import java.sql.*;
+
+public class MyTest &#123;
+  public static void main(String[] args) &#123;
+    String url = &quot;jdbc:mysql://localhost:3306/test&quot;;
+    String user = &quot;root&quot;;
+    String password = &quot;123456&quot;;
+
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(&quot;SELECT * FROM mess&quot;)) &#123;
+
+        while (rs.next()) &#123;
+            String number = rs.getString(&quot;number&quot;);
+            String name = rs.getString(&quot;name&quot;);
+            Date birthday = rs.getDate(&quot;birthday&quot;);
+            double height = rs.getDouble(&quot;height&quot;);
+
+            System.out.println(number + &quot; - &quot; + name + &quot; - &quot; + birthday + &quot; - &quot; + height);
+        &#125;
+
+        &#125; catch (SQLException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
       
     </div>
 
@@ -338,6 +375,10 @@
           <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
       </div>
   </nav>
 </div>

@@ -20,15 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/index.html">
+  <meta name="description" content="JDBC连接一般流程1.加载&#x2F;注册驱动（DriverManager负责）2.获取连接（DriverManager的getConnection方法返回Connection对象）3.创建Statement&#x2F;PrepareStatement(Connection对象的方法)4.执行SQL语句（Statement或PreparedStatement对象的方法）5.处理结果集（如果SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Java连接MySQL数据库">
+<meta property="og:url" content="http://example.com/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="JDBC连接一般流程1.加载&#x2F;注册驱动（DriverManager负责）2.获取连接（DriverManager的getConnection方法返回Connection对象）3.创建Statement&#x2F;PrepareStatement(Connection对象的方法)4.执行SQL语句（Statement或PreparedStatement对象的方法）5.处理结果集（如果SQL">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-25T11:01:01.000Z">
+<meta property="article:modified_time" content="2025-06-27T08:02:42.016Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/archives/">
+<link rel="canonical" href="http://example.com/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/">
 
 
 <script id="page-configurations">
@@ -36,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Hexo</title>
+  <title>关于Java连接MySQL数据库 | Hexo</title>
   
 
 
@@ -139,70 +145,116 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 2 posts in total. Keep on posting.</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于Java连接MySQL数据库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-06-25 19:01:01" itemprop="dateCreated datePublished" datetime="2025-06-25T19:01:01+08:00">2025-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-06-27 16:02:42" itemprop="dateModified" datetime="2025-06-27T16:02:42+08:00">2025-06-27</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2025</span>
-    </div>
+        <h1 id="JDBC连接一般流程"><a href="#JDBC连接一般流程" class="headerlink" title="JDBC连接一般流程"></a>JDBC连接一般流程</h1><p>1.<strong>加载&#x2F;注册驱动</strong>（<code>DriverManager</code>负责）<br>2.<strong>获取连接</strong>（<code>DriverManager</code>的<code>getConnection</code>方法返回<code>Connection</code>对象）<br>3.<strong>创建Statement&#x2F;PrepareStatement</strong>(<code>Connection</code>对象的方法)<br>4.<strong>执行SQL语句</strong>（<code>Statement</code>或<code>PreparedStatement</code>对象的方法）<br>5.<strong>处理结果集</strong>（如果SQL语句返回结果）<br>6.<strong>关闭资源</strong>（按照<code>ResultSet</code> -&gt; <code>Statement</code> -&gt; <code>Connection</code> 的顺序关闭，确保资源释放，通常在<code>finally</code>块完成）<br>7.<strong>处理异常</strong>（<code>SQLException</code>用于捕获和处理上述过程中可能出现的任何数据库相关的错误）</p>
+<h1 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h1><pre><code>package com.linsist;
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+import java.sql.*;
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2025-06-25T19:01:01+08:00"
-              content="2025-06-25">
-          06-25
-        </time>
-      </div>
+public class MyTest &#123;
+  public static void main(String[] args) &#123;
+    String url = &quot;jdbc:mysql://localhost:3306/test&quot;;
+    String user = &quot;root&quot;;
+    String password = &quot;123456&quot;;
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/06/25/JDBC%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url">
-            <span itemprop="name">关于Java连接MySQL数据库</span>
-          </a>
-      </div>
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(&quot;SELECT * FROM mess&quot;)) &#123;
 
-    </header>
-  </article>
+        while (rs.next()) &#123;
+            String number = rs.getString(&quot;number&quot;);
+            String name = rs.getString(&quot;name&quot;);
+            Date birthday = rs.getDate(&quot;birthday&quot;);
+            double height = rs.getDouble(&quot;height&quot;);
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+            System.out.println(number + &quot; - &quot; + name + &quot; - &quot; + birthday + &quot; - &quot; + height);
+        &#125;
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2025-06-25T18:34:48+08:00"
-              content="2025-06-25">
-          06-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/06/25/hello-world/" itemprop="url">
-            <span itemprop="name">Hello World</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        &#125; catch (SQLException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/25/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
@@ -255,6 +307,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JDBC%E8%BF%9E%E6%8E%A5%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">JDBC连接一般流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%B1%95%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">代码展示</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
