@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Day03-05到09 《新增菜品》 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🎥 dayXX-XX 模块名称🧩 本节概述 一句话总结： 通过编写三个接口及相关方法，实现对菜品的添加上传和更新。  主要内容关键词：阿里云OSS  🧠 模块目标 菜品名称唯一 菜品必须属于某个分类下，不能单独存在 新增菜品可根据情况选择口味 每个菜品必须对应一张图片（测试时未成功，是否和阿里云OSS配置文件内容有关？）   🧰 关键技术 &#x2F; 类   类型 名称 说明    控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Day03-05到09 《新增菜品》">
+<meta property="og:url" content="https://lin-sist.github.io/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/index.html">
+<meta property="og:site_name" content="Lin说">
+<meta property="og:description" content="🎥 dayXX-XX 模块名称🧩 本节概述 一句话总结： 通过编写三个接口及相关方法，实现对菜品的添加上传和更新。  主要内容关键词：阿里云OSS  🧠 模块目标 菜品名称唯一 菜品必须属于某个分类下，不能单独存在 新增菜品可根据情况选择口味 每个菜品必须对应一张图片（测试时未成功，是否和阿里云OSS配置文件内容有关？）   🧰 关键技术 &#x2F; 类   类型 名称 说明    控制">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
+<meta property="article:published_time" content="2025-12-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-02T09:23:42.278Z">
+<meta property="article:author" content="Lin">
+<meta property="article:tag" content="一刷苍穹外卖">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Day03-05到09 《新增菜品》",
+  "url": "https://lin-sist.github.io/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/",
+  "image": "https://lin-sist.github.io/img/Lin.jpg",
+  "datePublished": "2025-12-01T16:00:00.000Z",
+  "dateModified": "2025-12-02T09:23:42.278Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lin",
+      "url": "https://Lin-sist.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Day03-05到09 《新增菜品》',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">Day03-05到09 《新增菜品》</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Day03-05到09 《新增菜品》</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-01T16:00:00.000Z" title="发表于 2025-12-02 00:00:00">2025-12-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-02T09:23:42.278Z" title="更新于 2025-12-02 17:23:42">2025-12-02</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="🎥-dayXX-XX-模块名称"><a href="#🎥-dayXX-XX-模块名称" class="headerlink" title="🎥 dayXX-XX 模块名称"></a>🎥 dayXX-XX 模块名称</h2><h3 id="🧩-本节概述"><a href="#🧩-本节概述" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h3><blockquote>
+<p><strong>一句话总结</strong>： 通过编写三个接口及相关方法，实现对菜品的添加上传和更新。</p>
+</blockquote>
+<p><strong>主要内容关键词</strong>：<code>阿里云OSS</code></p>
+<hr>
+<h3 id="🧠-模块目标"><a href="#🧠-模块目标" class="headerlink" title="🧠 模块目标"></a>🧠 模块目标</h3><ul>
+<li>菜品名称唯一</li>
+<li>菜品必须属于某个分类下，不能单独存在</li>
+<li>新增菜品可根据情况选择口味</li>
+<li>每个菜品必须对应一张图片（测试时未成功，是否和阿里云OSS配置文件内容有关？）</li>
+</ul>
+<hr>
+<h3 id="🧰-关键技术-类"><a href="#🧰-关键技术-类" class="headerlink" title="🧰 关键技术 &#x2F; 类"></a>🧰 关键技术 &#x2F; 类</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>控制层</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>业务层</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>工具类</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>技术栈</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>根据类型查询分类接口（已完成）</li>
+<li>文件上传接口</li>
+<li>新增菜品接口</li>
+</ul>
+<hr>
+<h3 id="🔄-实现流程"><a href="#🔄-实现流程" class="headerlink" title="🔄 实现流程"></a>🔄 实现流程</h3><ol>
+<li>配置AliOSS文件上传需要的信息</li>
+<li>创建配置类OssConfiguration，用于创建AliOssUtil对象</li>
+<li>编写CommonController类中文件上传方法</li>
+<li>编写DishController类中菜品管理方法，创建DishService接口和DishServiceIml实现类</li>
+<li>编写并调用DishMapper的方法，需要先配置DishMapper.xml文件</li>
+<li>定义DishFlavorMapper接口，操作口味表数据，同样需配置xml文件</li>
+</ol>
+<hr>
+<h3 id="📘-学到的知识"><a href="#📘-学到的知识" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h3><ul>
+<li>阿里云OSS：</li>
+<li></li>
+</ul>
+<hr>
+<h3 id="🗂️-关联文件"><a href="#🗂️-关联文件" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">sky-server/src/main/java/com/sky/controller/admin/CommonController.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/resources/application.yml</span><br><span class="line"></span><br><span class="line">sky-common/src/main/java/com/sky/properties/AliOssProperties.java</span><br><span class="line"></span><br><span class="line">sky-common/src/main/java/com/sky/utils/AliOssUtil.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/java/com/sky/config/OssConfiguration.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/java/com/sky/controller/admin/DishController.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/java/com/sky/service/DishService.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/java/com/sky/service/impl/DishServiceImpl.java</span><br><span class="line"></span><br><span class="line">sky-server/src/main/java/com/sky/mapper/DishFlavorMapper.java</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🏁-一句话复盘"><a href="#🏁-一句话复盘" class="headerlink" title="🏁 一句话复盘"></a>🏁 一句话复盘</h3><blockquote>
+</blockquote>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/">https://lin-sist.github.io/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%B8%80%E5%88%B7%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/">一刷苍穹外卖</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/01/%E5%A4%A7%E4%BA%8C%E4%B8%8A12%E6%9C%88%E8%A7%84%E5%88%92/" title="大二上12月规划"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">大二上12月规划</div></div><div class="info-2"><div class="info-item-1">前言 请假两星期，11月任务未完成； 代码随想录贪心算法差8题 《苍穹外卖》只看到day03 八股推进慢  1. 十二月目标 完成代码随想录：刷完动态规划，单调栈，图论。完成代码随想录一刷 《苍穹外卖》一刷：了解整体框架印象，完成一个模块就写博客记录。完成苍穹外卖一刷 《苍穹外卖》二刷：每次只写一个模块，重写过程中思考代码中核心的部分是那个，理解其作用，写在博客里面。 八股文与简历补充：每周星期天整理一周八股文笔记。  2. 12月1日~12月7日 任务清单 []代码随想录：完成贪心算法，完成动态规划26题； []完成苍穹外卖day03共18集； []数据库项目作业，完成数据库部分  2025-12-01  代码随想录：贪心算法7题，  苍穹外卖：苍穹外卖day03-01~04(补)  复盘并写博客 30 分钟(补)  2025-12-02 [] 代码随想录：动态规划5题 [] docker镜像设置，部署deepwiki  苍穹外卖：苍穹外卖day03-05~09 [] 外卖难点复盘并写博客 30 分钟  2025-12-03  代码随想录：动态规划5题  苍穹外卖：苍穹外卖da...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/02/Day02-10%E5%88%B011/" title="Day03-01到04 《公共字段自动填充》"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="info-item-2">Day03-01到04 《公共字段自动填充》</div></div><div class="info-2"><div class="info-item-1">🎥 公共字段自动填充🧩 本节概述 一句话总结：    主要内容关键词：枚举，注解，反射，AOP  🧠 模块目标  在业务表里面，有很多诸如创建时间，修改人等公共字段需要去赋值；在维护这些字段时会有很多重复代码，  若后面表的结构发生变化，这些赋值语句也需要重新更改，自动填充可以处理这个问题。  🧰 关键技术 &#x2F; 类   类型 名称 说明    控制层     业务层     工具类     技术栈 mybaties     🔄 实现流程 自定义注解AutoFill，用于标识需要公共字段自动填充的方法。 自定义切面类AutoFillspect，统一拦截加入了AutoFill的方法，通过反射为公共字段赋值。 在Mapper的方法上加入AutoFill注解.   📘 学到的知识 注解：Java里的特殊标记，比如 @Override和 @Test ,目标是 让其他程序根据注解信息来决定怎么执行；  自定义注解：注解本质是一个继承annotation的接口，属性本质是抽象方法； 12345public @interface 注解名称 &#123;    String ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%A5-dayXX-XX-%E6%A8%A1%E5%9D%97%E5%90%8D%E7%A7%B0"><span class="toc-number">1.</span> <span class="toc-text">🎥 dayXX-XX 模块名称</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">🧩 本节概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A0-%E6%A8%A1%E5%9D%97%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">🧠 模块目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%B0-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF-%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">🧰 关键技术 &#x2F; 类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">🔄 实现流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="toc-number">1.5.</span> <span class="toc-text">📘 学到的知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">🗂️ 关联文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%81-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%A4%8D%E7%9B%98"><span class="toc-number">1.7.</span> <span class="toc-text">🏁 一句话复盘</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/02/Day03-05%E5%88%B009-%E3%80%8A%E6%96%B0%E5%A2%9E%E8%8F%9C%E5%93%81%E3%80%8B/" title="Day03-05到09 《新增菜品》">Day03-05到09 《新增菜品》</a><time datetime="2025-12-01T16:00:00.000Z" title="发表于 2025-12-02 00:00:00">2025-12-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/01/%E5%A4%A7%E4%BA%8C%E4%B8%8A12%E6%9C%88%E8%A7%84%E5%88%92/" title="大二上12月规划">大二上12月规划</a><time datetime="2025-12-01T01:00:00.000Z" title="发表于 2025-12-01 09:00:00">2025-12-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/30/%E5%A4%A7%E4%BA%8C%E4%B8%8A1%E6%9C%88%E8%A7%84%E5%88%92/" title="无标题">无标题</a><time datetime="2025-11-30T11:32:04.612Z" title="发表于 2025-11-30 19:32:04">2025-11-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/02/Day02-10%E5%88%B011/" title="Day03-01到04 《公共字段自动填充》">Day03-01到04 《公共字段自动填充》</a><time datetime="2025-11-02T07:04:28.148Z" title="发表于 2025-11-02 15:04:28">2025-11-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/02/%E5%A4%A7%E4%BA%8C%E4%B8%8A11%E6%9C%88%E8%A7%84%E5%88%92/" title="大二上11月规划"><img src="/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-11-27%20134900.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大二上11月规划"/></a><div class="content"><a class="title" href="/2025/11/02/%E5%A4%A7%E4%BA%8C%E4%B8%8A11%E6%9C%88%E8%A7%84%E5%88%92/" title="大二上11月规划">大二上11月规划</a><time datetime="2025-11-02T01:00:00.000Z" title="发表于 2025-11-02 09:00:00">2025-11-02</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
+  window.ChatraID = ''
+  window.Chatra = window.Chatra || function() {
+    (window.Chatra.q = window.Chatra.q || []).push(arguments)
+  }
+
+  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
+    const isChatBtn = false
+    const isChatHideShow = false
+
+    if (isChatBtn) {
+      const close = () => {
+        Chatra('minimizeWidget')
+        Chatra('hide')
+      }
+
+      const open = () => {
+        Chatra('openChat', true)
+        Chatra('show')
+      }
+
+      window.ChatraSetup = { startHidden: true }
+    
+      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
+
+      document.getElementById('chat-btn').style.display = 'block'
+    } else if (isChatHideShow) {
+      window.chatBtn = {
+        hide: () => Chatra('hide'),
+        show: () => Chatra('show')
+      }
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
