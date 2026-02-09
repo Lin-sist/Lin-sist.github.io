@@ -5,5 +5,6 @@
   "defaultViewMode": "preview",
   "spellcheck": false,
   "rightToLeft": false,
-  "readableLineLength": false
+  "readableLineLength": false,
+  "alwaysUpdateLinks": true
 }
