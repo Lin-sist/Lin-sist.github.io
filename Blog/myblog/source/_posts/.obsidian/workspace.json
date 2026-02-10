@@ -4,11 +4,26 @@
     "type": "split",
     "children": [
       {
-        "id": "a6932ed36b633047",
+        "id": "328d462304259598",
         "type": "tabs",
         "children": [
           {
-            "id": "d4ea7ce5d9f6464e",
+            "id": "ae2a51e99ac6df41",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "大二下2月规划.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大二下2月规划 的大纲"
+            }
+          },
+          {
+            "id": "364fecb459b3eadc",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -31,7 +46,8 @@
               "title": "大二下2月规划"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -194,16 +210,17 @@
       "bases:新建数据库": false
     }
   },
-  "active": "d4ea7ce5d9f6464e",
+  "active": "364fecb459b3eadc",
   "lastOpenFiles": [
+    "Day07-01到12《缓存功能》.md",
+    "spring核心注解.md",
+    "Day07总结.md",
+    "大二下2月规划.md",
     "Day08-12到18《订单支付》.md",
     "Day08-01到11《用户下单》.md",
-    "Day07总结.md",
     "Day07-13到19《购物车功能》.md",
-    "Day07-01到12《缓存功能》.md",
     "Day03《修改菜品》.md",
     "Day03-10到14《菜品查询和删除菜品》.md",
-    "大二下2月规划.md",
     "Day03-15到18-《修改菜品》.md",
     "大二上1月规划.md",
     "大二上12月规划.md",
@@ -219,7 +236,6 @@
     "《校园快递管理系统》项目.md",
     "《苍穹外卖》解决微信登录模块.md",
     "《苍穹外卖》登录模块.md",
-    "spring核心注解.md",
     "home/lin/HexoBlog/Blog/myblog/source/_posts/spring核心注解.md",
     "home/lin/HexoBlog/Blog/myblog/source/_posts",
     "home/lin/HexoBlog/Blog/myblog/source",
