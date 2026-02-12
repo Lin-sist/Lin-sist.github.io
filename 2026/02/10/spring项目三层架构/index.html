@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>《苍穹外卖》概述 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、SpringBoot项目的典型结构 《苍穹外卖》概述  1. Maven多模块划分（当前项目结构）1234sky-take-out (父工程)├── sky-common   (公共模块：工具类、常量、异常等)├── sky-pojo     (实体类模块：Entity、DTO、VO)└── sky-server   (核心业务模块：Controller、Service、Mapper)  为什">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《苍穹外卖》概述">
+<meta property="og:url" content="https://lin-sist.github.io/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="Lin说">
+<meta property="og:description" content="一、SpringBoot项目的典型结构 《苍穹外卖》概述  1. Maven多模块划分（当前项目结构）1234sky-take-out (父工程)├── sky-common   (公共模块：工具类、常量、异常等)├── sky-pojo     (实体类模块：Entity、DTO、VO)└── sky-server   (核心业务模块：Controller、Service、Mapper)  为什">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
+<meta property="article:published_time" content="2026-02-10T14:43:47.255Z">
+<meta property="article:modified_time" content="2026-02-10T14:43:47.255Z">
+<meta property="article:author" content="Lin">
+<meta property="article:tag" content="苍穹外卖">
+<meta property="article:tag" content="spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "《苍穹外卖》概述",
+  "url": "https://lin-sist.github.io/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/",
+  "image": "https://lin-sist.github.io/img/Lin.jpg",
+  "datePublished": "2026-02-10T14:43:47.255Z",
+  "dateModified": "2026-02-10T14:43:47.255Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lin",
+      "url": "https://Lin-sist.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《苍穹外卖》概述',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">《苍穹外卖》概述</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">《苍穹外卖》概述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-10T14:43:47.255Z" title="发表于 2026-02-10 22:43:47">2026-02-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-10T14:43:47.255Z" title="更新于 2026-02-10 22:43:47">2026-02-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="一、SpringBoot项目的典型结构"><a href="#一、SpringBoot项目的典型结构" class="headerlink" title="一、SpringBoot项目的典型结构"></a>一、SpringBoot项目的典型结构</h2><ul>
+<li><a href="%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E6%A6%82%E8%BF%B0">《苍穹外卖》概述</a></li>
+</ul>
+<h3 id="1-Maven多模块划分（当前项目结构）"><a href="#1-Maven多模块划分（当前项目结构）" class="headerlink" title="1. Maven多模块划分（当前项目结构）"></a>1. <strong>Maven多模块划分</strong>（当前项目结构）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sky-take-out (父工程)</span><br><span class="line">├── sky-common   (公共模块：工具类、常量、异常等)</span><br><span class="line">├── sky-pojo     (实体类模块：Entity、DTO、VO)</span><br><span class="line">└── sky-server   (核心业务模块：Controller、Service、Mapper)</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么这样划分？</strong></p>
+<ul>
+<li><strong>解耦</strong>：各模块职责单一，common和pojo可以被多个服务复用</li>
+<li><strong>协作</strong>：多人开发时可以各自负责不同模块，减少代码冲突</li>
+<li><strong>演进</strong>：未来如果要拆分成微服务，改造成本低</li>
+</ul>
+<hr>
+<h3 id="2-核心业务模块（sky-server）的分层结构"><a href="#2-核心业务模块（sky-server）的分层结构" class="headerlink" title="2. 核心业务模块（sky-server）的分层结构"></a>2. <strong>核心业务模块（sky-server）的分层结构</strong></h3><p>让我画个图说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    A[用户请求] --&gt; B[Controller层&lt;br/&gt;接收请求、参数校验]</span><br><span class="line">    B --&gt; C[Service层&lt;br/&gt;业务逻辑处理]</span><br><span class="line">    C --&gt; D[Mapper层&lt;br/&gt;数据库操作]</span><br><span class="line">    D --&gt; E[(MySQL数据库)]</span><br><span class="line">    </span><br><span class="line">    C -.缓存查询.-&gt; F[(Redis)]</span><br><span class="line">    </span><br><span class="line">    style B fill:#e1f5ff</span><br><span class="line">    style C fill:#fff4e1</span><br><span class="line">    style D fill:#ffe1e1</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、为什么要分三层架构？"><a href="#二、为什么要分三层架构？" class="headerlink" title="二、为什么要分三层架构？"></a>二、为什么要分三层架构？</h2><h3 id="核心原因：职责分离（Single-Responsibility）"><a href="#核心原因：职责分离（Single-Responsibility）" class="headerlink" title="核心原因：职责分离（Single Responsibility）"></a><strong>核心原因：职责分离（Single Responsibility）</strong></h3><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>职责</th>
+<th>举例（员工登录）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Controller</strong></td>
+<td>接收HTTP请求、返回HTTP响应</td>
+<td>接收POST <code>/admin/employee/login</code>，返回JWT token</td>
+</tr>
+<tr>
+<td><strong>Service</strong></td>
+<td>业务逻辑处理、事务管理</td>
+<td>校验密码、生成token、记录登录日志</td>
+</tr>
+<tr>
+<td><strong>Mapper</strong></td>
+<td>数据访问、SQL执行</td>
+<td><code>SELECT * FROM employee WHERE username = ?</code></td>
+</tr>
+</tbody></table>
+<h3 id="实际业务流程示例（员工登录）"><a href="#实际业务流程示例（员工登录）" class="headerlink" title="实际业务流程示例（员工登录）"></a><strong>实际业务流程示例</strong>（员工登录）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 前端</span><br><span class="line">    participant Controller</span><br><span class="line">    participant Service</span><br><span class="line">    participant Mapper</span><br><span class="line">    participant DB</span><br><span class="line">    </span><br><span class="line">    前端-&gt;&gt;Controller: POST /login &#123;username, password&#125;</span><br><span class="line">    Controller-&gt;&gt;Controller: 参数校验(@Valid)</span><br><span class="line">    Controller-&gt;&gt;Service: employeeService.login(dto)</span><br><span class="line">    Service-&gt;&gt;Mapper: employeeMapper.getByUsername(username)</span><br><span class="line">    Mapper-&gt;&gt;DB: SELECT * FROM employee</span><br><span class="line">    DB--&gt;&gt;Mapper: Employee对象</span><br><span class="line">    Mapper--&gt;&gt;Service: Employee对象</span><br><span class="line">    Service-&gt;&gt;Service: 密码MD5比对</span><br><span class="line">    Service-&gt;&gt;Service: 生成JWT token</span><br><span class="line">    Service--&gt;&gt;Controller: Employee对象</span><br><span class="line">    Controller-&gt;&gt;Controller: 封装Result对象</span><br><span class="line">    Controller--&gt;&gt;前端: &#123;code:1, data:&#123;token:&quot;xxx&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、三层架构的深层优势"><a href="#三、三层架构的深层优势" class="headerlink" title="三、三层架构的深层优势"></a>三、三层架构的深层优势</h2><h3 id="1-可维护性"><a href="#1-可维护性" class="headerlink" title="1. 可维护性"></a>1. <strong>可维护性</strong></h3><blockquote>
+<p>「修改某个功能时，知道改哪一层」</p>
+</blockquote>
+<ul>
+<li>需求变更：修改业务规则 → 只改Service</li>
+<li>性能优化：加缓存 → 在Service层加Redis逻辑</li>
+<li>数据库迁移：MySQL改PostgreSQL → 只改Mapper的SQL</li>
+</ul>
+<h3 id="2-可测试性"><a href="#2-可测试性" class="headerlink" title="2. 可测试性"></a>2. <strong>可测试性</strong></h3><blockquote>
+<p>「每一层都可以单独测试」</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller单元测试：Mock Service</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">testLogin</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">when</span>(employeeService.login(any())).thenReturn(employee);</span><br><span class="line">    <span class="comment">// 测试参数校验、返回格式</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Service单元测试：Mock Mapper</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">testLoginBusinessLogic</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">when</span>(employeeMapper.getByUsername(<span class="string">&quot;admin&quot;</span>)).thenReturn(employee);</span><br><span class="line">    <span class="comment">// 测试密码校验、异常处理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-可扩展性"><a href="#3-可扩展性" class="headerlink" title="3. 可扩展性"></a>3. <strong>可扩展性</strong></h3><blockquote>
+<p>「在高并发场景下怎么优化？」</p>
+</blockquote>
+<ul>
+<li><strong>Controller层</strong>：加限流注解（Sentinel）</li>
+<li><strong>Service层</strong>：加分布式锁（Redisson）、异步处理（@Async）</li>
+<li><strong>Mapper层</strong>：读写分离、分库分表（ShardingSphere）</li>
+</ul>
+<hr>
+<h2 id="四、⚠️-面试中通常这样问"><a href="#四、⚠️-面试中通常这样问" class="headerlink" title="四、⚠️ 面试中通常这样问"></a>四、⚠️ 面试中通常这样问</h2><h3 id="问题1：三层架构中事务应该加在哪一层？"><a href="#问题1：三层架构中事务应该加在哪一层？" class="headerlink" title="问题1：三层架构中事务应该加在哪一层？"></a><strong>问题1：三层架构中事务应该加在哪一层？</strong></h3><p><strong>答案</strong>：Service层<br><strong>原因</strong>：  </p>
+<ul>
+<li>一个业务操作可能涉及多个Mapper调用，需要保证原子性</li>
+<li>Controller处理HTTP请求，不应该管理事务</li>
+<li>示例：下单操作需要同时操作订单表、订单明细表、扣减库存</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderServiceImpl</span> &#123;</span><br><span class="line">    <span class="meta">@Transactional</span> <span class="comment">// 事务控制在Service层</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">submitOrder</span><span class="params">(OrderDTO orderDTO)</span> &#123;</span><br><span class="line">        orderMapper.insert(order);        <span class="comment">// 插入订单</span></span><br><span class="line">        orderDetailMapper.insert(details); <span class="comment">// 插入订单明细</span></span><br><span class="line">        dishMapper.updateStock(dishId);    <span class="comment">// 扣减库存</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="问题2：为什么不直接在Controller里写SQL？"><a href="#问题2：为什么不直接在Controller里写SQL？" class="headerlink" title="问题2：为什么不直接在Controller里写SQL？"></a><strong>问题2：为什么不直接在Controller里写SQL？</strong></h3><p><strong>答案</strong>：  </p>
+<ol>
+<li><strong>违反单一职责</strong>：Controller负责HTTP交互，不应该关心SQL细节</li>
+<li><strong>代码复用困难</strong>：同样的查询逻辑在多个Controller里重复</li>
+<li><strong>事务管理困难</strong>：无法保证多个SQL操作的原子性</li>
+<li><strong>测试困难</strong>：需要启动整个Web容器才能测试</li>
+</ol>
+<h3 id="追问：Service层应该依赖Controller吗？"><a href="#追问：Service层应该依赖Controller吗？" class="headerlink" title="追问：Service层应该依赖Controller吗？"></a><strong>追问：Service层应该依赖Controller吗？</strong></h3><p><strong>答案</strong>：绝对不能！  </p>
+<ul>
+<li>依赖方向：Controller → Service → Mapper（单向依赖）</li>
+<li>如果反向依赖，会造成<strong>循环依赖</strong>，破坏分层架构</li>
+</ul>
+<hr>
+<h2 id="五、你的项目里的具体体现"><a href="#五、你的项目里的具体体现" class="headerlink" title="五、你的项目里的具体体现"></a>五、你的项目里的具体体现</h2><p>在”苍穹外卖”中：</p>
+<ul>
+<li><strong>Controller</strong>：sky-server&#x2F;src&#x2F;main&#x2F;java&#x2F;com&#x2F;sky&#x2F;controller（分admin和user两个包）</li>
+<li><strong>Service</strong>：service（接口定义）+ impl包（实现类）</li>
+<li><strong>Mapper</strong>：mapper（接口）+ resources&#x2F;mapper（XML）</li>
+</ul>
+<hr>
+<h2 id="💡-总结口诀"><a href="#💡-总结口诀" class="headerlink" title="💡 总结口诀"></a>💡 总结口诀</h2><blockquote>
+<p><strong>Controller收参数，Service写逻辑，Mapper操数据</strong><br><strong>事务加Service，缓存看需求，依赖向下走</strong></p>
+</blockquote>
+<p>准备面试时，你可以用”员工登录”或”下单流程”作为例子，展示你对三层架构的理解。记住一定要强调<strong>职责分离</strong>和<strong>单向依赖</strong>这两个核心原则！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/">https://lin-sist.github.io/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/">苍穹外卖</a><a class="post-meta__tags" href="/tags/spring/">spring</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/02/10/spring%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">我们采用”三段式”学习法：注解说明 → 项目实例 → 面试追问。 [[《苍穹外卖》概述]]  🎯 第一部分：Spring 核心注解全解析一、组件注册类注解（告诉Spring”这是我的Bean”）1️⃣ @Component - 通用组件作用： 标记一个类为Spring管理的Bean（组件） 项目出处：  JwtTokenAdminInterceptor.java AutoFillAspect.java OrderTask.java  12345@Component  // 注册为Spring Bean@Slf4jpublic class JwtTokenAdminInterceptor implements HandlerInterceptor &#123;    // 拦截器代码...&#125;   2️⃣ @Service - 业务层组件作用： 标记业务层类，本质上等同于@Component，但语义更明确 项目出处： EmployeeServiceImpl.java 1234@Service  // 标记为业务层Beanpublic class EmployeeServi...</div></div></div></a><a class="pagination-related" href="/2026/02/10/Day02/" title="Day02"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Day02</div></div><div class="info-2"><div class="info-item-1">初期笔记🔄 实现流程 自定义注解AutoFill，用于标识需要公共字段自动填充的方法。 自定义切面类AutoFillspect，统一拦截加入了AutoFill的方法，通过反射为公共字段赋值。 在Mapper的方法上加入AutoFill注解.   📘 学到的知识 注解：Java里的特殊标记，比如 @Override和 @Test ,目标是 让其他程序根据注解信息来决定怎么执行；  自定义注解：注解本质是一个继承annotation的接口，属性本质是抽象方法； 12345public @interface 注解名称 &#123;    String name();    int age() default 18;    String value(); //特殊属性value,如果注解只有一个value属性，那么value的名字可以省略不写&#125; 元注解：**@Target声明被修饰的注解只能在哪些位置使用；@Retention**声明注解的保留周期；  反射：  枚举：  mybaties：    📋 员工管理模块完整解析一、整体业务流程图1234567891011121...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/10/spring%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">我们采用”三段式”学习法：注解说明 → 项目实例 → 面试追问。 [[《苍穹外卖》概述]]  🎯 第一部分：Spring 核心注解全解析一、组件注册类注解（告诉Spring”这是我的Bean”）1️⃣ @Component - 通用组件作用： 标记一个类为Spring管理的Bean（组件） 项目出处：  JwtTokenAdminInterceptor.java AutoFillAspect.java OrderTask.java  12345@Component  // 注册为Spring Bean@Slf4jpublic class JwtTokenAdminInterceptor implements HandlerInterceptor &#123;    // 拦截器代码...&#125;   2️⃣ @Service - 业务层组件作用： 标记业务层类，本质上等同于@Component，但语义更明确 项目出处： EmployeeServiceImpl.java 1234@Service  // 标记为业务层Beanpublic class EmployeeServi...</div></div></div></a><a class="pagination-related" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/" title="JWT登录认证"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-11</div><div class="info-item-2">JWT登录认证</div></div><div class="info-2"><div class="info-item-1"> [[《苍穹外卖》概述]] [[spring核心注解]] [[《苍穹外卖》登录模块]] [[JWT登录认证复盘]]  核心业务流  管理端：管理员账号密码登录 → 服务端生成JWT → 前端保存并在后续请求头携带 → 拦截器校验JWT → 解析出empId写入ThreadLocal → Controller&#x2F;Service使用当前用户信息。 C端：微信登录换取用户信息 → 生成JWT → 前端携带 → 拦截器校验 → 解析出userId写入ThreadLocal → 后续业务读取当前用户。  123456789flowchart TD    A[登录请求&lt;br/&gt;/admin/employee/login 或 /user/user/login] --&gt; B[校验账号/微信code]    B --&gt; C[生成JWT并返回给前端]    C --&gt; D[前端在请求头携带token]    D --&gt; E[拦截器读取请求头token]    E --&gt; F&#123;JWT有效?&#125;    F --&gt;|是| G[解析c...</div></div></div></a><a class="pagination-related" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/" title="JWT登录认证复盘"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-11</div><div class="info-item-2">JWT登录认证复盘</div></div><div class="info-2"><div class="info-item-1">[[JWT登录认证]] 非常好！用费曼学习法来验证理解，说明你已经在认真消化知识了。我逐条给你纠正和补充：  ✅ 你理解正确的部分整体职责划分方向是对的，但有一些错误理解和关键遗漏需要纠正。  ❌ 逐条纠正与补充1. JwtProperties类 - 基本正确，但有重要遗漏你的理解：  通过@ConfigurationProperties(prefix &#x3D; “sky.jwt”)注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌。  纠正与补充：  ✅ 正确：通过@ConfigurationProperties绑定配置 ⚠️ 遗漏：还需要@Component注解才能被Spring容器管理，才能被@Autowired注入 ⚠️ 遗漏：具体包含两套独立配置（重要！）： 管理端：adminSecretKey、adminTtl、adminTokenName...</div></div></div></a><a class="pagination-related" href="/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-12</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">🎯 第一部分：ThreadLocal 基础知识一、什么是ThreadLocal？通俗理解： ThreadLocal就像是每个线程的专属储物柜🔐 想象一个场景：  公司有100个员工（100个线程） 每个员工都有自己的工位储物柜（ThreadLocal） 张三在自己柜子里放的东西，李四拿不到  1234567891011121314151617graph TB    subgraph 线程1[线程1 - 用户A的请求]        A1[拦截器设置userId=1] --&gt; B1[ThreadLocal存储userId=1]        B1 --&gt; C1[Service获取userId=1]        C1 --&gt; D1[操作用户1的数据]    end        subgraph 线程2[线程2 - 用户B的请求]        A2[拦截器设置userId=2] --&gt; B2[ThreadLocal存储userId=2]        B2 --&gt; C2[Service获取userId=2]        C2 --&gt; D2...</div></div></div></a><a class="pagination-related" href="/2026/02/10/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E6%A6%82%E8%BF%B0/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">📚 苍穹外卖项目 - 面试必学知识点清单 [[spring核心注解]] [[spring项目三层架构]] [[JWT登录认证]] [[ThreadLocal核心应用]]  作为面试官，我把这个项目的知识点分为三个层次，你按顺序学习： 123456789101112131415161718192021222324252627graph TB    subgraph 第一层[🎯 第一层：必须掌握 - 面试必问]        A1[Spring Boot 核心注解]        A2[三层架构 Controller-Service-Mapper]        A3[JWT 登录认证]        A4[ThreadLocal 用户上下文]        A5[统一响应封装 Result]        A6[全局异常处理]    end        subgraph 第二层[⭐ 第二层：加分项 - 体现深度]        B1[AOP 切面编程]        B2[Spring Cache + Redis 缓存]        B3[MyBatis 动态SQL]   ...</div></div></div></a><a class="pagination-related" href="/2026/01/25/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97/" title="《苍穹外卖》解决微信登录模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-25</div><div class="info-item-2">《苍穹外卖》解决微信登录模块</div></div><div class="info-2"><div class="info-item-1">1. 背景微信小程序点击登录后，login失败，无法正常登录，无法加载菜品页面。 2. 正文内容问题的根源是：@AutoFill 注解是为管理端的实体类设计的（如 Employee、Category 等），这些实体类有 createUser 和 updateUser 字段。但 User 是 C端用户实体，它没有这两个字段。  问题根源详解 ┌─────────────────────────────────────────────────────────────────────────┐│  User 实体类只有：                                                       ││  - id, openid, name, phone, sex, idNumber, avatar, createTime          ││                                                                         ││  AutoFillAspect 尝试调用：         ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81SpringBoot%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%85%B8%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">一、SpringBoot项目的典型结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Maven%E5%A4%9A%E6%A8%A1%E5%9D%97%E5%88%92%E5%88%86%EF%BC%88%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">1. Maven多模块划分（当前项目结构）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E4%B8%9A%E5%8A%A1%E6%A8%A1%E5%9D%97%EF%BC%88sky-server%EF%BC%89%E7%9A%84%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">2. 核心业务模块（sky-server）的分层结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">二、为什么要分三层架构？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%9B%A0%EF%BC%9A%E8%81%8C%E8%B4%A3%E5%88%86%E7%A6%BB%EF%BC%88Single-Responsibility%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">核心原因：职责分离（Single Responsibility）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B%EF%BC%88%E5%91%98%E5%B7%A5%E7%99%BB%E5%BD%95%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">实际业务流程示例（员工登录）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E7%9A%84%E6%B7%B1%E5%B1%82%E4%BC%98%E5%8A%BF"><span class="toc-number">3.</span> <span class="toc-text">三、三层架构的深层优势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">1. 可维护性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%AF%E6%B5%8B%E8%AF%95%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">2. 可测试性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7"><span class="toc-number">3.3.</span> <span class="toc-text">3. 可扩展性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E2%9A%A0%EF%B8%8F-%E9%9D%A2%E8%AF%95%E4%B8%AD%E9%80%9A%E5%B8%B8%E8%BF%99%E6%A0%B7%E9%97%AE"><span class="toc-number">4.</span> <span class="toc-text">四、⚠️ 面试中通常这样问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%981%EF%BC%9A%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E4%B8%AD%E4%BA%8B%E5%8A%A1%E5%BA%94%E8%AF%A5%E5%8A%A0%E5%9C%A8%E5%93%AA%E4%B8%80%E5%B1%82%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">问题1：三层架构中事务应该加在哪一层？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%982%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%9B%B4%E6%8E%A5%E5%9C%A8Controller%E9%87%8C%E5%86%99SQL%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">问题2：为什么不直接在Controller里写SQL？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%BD%E9%97%AE%EF%BC%9AService%E5%B1%82%E5%BA%94%E8%AF%A5%E4%BE%9D%E8%B5%96Controller%E5%90%97%EF%BC%9F"><span class="toc-number">4.3.</span> <span class="toc-text">追问：Service层应该依赖Controller吗？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%9A%84%E5%85%B7%E4%BD%93%E4%BD%93%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text">五、你的项目里的具体体现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%92%A1-%E6%80%BB%E7%BB%93%E5%8F%A3%E8%AF%80"><span class="toc-number">6.</span> <span class="toc-text">💡 总结口诀</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-12T14:38:45.516Z" title="发表于 2026-02-12 22:38:45">2026-02-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/" title="JWT登录认证">JWT登录认证</a><time datetime="2026-02-10T16:00:00.000Z" title="发表于 2026-02-11 00:00:00">2026-02-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/" title="JWT登录认证复盘">JWT登录认证复盘</a><time datetime="2026-02-10T16:00:00.000Z" title="发表于 2026-02-11 00:00:00">2026-02-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-10T14:43:47.255Z" title="发表于 2026-02-10 22:43:47">2026-02-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/10/spring%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-10T14:43:47.255Z" title="发表于 2026-02-10 22:43:47">2026-02-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
+  window.ChatraID = ''
+  window.Chatra = window.Chatra || function() {
+    (window.Chatra.q = window.Chatra.q || []).push(arguments)
+  }
+
+  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
+    const isChatBtn = false
+    const isChatHideShow = false
+
+    if (isChatBtn) {
+      const close = () => {
+        Chatra('minimizeWidget')
+        Chatra('hide')
+      }
+
+      const open = () => {
+        Chatra('openChat', true)
+        Chatra('show')
+      }
+
+      window.ChatraSetup = { startHidden: true }
+    
+      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
+
+      document.getElementById('chat-btn').style.display = 'block'
+    } else if (isChatHideShow) {
+      window.chatBtn = {
+        hide: () => Chatra('hide'),
+        show: () => Chatra('show')
+      }
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

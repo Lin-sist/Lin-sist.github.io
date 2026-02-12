@@ -1,0 +1,466 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>《苍穹外卖》概述 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🎯 第一部分：ThreadLocal 基础知识一、什么是ThreadLocal？通俗理解： ThreadLocal就像是每个线程的专属储物柜🔐 想象一个场景：  公司有100个员工（100个线程） 每个员工都有自己的工位储物柜（ThreadLocal） 张三在自己柜子里放的东西，李四拿不到  1234567891011121314151617graph TB    subgraph 线程1[线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《苍穹外卖》概述">
+<meta property="og:url" content="https://lin-sist.github.io/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Lin说">
+<meta property="og:description" content="🎯 第一部分：ThreadLocal 基础知识一、什么是ThreadLocal？通俗理解： ThreadLocal就像是每个线程的专属储物柜🔐 想象一个场景：  公司有100个员工（100个线程） 每个员工都有自己的工位储物柜（ThreadLocal） 张三在自己柜子里放的东西，李四拿不到  1234567891011121314151617graph TB    subgraph 线程1[线">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
+<meta property="article:published_time" content="2026-02-12T14:38:45.516Z">
+<meta property="article:modified_time" content="2026-02-12T14:39:21.551Z">
+<meta property="article:author" content="Lin">
+<meta property="article:tag" content="苍穹外卖">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "《苍穹外卖》概述",
+  "url": "https://lin-sist.github.io/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/",
+  "image": "https://lin-sist.github.io/img/Lin.jpg",
+  "datePublished": "2026-02-12T14:38:45.516Z",
+  "dateModified": "2026-02-12T14:39:21.551Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lin",
+      "url": "https://Lin-sist.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《苍穹外卖》概述',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">《苍穹外卖》概述</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">《苍穹外卖》概述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-12T14:38:45.516Z" title="发表于 2026-02-12 22:38:45">2026-02-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-12T14:39:21.551Z" title="更新于 2026-02-12 22:39:21">2026-02-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="🎯-第一部分：ThreadLocal-基础知识"><a href="#🎯-第一部分：ThreadLocal-基础知识" class="headerlink" title="🎯 第一部分：ThreadLocal 基础知识"></a>🎯 第一部分：ThreadLocal 基础知识</h1><h2 id="一、什么是ThreadLocal？"><a href="#一、什么是ThreadLocal？" class="headerlink" title="一、什么是ThreadLocal？"></a>一、什么是ThreadLocal？</h2><p><strong>通俗理解：</strong> ThreadLocal就像是<strong>每个线程的专属储物柜</strong>🔐</p>
+<p>想象一个场景：</p>
+<ul>
+<li>公司有100个员工（100个线程）</li>
+<li>每个员工都有自己的工位储物柜（ThreadLocal）</li>
+<li>张三在自己柜子里放的东西，李四拿不到</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    subgraph 线程1[线程1 - 用户A的请求]</span><br><span class="line">        A1[拦截器设置userId=1] --&gt; B1[ThreadLocal存储userId=1]</span><br><span class="line">        B1 --&gt; C1[Service获取userId=1]</span><br><span class="line">        C1 --&gt; D1[操作用户1的数据]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 线程2[线程2 - 用户B的请求]</span><br><span class="line">        A2[拦截器设置userId=2] --&gt; B2[ThreadLocal存储userId=2]</span><br><span class="line">        B2 --&gt; C2[Service获取userId=2]</span><br><span class="line">        C2 --&gt; D2[操作用户2的数据]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    style B1 fill:#90EE90</span><br><span class="line">    style B2 fill:#87CEEB</span><br><span class="line">    style D1 fill:#90EE90</span><br><span class="line">    style D2 fill:#87CEEB</span><br></pre></td></tr></table></figure>
+
+<p><strong>核心特点：</strong></p>
+<ol>
+<li><strong>线程隔离</strong>：每个线程有自己独立的副本</li>
+<li><strong>无需传参</strong>：不需要层层传递参数</li>
+<li><strong>线程安全</strong>：避免了多线程并发问题</li>
+</ol>
+<hr>
+<h2 id="二、ThreadLocal-的核心API"><a href="#二、ThreadLocal-的核心API" class="headerlink" title="二、ThreadLocal 的核心API"></a>二、ThreadLocal 的核心API</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span>      <span class="comment">// 设置当前线程的值</span></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span>                 <span class="comment">// 获取当前线程的值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">()</span>           <span class="comment">// 清除当前线程的值（重要！）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>简单示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个ThreadLocal</span></span><br><span class="line">ThreadLocal&lt;Long&gt; userIdHolder = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1执行</span></span><br><span class="line">userIdHolder.set(<span class="number">100L</span>);  </span><br><span class="line">System.out.println(userIdHolder.get()); <span class="comment">// 输出：100</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2执行（完全独立）</span></span><br><span class="line">userIdHolder.set(<span class="number">200L</span>);  </span><br><span class="line">System.out.println(userIdHolder.get()); <span class="comment">// 输出：200</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 清理</span></span><br><span class="line">userIdHolder.remove();</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、ThreadLocal-的底层原理"><a href="#三、ThreadLocal-的底层原理" class="headerlink" title="三、ThreadLocal 的底层原理"></a>三、ThreadLocal 的底层原理</h2><h3 id="1️⃣-数据结构"><a href="#1️⃣-数据结构" class="headerlink" title="1️⃣ 数据结构"></a>1️⃣ 数据结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    Thread[Thread线程对象] --&gt; ThreadLocalMap[ThreadLocalMap]</span><br><span class="line">    ThreadLocalMap --&gt; Entry1[&quot;Entry&lt;ThreadLocal1, value1&gt;&quot;]</span><br><span class="line">    ThreadLocalMap --&gt; Entry2[&quot;Entry&lt;ThreadLocal2, value2&gt;&quot;]</span><br><span class="line">    ThreadLocalMap --&gt; Entry3[&quot;Entry&lt;ThreadLocal3, value3&gt;&quot;]</span><br><span class="line">    </span><br><span class="line">    style Thread fill:#FFE4B5</span><br><span class="line">    style ThreadLocalMap fill:#87CEEB</span><br><span class="line">    style Entry1 fill:#90EE90</span><br><span class="line">    style Entry2 fill:#90EE90</span><br><span class="line">    style Entry3 fill:#90EE90</span><br></pre></td></tr></table></figure>
+
+<p><strong>核心原理：</strong></p>
+<ul>
+<li>每个<code>Thread</code>对象内部有一个<code>ThreadLocalMap</code></li>
+<li><code>ThreadLocalMap</code>是一个特殊的Map，key是<code>ThreadLocal</code>对象，value是存储的值</li>
+<li>当调用<code>threadLocal.set(value)</code>时，实际上是：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread.currentThread().threadLocalMap.put(threadLocal, value);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2️⃣-源码简化版"><a href="#2️⃣-源码简化版" class="headerlink" title="2️⃣ 源码简化版"></a>2️⃣ 源码简化版</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocal</span>&lt;T&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();  <span class="comment">// 获取当前线程</span></span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> t.threadLocals; <span class="comment">// 获取线程的Map</span></span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>)</span><br><span class="line">            map.set(<span class="built_in">this</span>, value);  <span class="comment">// this是ThreadLocal对象本身</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            t.threadLocals = <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>(<span class="built_in">this</span>, value);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> t.threadLocals;</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> map.getEntry(<span class="built_in">this</span>);</span><br><span class="line">            <span class="keyword">return</span> (T) e.value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="🚀-第二部分：ThreadLocal在项目中的核心应用"><a href="#🚀-第二部分：ThreadLocal在项目中的核心应用" class="headerlink" title="🚀 第二部分：ThreadLocal在项目中的核心应用"></a>🚀 第二部分：ThreadLocal在项目中的核心应用</h1><h2 id="一、项目中的使用场景-BaseContext"><a href="#一、项目中的使用场景-BaseContext" class="headerlink" title="一、项目中的使用场景 - BaseContext"></a>一、项目中的使用场景 - BaseContext</h2><p>项目封装了一个工具类：BaseContext.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseContext</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 存储当前登录用户ID</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;Long&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置当前用户ID（拦截器中调用）</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setCurrentId</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        threadLocal.set(id);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取当前用户ID（Service中调用）</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title function_">getCurrentId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> threadLocal.get();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 清除（防止内存泄漏）</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">removeCurrentId</span><span class="params">()</span> &#123;</span><br><span class="line">        threadLocal.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、完整的业务流程"><a href="#二、完整的业务流程" class="headerlink" title="二、完整的业务流程"></a>二、完整的业务流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 用户A</span><br><span class="line">    participant 拦截器</span><br><span class="line">    participant ThreadLocal</span><br><span class="line">    participant Controller</span><br><span class="line">    participant Service</span><br><span class="line">    participant Mapper</span><br><span class="line">    </span><br><span class="line">    用户A-&gt;&gt;拦截器: 1. 请求 + JWT Token</span><br><span class="line">    拦截器-&gt;&gt;拦截器: 2. 解析Token，得到userId=1</span><br><span class="line">    拦截器-&gt;&gt;ThreadLocal: 3. BaseContext.setCurrentId(1)</span><br><span class="line">    Note over ThreadLocal: 线程1存储：userId=1</span><br><span class="line">    </span><br><span class="line">    拦截器-&gt;&gt;Controller: 4. 放行请求</span><br><span class="line">    Controller-&gt;&gt;Service: 5. 调用业务方法</span><br><span class="line">    Service-&gt;&gt;ThreadLocal: 6. BaseContext.getCurrentId()</span><br><span class="line">    ThreadLocal--&gt;&gt;Service: 7. 返回userId=1</span><br><span class="line">    Service-&gt;&gt;Mapper: 8. 查询用户1的数据</span><br><span class="line">    Mapper--&gt;&gt;Service: 9. 返回数据</span><br><span class="line">    Service--&gt;&gt;Controller: 10. 返回结果</span><br><span class="line">    Controller--&gt;&gt;用户A: 11. 响应</span><br><span class="line">    </span><br><span class="line">    Note over ThreadLocal: ⚠️ 理应调用 remove()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、项目中的3个核心应用场景"><a href="#三、项目中的3个核心应用场景" class="headerlink" title="三、项目中的3个核心应用场景"></a>三、项目中的3个核心应用场景</h2><h3 id="场景1️⃣：拦截器中设置用户ID"><a href="#场景1️⃣：拦截器中设置用户ID" class="headerlink" title="场景1️⃣：拦截器中设置用户ID"></a>场景1️⃣：拦截器中设置用户ID</h3><p><strong>文件：</strong> JwtTokenAdminInterceptor.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JwtTokenAdminInterceptor</span> <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request, ...)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 从请求头获取Token</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> request.getHeader(jwtProperties.getAdminTokenName());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 解析Token，获取员工ID</span></span><br><span class="line">        <span class="type">Claims</span> <span class="variable">claims</span> <span class="operator">=</span> JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);</span><br><span class="line">        <span class="type">Long</span> <span class="variable">empId</span> <span class="operator">=</span> Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. 存入ThreadLocal 🔥</span></span><br><span class="line">        BaseContext.setCurrentId(empId);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="场景2️⃣：Service层获取当前用户ID（购物车案例）"><a href="#场景2️⃣：Service层获取当前用户ID（购物车案例）" class="headerlink" title="场景2️⃣：Service层获取当前用户ID（购物车案例）"></a>场景2️⃣：Service层获取当前用户ID（购物车案例）</h3><p><strong>文件：</strong> ShoppingCartServiceImpl.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShoppingCartServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">ShoppingCartService</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addShoppingCart</span><span class="params">(ShoppingCartDTO shoppingCartDTO)</span> &#123;</span><br><span class="line">        <span class="type">ShoppingCart</span> <span class="variable">shoppingCart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShoppingCart</span>();</span><br><span class="line">        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 🔥 无需传参，直接从ThreadLocal获取当前用户ID</span></span><br><span class="line">        shoppingCart.setUserId(BaseContext.getCurrentId());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只能查询自己的购物车数据</span></span><br><span class="line">        List&lt;ShoppingCart&gt; list = shoppingCartMapper.list(shoppingCart);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;ShoppingCart&gt; <span class="title function_">showShoppingCart</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 🔥 查询购物车时，自动关联当前用户</span></span><br><span class="line">        <span class="keyword">return</span> shoppingCartMapper.list(</span><br><span class="line">            ShoppingCart.builder()</span><br><span class="line">                .userId(BaseContext.getCurrentId())  </span><br><span class="line">                .build()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意看：</strong> 这个方法的参数里<strong>没有userId</strong>，但是能准确查询当前用户的购物车！这就是ThreadLocal的魔力。</p>
+<hr>
+<h3 id="场景3️⃣：AOP中自动填充公共字段"><a href="#场景3️⃣：AOP中自动填充公共字段" class="headerlink" title="场景3️⃣：AOP中自动填充公共字段"></a>场景3️⃣：AOP中自动填充公共字段</h3><p><strong>文件：</strong> AutoFillAspect.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AutoFillAspect</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Before(&quot;autoFillPointCut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">autoFill</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        <span class="comment">// 获取当前时间</span></span><br><span class="line">        <span class="type">LocalDateTime</span> <span class="variable">now</span> <span class="operator">=</span> LocalDateTime.now();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 🔥 从ThreadLocal获取当前操作人ID</span></span><br><span class="line">        <span class="type">Long</span> <span class="variable">currentId</span> <span class="operator">=</span> BaseContext.getCurrentId();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 通过反射自动填充 createUser、updateUser</span></span><br><span class="line">        <span class="keyword">if</span> (operationType == OperationType.INSERT) &#123;</span><br><span class="line">            setCreateUser.invoke(entity, currentId);  <span class="comment">// 创建人</span></span><br><span class="line">            setUpdateUser.invoke(entity, currentId);  <span class="comment">// 更新人</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>业务含义：</strong> </p>
+<ul>
+<li>当员工新增菜品时，自动填充<code>createUser</code>为当前登录员工ID</li>
+<li>不需要手动传参，AOP自动完成</li>
+</ul>
+<hr>
+<h2 id="四、为什么要用ThreadLocal？"><a href="#四、为什么要用ThreadLocal？" class="headerlink" title="四、为什么要用ThreadLocal？"></a>四、为什么要用ThreadLocal？</h2><h3 id="对比方案：传统方式"><a href="#对比方案：传统方式" class="headerlink" title="对比方案：传统方式"></a>对比方案：传统方式</h3><p><strong>❌ 不用ThreadLocal的代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/cart/add&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">add</span><span class="params">(<span class="meta">@RequestBody</span> CartDTO dto, Long userId)</span> &#123;  <span class="comment">// 需要传userId</span></span><br><span class="line">    cartService.add(dto, userId);</span><br><span class="line">    <span class="keyword">return</span> Result.success();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(CartDTO dto, Long userId)</span> &#123;  <span class="comment">// 需要传userId</span></span><br><span class="line">    <span class="type">ShoppingCart</span> <span class="variable">cart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShoppingCart</span>();</span><br><span class="line">    cart.setUserId(userId);  <span class="comment">// 手动设置</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>层层传递的问题：</strong></p>
+<ol>
+<li>Controller → Service → Mapper 每一层都要传<code>userId</code></li>
+<li>容易漏传或传错</li>
+<li>代码臃肿，参数列表过长</li>
+</ol>
+<hr>
+<p><strong>✅ 使用ThreadLocal的代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/cart/add&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">add</span><span class="params">(<span class="meta">@RequestBody</span> CartDTO dto)</span> &#123;  <span class="comment">// 不需要传userId</span></span><br><span class="line">    cartService.add(dto);</span><br><span class="line">    <span class="keyword">return</span> Result.success();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(CartDTO dto)</span> &#123;  <span class="comment">// 不需要传userId</span></span><br><span class="line">    <span class="type">ShoppingCart</span> <span class="variable">cart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShoppingCart</span>();</span><br><span class="line">    cart.setUserId(BaseContext.getCurrentId());  <span class="comment">// 直接获取</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>优势：</strong></p>
+<ol>
+<li>✅ 代码简洁</li>
+<li>✅ 解耦，Controller不需要关心用户ID</li>
+<li>✅ 安全，用户ID从Token解析，不能伪造</li>
+</ol>
+<hr>
+<h1 id="🔥-第三部分：ThreadLocal在面试中的重要性"><a href="#🔥-第三部分：ThreadLocal在面试中的重要性" class="headerlink" title="🔥 第三部分：ThreadLocal在面试中的重要性"></a>🔥 第三部分：ThreadLocal在面试中的重要性</h1><h2 id="⭐-重要性等级：★★★★★（五星满分）"><a href="#⭐-重要性等级：★★★★★（五星满分）" class="headerlink" title="⭐ 重要性等级：★★★★★（五星满分）"></a>⭐ 重要性等级：★★★★★（五星满分）</h2><p><strong>为什么这么重要？</strong></p>
+<ol>
+<li><strong>考察频率超高</strong>：90%的Java面试都会问</li>
+<li><strong>区分度明显</strong>：<ul>
+<li>初级：只知道用法 → <strong>你现在的水平</strong></li>
+<li>中级：知道原理（ThreadLocalMap）</li>
+<li>高级：知道内存泄漏问题和解决方案 → <strong>面试加分项</strong></li>
+</ul>
+</li>
+<li><strong>综合能力体现</strong>：涉及到JVM、多线程、GC等知识</li>
+</ol>
+<hr>
+<h1 id="📝-第四部分：面试题全解析"><a href="#📝-第四部分：面试题全解析" class="headerlink" title="📝 第四部分：面试题全解析"></a>📝 第四部分：面试题全解析</h1><h2 id="❓-面试题1：请介绍一下ThreadLocal（基础必问）"><a href="#❓-面试题1：请介绍一下ThreadLocal（基础必问）" class="headerlink" title="❓ 面试题1：请介绍一下ThreadLocal（基础必问）"></a>❓ 面试题1：请介绍一下ThreadLocal（基础必问）</h2><p><strong>标准回答（三段式）：</strong></p>
+<p><strong>第一段 - 是什么：</strong><br>ThreadLocal是Java提供的线程局部变量，它为每个线程提供独立的变量副本，实现线程间的数据隔离。</p>
+<p><strong>第二段 - 怎么用（结合项目）：</strong><br>在我们的外卖项目中，用ThreadLocal存储当前登录用户的ID。当用户请求到达时，拦截器解析JWT Token获取用户ID并存入ThreadLocal，后续Service层直接通过<code>BaseContext.getCurrentId()</code>获取，无需层层传参。比如查询购物车时，自动关联当前用户，避免了数据越权访问。</p>
+<p><strong>第三段 - 原理：</strong><br>每个Thread对象内部有一个ThreadLocalMap，key是ThreadLocal对象，value是存储的值。调用<code>set()</code>时实际是往当前线程的Map中存数据，所以线程间互不影响。</p>
+<hr>
+<h2 id="❓-面试题2：ThreadLocal的原理是什么？（中级必问）"><a href="#❓-面试题2：ThreadLocal的原理是什么？（中级必问）" class="headerlink" title="❓ 面试题2：ThreadLocal的原理是什么？（中级必问）"></a>❓ 面试题2：ThreadLocal的原理是什么？（中级必问）</h2><p><strong>答：</strong></p>
+<p>ThreadLocal的核心是<strong>ThreadLocalMap</strong>，结构如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Thread &#123;</span><br><span class="line">    <span class="type">ThreadLocalMap</span> <span class="variable">threadLocals</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadLocalMap</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ThreadLocalMap &#123;</span><br><span class="line">    Entry[] table;  <span class="comment">// 数组 + 开放寻址法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Entry &#123;</span><br><span class="line">    ThreadLocal key;   <span class="comment">// 弱引用 WeakReference</span></span><br><span class="line">    Object value;      <span class="comment">// 强引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>调用流程：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">threadLocal.set(value);</span><br><span class="line">↓</span><br><span class="line"><span class="number">1.</span> 获取当前线程 <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line"><span class="number">2.</span> 获取Map：<span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> t.threadLocals;</span><br><span class="line"><span class="number">3.</span> 以ThreadLocal对象为key存入：map.set(<span class="built_in">this</span>, value);</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么线程安全？</strong></p>
+<ul>
+<li>每个线程操作的是<strong>自己的Map</strong></li>
+<li>不存在竞争关系，天然线程安全</li>
+</ul>
+<hr>
+<h2 id="❓-面试题3：ThreadLocal会内存泄漏吗？（高频！）"><a href="#❓-面试题3：ThreadLocal会内存泄漏吗？（高频！）" class="headerlink" title="❓ 面试题3：ThreadLocal会内存泄漏吗？（高频！）"></a>❓ 面试题3：ThreadLocal会内存泄漏吗？（高频！）</h2><p><strong>答：⚠️ 会！而且这是面试的重点！</strong></p>
+<h3 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    Thread[Thread对象] --&gt;|强引用| ThreadLocalMap</span><br><span class="line">    ThreadLocalMap --&gt;|弱引用| ThreadLocal[ThreadLocal对象 key]</span><br><span class="line">    ThreadLocalMap --&gt;|强引用| Value[Value对象]</span><br><span class="line">    </span><br><span class="line">    style ThreadLocal fill:#FFB6C1</span><br><span class="line">    style Value fill:#FF6347</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题链条：</strong></p>
+<ol>
+<li><strong>ThreadLocal对象被GC回收</strong>（因为key是弱引用）</li>
+<li><strong>Entry的key变成null</strong></li>
+<li><strong>但value还是强引用</strong>，无法被GC</li>
+<li><strong>线程池场景下</strong>，线程不销毁，value永远不会被回收 → <strong>内存泄漏</strong></li>
+</ol>
+<h3 id="严重吗？"><a href="#严重吗？" class="headerlink" title="严重吗？"></a>严重吗？</h3><p><strong>在线程池场景下非常严重！</strong></p>
+<ul>
+<li>Web应用使用Tomcat线程池</li>
+<li>线程复用，<code>threadLocalMap</code>一直存在</li>
+<li>每次请求set，不remove，越堆越多</li>
+</ul>
+<hr>
+<h3 id="解决方案：必须调用remove-！"><a href="#解决方案：必须调用remove-！" class="headerlink" title="解决方案：必须调用remove()！"></a>解决方案：<strong>必须调用remove()！</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    threadLocal.set(value);</span><br><span class="line">    <span class="comment">// 业务代码</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    threadLocal.remove();  <span class="comment">// 🔥 必须清理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="⚠️-项目中的严重问题（我要严厉指出！）"><a href="#⚠️-项目中的严重问题（我要严厉指出！）" class="headerlink" title="⚠️ 项目中的严重问题（我要严厉指出！）"></a>⚠️ 项目中的严重问题（我要严厉指出！）</h2><p><strong>你的项目代码有内存泄漏风险！</strong></p>
+<p>看这段代码：JwtTokenAdminInterceptor.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(...)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    BaseContext.setCurrentId(empId);  <span class="comment">// ✅ 设置了</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 没有 afterCompletion() 方法调用 remove()！</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>后果：</strong></p>
+<ul>
+<li>Tomcat线程池复用线程</li>
+<li>每次请求set，不remove</li>
+<li>userId堆积 → 内存泄漏</li>
+<li>更严重：可能取到上一个请求的userId → <strong>数据错乱</strong></li>
+</ul>
+<hr>
+<h2 id="🔧-正确的写法（面试加分项！）"><a href="#🔧-正确的写法（面试加分项！）" class="headerlink" title="🔧 正确的写法（面试加分项！）"></a>🔧 正确的写法（面试加分项！）</h2><p><strong>方案1：在拦截器中清理</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JwtTokenAdminInterceptor</span> <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(...)</span> &#123;</span><br><span class="line">        <span class="comment">// 解析Token，设置userId</span></span><br><span class="line">        BaseContext.setCurrentId(empId);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCompletion</span><span class="params">(HttpServletRequest request, </span></span><br><span class="line"><span class="params">                                HttpServletResponse response, </span></span><br><span class="line"><span class="params">                                Object handler, </span></span><br><span class="line"><span class="params">                                Exception ex)</span> &#123;</span><br><span class="line">        <span class="comment">// 🔥 请求结束后清理</span></span><br><span class="line">        BaseContext.removeCurrentId();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>方案2：Filter中清理（更推荐）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalCleanFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest request, </span></span><br><span class="line"><span class="params">                        ServletResponse response, </span></span><br><span class="line"><span class="params">                        FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            chain.doFilter(request, response);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            BaseContext.removeCurrentId();  <span class="comment">// 🔥 确保清理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="❓-面试题4：ThreadLocal的应用场景有哪些？"><a href="#❓-面试题4：ThreadLocal的应用场景有哪些？" class="headerlink" title="❓ 面试题4：ThreadLocal的应用场景有哪些？"></a>❓ 面试题4：ThreadLocal的应用场景有哪些？</h2><p><strong>答：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>用户上下文传递</strong></td>
+<td>存储登录用户信息</td>
+<td>你的项目 <code>BaseContext</code></td>
+</tr>
+<tr>
+<td><strong>数据库连接管理</strong></td>
+<td>存储Connection，保证同一线程用同一连接</td>
+<td>Spring的<code>@Transactional</code></td>
+</tr>
+<tr>
+<td><strong>日期格式化</strong></td>
+<td><code>SimpleDateFormat</code>线程不安全，用ThreadLocal包装</td>
+<td><code>ThreadLocal&lt;SimpleDateFormat&gt;</code></td>
+</tr>
+<tr>
+<td><strong>链路追踪</strong></td>
+<td>存储traceId，跨方法传递</td>
+<td>SkyWalking、分布式追踪</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="❓-面试题5：ThreadLocal和synchronized的区别？"><a href="#❓-面试题5：ThreadLocal和synchronized的区别？" class="headerlink" title="❓ 面试题5：ThreadLocal和synchronized的区别？"></a>❓ 面试题5：ThreadLocal和synchronized的区别？</h2><p><strong>答：</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>ThreadLocal</th>
+<th>synchronized</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>目的</strong></td>
+<td>线程隔离（每个线程有自己的副本）</td>
+<td>线程同步（多线程访问同一资源）</td>
+</tr>
+<tr>
+<td><strong>原理</strong></td>
+<td>空间换时间</td>
+<td>时间换空间</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>无锁，性能好</td>
+<td>有锁，性能差</td>
+</tr>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>避免参数传递</td>
+<td>避免并发冲突</td>
+</tr>
+</tbody></table>
+<p><strong>比喻：</strong></p>
+<ul>
+<li>ThreadLocal：每人一个苹果，互不影响</li>
+<li>synchronized：大家抢一个苹果，排队拿</li>
+</ul>
+<hr>
+<h2 id="❓-面试题6：InheritableThreadLocal是什么？"><a href="#❓-面试题6：InheritableThreadLocal是什么？" class="headerlink" title="❓ 面试题6：InheritableThreadLocal是什么？"></a>❓ 面试题6：InheritableThreadLocal是什么？</h2><p><strong>答：</strong></p>
+<p><code>InheritableThreadLocal</code>可以让<strong>子线程继承父线程的值</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">threadLocal.set(<span class="string">&quot;父线程的值&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">    System.out.println(threadLocal.get());  <span class="comment">// null</span></span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 InheritableThreadLocal</span></span><br><span class="line">InheritableThreadLocal&lt;String&gt; inheritableThreadLocal = <span class="keyword">new</span> <span class="title class_">InheritableThreadLocal</span>&lt;&gt;();</span><br><span class="line">inheritableThreadLocal.set(<span class="string">&quot;父线程的值&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">    System.out.println(inheritableThreadLocal.get());  <span class="comment">// &quot;父线程的值&quot;</span></span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景：</strong> 异步任务需要用到父线程的上下文信息。</p>
+<p><strong>注意：</strong> 线程池场景下会失效，需要用阿里的<code>TransmittableThreadLocal</code>。</p>
+<hr>
+<h1 id="🎓-面试回答模板"><a href="#🎓-面试回答模板" class="headerlink" title="🎓 面试回答模板"></a>🎓 面试回答模板</h1><p><strong>当面试官问：”你们项目中是怎么用ThreadLocal的？”</strong></p>
+<p><strong>完美回答：</strong></p>
+<blockquote>
+<p>“我们项目用ThreadLocal实现了用户上下文的传递。具体流程是：</p>
+<p>1️⃣ 用户登录后生成JWT Token，后续请求都携带Token<br>2️⃣ 拦截器解析Token获取用户ID，通过<code>BaseContext.setCurrentId()</code>存入ThreadLocal<br>3️⃣ Service层通过<code>BaseContext.getCurrentId()</code>获取，无需层层传参<br>4️⃣ 这样既保证了线程安全，又简化了代码</p>
+<p><strong>原理上</strong>，每个线程有自己的ThreadLocalMap，key是ThreadLocal对象，value是用户ID，所以并发请求互不影响。</p>
+<p><strong>安全性上</strong>，我们在拦截器的<code>afterCompletion()</code>方法中调用<code>remove()</code>清理，避免了内存泄漏。”</p>
+</blockquote>
+<p><strong>面试官追问：”如果不清理会怎样？”</strong></p>
+<blockquote>
+<p>“在生产环境通常使用Tomcat线程池，线程会复用。如果不清理：</p>
+<ol>
+<li>内存泄漏：ThreadLocalMap中的value无法被GC</li>
+<li>数据错乱：下次请求复用线程时，可能取到上一个用户的ID</li>
+<li>严重的话会导致数据越权访问，这是安全漏洞”</li>
+</ol>
+</blockquote>
+<hr>
+<h1 id="🎯-总结：掌握ThreadLocal的三个层次"><a href="#🎯-总结：掌握ThreadLocal的三个层次" class="headerlink" title="🎯 总结：掌握ThreadLocal的三个层次"></a>🎯 总结：掌握ThreadLocal的三个层次</h1><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>掌握内容</th>
+<th>面试定位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>初级</strong></td>
+<td>知道ThreadLocal的用法（set&#x2F;get）</td>
+<td>勉强及格</td>
+</tr>
+<tr>
+<td><strong>中级</strong></td>
+<td>理解ThreadLocalMap原理</td>
+<td>中等偏上</td>
+</tr>
+<tr>
+<td><strong>高级</strong></td>
+<td>知道内存泄漏原理+解决方案+实际应用</td>
+<td>面试加分</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>现在你想：</strong></p>
+<ol>
+<li>🔧 <strong>修复项目代码</strong> - 我帮你给拦截器加上<code>remove()</code>清理逻辑</li>
+<li>💡 <strong>看更多应用</strong> - 学习ThreadLocal在事务管理中的应用</li>
+<li>🎯 <strong>下一个知识点</strong> - 学习JWT认证的完整流程</li>
+</ol>
+<p>选择你的学习路径吧！💪</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/">https://lin-sist.github.io/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/">苍穹外卖</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/" title="JWT登录认证复盘"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JWT登录认证复盘</div></div><div class="info-2"><div class="info-item-1">[[JWT登录认证]] 非常好！用费曼学习法来验证理解，说明你已经在认真消化知识了。我逐条给你纠正和补充：  ✅ 你理解正确的部分整体职责划分方向是对的，但有一些错误理解和关键遗漏需要纠正。  ❌ 逐条纠正与补充1. JwtProperties类 - 基本正确，但有重要遗漏你的理解：  通过@ConfigurationProperties(prefix &#x3D; “sky.jwt”)注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌。  纠正与补充：  ✅ 正确：通过@ConfigurationProperties绑定配置 ⚠️ 遗漏：还需要@Component注解才能被Spring容器管理，才能被@Autowired注入 ⚠️ 遗漏：具体包含两套独立配置（重要！）： 管理端：adminSecretKey、adminTtl、adminTokenName...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/" title="JWT登录认证"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-11</div><div class="info-item-2">JWT登录认证</div></div><div class="info-2"><div class="info-item-1"> [[《苍穹外卖》概述]] [[spring核心注解]] [[《苍穹外卖》登录模块]] [[JWT登录认证复盘]]  核心业务流  管理端：管理员账号密码登录 → 服务端生成JWT → 前端保存并在后续请求头携带 → 拦截器校验JWT → 解析出empId写入ThreadLocal → Controller&#x2F;Service使用当前用户信息。 C端：微信登录换取用户信息 → 生成JWT → 前端携带 → 拦截器校验 → 解析出userId写入ThreadLocal → 后续业务读取当前用户。  123456789flowchart TD    A[登录请求&lt;br/&gt;/admin/employee/login 或 /user/user/login] --&gt; B[校验账号/微信code]    B --&gt; C[生成JWT并返回给前端]    C --&gt; D[前端在请求头携带token]    D --&gt; E[拦截器读取请求头token]    E --&gt; F&#123;JWT有效?&#125;    F --&gt;|是| G[解析c...</div></div></div></a><a class="pagination-related" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/" title="JWT登录认证复盘"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-11</div><div class="info-item-2">JWT登录认证复盘</div></div><div class="info-2"><div class="info-item-1">[[JWT登录认证]] 非常好！用费曼学习法来验证理解，说明你已经在认真消化知识了。我逐条给你纠正和补充：  ✅ 你理解正确的部分整体职责划分方向是对的，但有一些错误理解和关键遗漏需要纠正。  ❌ 逐条纠正与补充1. JwtProperties类 - 基本正确，但有重要遗漏你的理解：  通过@ConfigurationProperties(prefix &#x3D; “sky.jwt”)注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌。  纠正与补充：  ✅ 正确：通过@ConfigurationProperties绑定配置 ⚠️ 遗漏：还需要@Component注解才能被Spring容器管理，才能被@Autowired注入 ⚠️ 遗漏：具体包含两套独立配置（重要！）： 管理端：adminSecretKey、adminTtl、adminTokenName...</div></div></div></a><a class="pagination-related" href="/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">一、SpringBoot项目的典型结构 《苍穹外卖》概述  1. Maven多模块划分（当前项目结构）1234sky-take-out (父工程)├── sky-common   (公共模块：工具类、常量、异常等)├── sky-pojo     (实体类模块：Entity、DTO、VO)└── sky-server   (核心业务模块：Controller、Service、Mapper)  为什么这样划分？  解耦：各模块职责单一，common和pojo可以被多个服务复用 协作：多人开发时可以各自负责不同模块，减少代码冲突 演进：未来如果要拆分成微服务，改造成本低   2. 核心业务模块（sky-server）的分层结构让我画个图说明： 1234567891011graph TB    A[用户请求] --&gt; B[Controller层&lt;br/&gt;接收请求、参数校验]    B --&gt; C[Service层&lt;br/&gt;业务逻辑处理]    C --&gt; D[Mapper层&lt;br/&gt;数据库操作]    D --&gt; E[(MyS...</div></div></div></a><a class="pagination-related" href="/2026/02/10/spring%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">我们采用”三段式”学习法：注解说明 → 项目实例 → 面试追问。 [[《苍穹外卖》概述]]  🎯 第一部分：Spring 核心注解全解析一、组件注册类注解（告诉Spring”这是我的Bean”）1️⃣ @Component - 通用组件作用： 标记一个类为Spring管理的Bean（组件） 项目出处：  JwtTokenAdminInterceptor.java AutoFillAspect.java OrderTask.java  12345@Component  // 注册为Spring Bean@Slf4jpublic class JwtTokenAdminInterceptor implements HandlerInterceptor &#123;    // 拦截器代码...&#125;   2️⃣ @Service - 业务层组件作用： 标记业务层类，本质上等同于@Component，但语义更明确 项目出处： EmployeeServiceImpl.java 1234@Service  // 标记为业务层Beanpublic class EmployeeServi...</div></div></div></a><a class="pagination-related" href="/2026/02/10/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E6%A6%82%E8%BF%B0/" title="《苍穹外卖》概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">《苍穹外卖》概述</div></div><div class="info-2"><div class="info-item-1">📚 苍穹外卖项目 - 面试必学知识点清单 [[spring核心注解]] [[spring项目三层架构]] [[JWT登录认证]] [[ThreadLocal核心应用]]  作为面试官，我把这个项目的知识点分为三个层次，你按顺序学习： 123456789101112131415161718192021222324252627graph TB    subgraph 第一层[🎯 第一层：必须掌握 - 面试必问]        A1[Spring Boot 核心注解]        A2[三层架构 Controller-Service-Mapper]        A3[JWT 登录认证]        A4[ThreadLocal 用户上下文]        A5[统一响应封装 Result]        A6[全局异常处理]    end        subgraph 第二层[⭐ 第二层：加分项 - 体现深度]        B1[AOP 切面编程]        B2[Spring Cache + Redis 缓存]        B3[MyBatis 动态SQL]   ...</div></div></div></a><a class="pagination-related" href="/2026/01/25/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97/" title="《苍穹外卖》解决微信登录模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-25</div><div class="info-item-2">《苍穹外卖》解决微信登录模块</div></div><div class="info-2"><div class="info-item-1">1. 背景微信小程序点击登录后，login失败，无法正常登录，无法加载菜品页面。 2. 正文内容问题的根源是：@AutoFill 注解是为管理端的实体类设计的（如 Employee、Category 等），这些实体类有 createUser 和 updateUser 字段。但 User 是 C端用户实体，它没有这两个字段。  问题根源详解 ┌─────────────────────────────────────────────────────────────────────────┐│  User 实体类只有：                                                       ││  - id, openid, name, phone, sex, idNumber, avatar, createTime          ││                                                                         ││  AutoFillAspect 尝试调用：         ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9AThreadLocal-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">🎯 第一部分：ThreadLocal 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFThreadLocal%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">一、什么是ThreadLocal？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81ThreadLocal-%E7%9A%84%E6%A0%B8%E5%BF%83API"><span class="toc-number">1.2.</span> <span class="toc-text">二、ThreadLocal 的核心API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81ThreadLocal-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">三、ThreadLocal 的底层原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.1.</span> <span class="toc-text">1️⃣ 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E6%BA%90%E7%A0%81%E7%AE%80%E5%8C%96%E7%89%88"><span class="toc-number">1.3.2.</span> <span class="toc-text">2️⃣ 源码简化版</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9A%80-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9AThreadLocal%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">🚀 第二部分：ThreadLocal在项目中的核心应用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-BaseContext"><span class="toc-number">2.1.</span> <span class="toc-text">一、项目中的使用场景 - BaseContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%8C%E6%95%B4%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">二、完整的业务流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%843%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.3.</span> <span class="toc-text">三、项目中的3个核心应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF1%EF%B8%8F%E2%83%A3%EF%BC%9A%E6%8B%A6%E6%88%AA%E5%99%A8%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8%E6%88%B7ID"><span class="toc-number">2.3.1.</span> <span class="toc-text">场景1️⃣：拦截器中设置用户ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF2%EF%B8%8F%E2%83%A3%EF%BC%9AService%E5%B1%82%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7ID%EF%BC%88%E8%B4%AD%E7%89%A9%E8%BD%A6%E6%A1%88%E4%BE%8B%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">场景2️⃣：Service层获取当前用户ID（购物车案例）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF3%EF%B8%8F%E2%83%A3%EF%BC%9AAOP%E4%B8%AD%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85%E5%85%AC%E5%85%B1%E5%AD%97%E6%AE%B5"><span class="toc-number">2.3.3.</span> <span class="toc-text">场景3️⃣：AOP中自动填充公共字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8ThreadLocal%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">四、为什么要用ThreadLocal？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E6%96%B9%E6%A1%88%EF%BC%9A%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F"><span class="toc-number">2.4.1.</span> <span class="toc-text">对比方案：传统方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%94%A5-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9AThreadLocal%E5%9C%A8%E9%9D%A2%E8%AF%95%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">3.</span> <span class="toc-text">🔥 第三部分：ThreadLocal在面试中的重要性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%AD%90-%E9%87%8D%E8%A6%81%E6%80%A7%E7%AD%89%E7%BA%A7%EF%BC%9A%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%EF%BC%88%E4%BA%94%E6%98%9F%E6%BB%A1%E5%88%86%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">⭐ 重要性等级：★★★★★（五星满分）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%93%9D-%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86%EF%BC%9A%E9%9D%A2%E8%AF%95%E9%A2%98%E5%85%A8%E8%A7%A3%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">📝 第四部分：面试题全解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%981%EF%BC%9A%E8%AF%B7%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8BThreadLocal%EF%BC%88%E5%9F%BA%E7%A1%80%E5%BF%85%E9%97%AE%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">❓ 面试题1：请介绍一下ThreadLocal（基础必问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%982%EF%BC%9AThreadLocal%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%88%E4%B8%AD%E7%BA%A7%E5%BF%85%E9%97%AE%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">❓ 面试题2：ThreadLocal的原理是什么？（中级必问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%983%EF%BC%9AThreadLocal%E4%BC%9A%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%90%97%EF%BC%9F%EF%BC%88%E9%AB%98%E9%A2%91%EF%BC%81%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">❓ 面试题3：ThreadLocal会内存泄漏吗？（高频！）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90%EF%BC%9A"><span class="toc-number">4.3.1.</span> <span class="toc-text">原因分析：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A5%E9%87%8D%E5%90%97%EF%BC%9F"><span class="toc-number">4.3.2.</span> <span class="toc-text">严重吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E5%BF%85%E9%A1%BB%E8%B0%83%E7%94%A8remove-%EF%BC%81"><span class="toc-number">4.3.3.</span> <span class="toc-text">解决方案：必须调用remove()！</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%A5%E9%87%8D%E9%97%AE%E9%A2%98%EF%BC%88%E6%88%91%E8%A6%81%E4%B8%A5%E5%8E%89%E6%8C%87%E5%87%BA%EF%BC%81%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">⚠️ 项目中的严重问题（我要严厉指出！）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A7-%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%86%99%E6%B3%95%EF%BC%88%E9%9D%A2%E8%AF%95%E5%8A%A0%E5%88%86%E9%A1%B9%EF%BC%81%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">🔧 正确的写法（面试加分项！）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%984%EF%BC%9AThreadLocal%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">4.6.</span> <span class="toc-text">❓ 面试题4：ThreadLocal的应用场景有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%985%EF%BC%9AThreadLocal%E5%92%8Csynchronized%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">4.7.</span> <span class="toc-text">❓ 面试题5：ThreadLocal和synchronized的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9D%93-%E9%9D%A2%E8%AF%95%E9%A2%986%EF%BC%9AInheritableThreadLocal%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">4.8.</span> <span class="toc-text">❓ 面试题6：InheritableThreadLocal是什么？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%93-%E9%9D%A2%E8%AF%95%E5%9B%9E%E7%AD%94%E6%A8%A1%E6%9D%BF"><span class="toc-number">5.</span> <span class="toc-text">🎓 面试回答模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E6%80%BB%E7%BB%93%EF%BC%9A%E6%8E%8C%E6%8F%A1ThreadLocal%E7%9A%84%E4%B8%89%E4%B8%AA%E5%B1%82%E6%AC%A1"><span class="toc-number">6.</span> <span class="toc-text">🎯 总结：掌握ThreadLocal的三个层次</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-12T14:38:45.516Z" title="发表于 2026-02-12 22:38:45">2026-02-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/" title="JWT登录认证">JWT登录认证</a><time datetime="2026-02-10T16:00:00.000Z" title="发表于 2026-02-11 00:00:00">2026-02-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/" title="JWT登录认证复盘">JWT登录认证复盘</a><time datetime="2026-02-10T16:00:00.000Z" title="发表于 2026-02-11 00:00:00">2026-02-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/10/spring%E9%A1%B9%E7%9B%AE%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-10T14:43:47.255Z" title="发表于 2026-02-10 22:43:47">2026-02-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/10/spring%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3/" title="《苍穹外卖》概述">《苍穹外卖》概述</a><time datetime="2026-02-10T14:43:47.255Z" title="发表于 2026-02-10 22:43:47">2026-02-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
+  window.ChatraID = ''
+  window.Chatra = window.Chatra || function() {
+    (window.Chatra.q = window.Chatra.q || []).push(arguments)
+  }
+
+  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
+    const isChatBtn = false
+    const isChatHideShow = false
+
+    if (isChatBtn) {
+      const close = () => {
+        Chatra('minimizeWidget')
+        Chatra('hide')
+      }
+
+      const open = () => {
+        Chatra('openChat', true)
+        Chatra('show')
+      }
+
+      window.ChatraSetup = { startHidden: true }
+    
+      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
+
+      document.getElementById('chat-btn').style.display = 'block'
+    } else if (isChatHideShow) {
+      window.chatBtn = {
+        hide: () => Chatra('hide'),
+        show: () => Chatra('show')
+      }
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
