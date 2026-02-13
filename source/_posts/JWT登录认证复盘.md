@@ -12,6 +12,13 @@ date: 2026-02-11
 
 ## **✅ 你理解正确的部分**
 整体职责划分方向是对的，但有一些**错误理解**和**关键遗漏**需要纠正。
+1. 关于JwtProperties类，通过@ConfigurationProperties(prefix = "sky.jwt")注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌;
+2. 关于JwtUtil类，用于生成和解析校验jwt令牌，主要用到两个方法createJWT和parseJWT;
+3. JwtClaimsConstant类，一个常量类，统一claims字段名EMP_ID="empId", USER_ID="userId"，与数据库字段对应;
+4. BaseContext类，一个工具类，提供了一个ThreadLocal变量来存储当前线程的用户id；
+5. EmployeeController类，在该模块主要用到login方法，用于管理员登录，UserController类也是一样，只不过是微笑小程序端登录；
+6. WebMvcConfiguration类，一个注册类，注册拦截器，定义管理端和用户端的拦截器的路径配置；
+7. JwtTokenAdminInterceptor类和JwtTokenUserInterceptor类，在用户登录后，如果用户操作调用的是controller层方法，都需要经过jwt令牌校验才可以后续操作。
 
 ---
 
