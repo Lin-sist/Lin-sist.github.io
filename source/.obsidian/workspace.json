@@ -14,7 +14,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/JWT登录模块架构设计.md",
+                "file": "_posts/RAG知识汇总.md",
                 "mode": "preview",
                 "source": true,
                 "backlinks": true,
@@ -29,7 +29,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "JWT登录模块架构设计"
+              "title": "RAG知识汇总"
             }
           }
         ]
@@ -37,7 +37,7 @@
       {
         "id": "7966da6e53f45455",
         "type": "tabs",
-        "dimension": 12.325349301397205,
+        "dimension": 12.325349301397207,
         "children": [
           {
             "id": "fc26a8c663b0ffb9",
@@ -45,13 +45,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "_posts/JWT登录模块架构设计.md",
+                "file": "_posts/RAG知识汇总.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "JWT登录模块架构设计 的大纲"
+              "title": "RAG知识汇总 的大纲"
             }
           }
         ]
@@ -233,10 +233,13 @@
   },
   "active": "c1c93adde7381259",
   "lastOpenFiles": [
-    "_posts/JWT登录认证code review.md",
-    "_posts/JWT登录模块架构设计.md",
-    "_posts/JWT登录认证.md",
+    "_posts/MySQL学习笔记.md",
+    "_posts/RAG项目概况.md",
+    "_posts/RAG知识汇总.md",
     "_posts/《苍穹外卖》概述.md",
+    "_posts/JWT登录模块架构设计.md",
+    "_posts/JWT登录认证code review.md",
+    "_posts/JWT登录认证.md",
     "_posts/JWT登录认证复盘.md",
     "_posts/ThreadLocal核心应用.md",
     "_posts/Day07-01到12《缓存功能》.md",
