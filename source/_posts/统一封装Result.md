@@ -1,6 +1,6 @@
 ---
 title: 统一封装Result
-tags: [苍穹外卖]
+tags: [苍穹外卖, Result]
 date: 
 ---
 
