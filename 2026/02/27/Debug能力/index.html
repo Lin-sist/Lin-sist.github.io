@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Debug能力 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、Debug 的核心思维（架构师视角）很多初学者的 Debug 方式是：哪里报错改哪里，到处加断点碰运气。这是错的。 资深工程师的 Debug 思路是一套固定方法论，任何 Bug 都按这个流程走： 先学会 Debug 基本操作（3 分钟）在 VS Code 中调试 Java 程序，你只需要掌握 5 个按钮：🔴 断点 (Breakpoint)     → 在代码行号左边点一下，出现红点▶️  启">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Debug能力">
+<meta property="og:url" content="https://lin-sist.github.io/2026/02/27/Debug%E8%83%BD%E5%8A%9B/index.html">
+<meta property="og:site_name" content="Lin说">
+<meta property="og:description" content="一、Debug 的核心思维（架构师视角）很多初学者的 Debug 方式是：哪里报错改哪里，到处加断点碰运气。这是错的。 资深工程师的 Debug 思路是一套固定方法论，任何 Bug 都按这个流程走： 先学会 Debug 基本操作（3 分钟）在 VS Code 中调试 Java 程序，你只需要掌握 5 个按钮：🔴 断点 (Breakpoint)     → 在代码行号左边点一下，出现红点▶️  启">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
+<meta property="article:published_time" content="2026-02-27T15:28:41.820Z">
+<meta property="article:modified_time" content="2026-02-27T15:32:40.257Z">
+<meta property="article:author" content="Lin">
+<meta property="article:tag" content="工程能力">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Debug能力",
+  "url": "https://lin-sist.github.io/2026/02/27/Debug%E8%83%BD%E5%8A%9B/",
+  "image": "https://lin-sist.github.io/img/Lin.jpg",
+  "datePublished": "2026-02-27T15:28:41.820Z",
+  "dateModified": "2026-02-27T15:32:40.257Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lin",
+      "url": "https://Lin-sist.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2026/02/27/Debug%E8%83%BD%E5%8A%9B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Debug能力',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">Debug能力</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Debug能力</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-27T15:28:41.820Z" title="发表于 2026-02-27 23:28:41">2026-02-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T15:32:40.257Z" title="更新于 2026-02-27 23:32:40">2026-02-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="一、Debug-的核心思维（架构师视角）"><a href="#一、Debug-的核心思维（架构师视角）" class="headerlink" title="一、Debug 的核心思维（架构师视角）"></a>一、Debug 的核心思维（架构师视角）</h2><p>很多初学者的 Debug 方式是：<strong>哪里报错改哪里，到处加断点碰运气</strong>。这是错的。</p>
+<p>资深工程师的 Debug 思路是一套<strong>固定方法论</strong>，任何 Bug 都按这个流程走：</p>
+<h3 id="先学会-Debug-基本操作（3-分钟）"><a href="#先学会-Debug-基本操作（3-分钟）" class="headerlink" title="先学会 Debug 基本操作（3 分钟）"></a>先学会 Debug 基本操作（3 分钟）</h3><p>在 VS Code 中调试 Java 程序，你只需要掌握 5 个按钮：<br>🔴 断点 (Breakpoint)     → 在代码行号左边点一下，出现红点<br>▶️  启动调试 (F5)         → 以 Debug 模式启动 Spring Boot<br>⏭️  步过 (F10 &#x2F; Step Over)  → 执行当前行，跳到下一行（不进入方法内部）<br>⏬  步入 (F11 &#x2F; Step Into)  → 进入当前行调用的方法内部<br>⏫  步出 (Shift+F11 &#x2F; Step Out) → 从当前方法内部跳出来，回到调用处<br>▶️  继续 (F5 &#x2F; Continue)   → 放行，直接跑到下一个断点</p>
+<h3 id="步骤一：读报错信息（80-的-Bug-在这一步就能定位）"><a href="#步骤一：读报错信息（80-的-Bug-在这一步就能定位）" class="headerlink" title="步骤一：读报错信息（80% 的 Bug 在这一步就能定位）"></a>步骤一：读报错信息（80% 的 Bug 在这一步就能定位）</h3><p>Java 报错会给你一个 <strong>Exception Stack Trace（异常栈）</strong>，从下往上读：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">com.sky.exception.AccountNotFoundException: 账号不存在</span><br><span class="line">    at com.sky.service.impl.EmployeeServiceImpl.login(EmployeeServiceImpl.java:39)</span><br><span class="line">    at com.sky.controller.admin.EmployeeController.login(EmployeeController.java:44)</span><br><span class="line">    at sun.reflect.NativeMethodAccessorImpl.invoke(...)</span><br><span class="line">    at org.springframework.web.servlet.DispatcherServlet.doDispatch(...)</span><br></pre></td></tr></table></figure>
+
+<p><strong>从上往下看，找到第一个 <code>com.sky</code> 开头的行</strong>——这就是<strong>你的代码</strong>出问题的具体位置。上面的例子告诉你：EmployeeServiceImpl.java 第 39 行。</p>
+<h3 id="步骤二：形成假设（不要急着打断点）"><a href="#步骤二：形成假设（不要急着打断点）" class="headerlink" title="步骤二：形成假设（不要急着打断点）"></a>步骤二：形成假设（不要急着打断点）</h3><p>看到出错位置后，<strong>先用脑子想</strong>：</p>
+<ul>
+<li>这行代码在做什么？</li>
+<li>什么情况下它会报这个错？</li>
+<li>数据是从哪里来的？是不是上游传错了？</li>
+</ul>
+<p>比如看到 <code>NullPointerException at line 39</code>，你的假设应该是：<strong>第 39 行的某个变量是 null，是谁传进来的？</strong></p>
+<h3 id="步骤三：打断点验证假设（最多-2-3-个）"><a href="#步骤三：打断点验证假设（最多-2-3-个）" class="headerlink" title="步骤三：打断点验证假设（最多 2-3 个）"></a>步骤三：打断点验证假设（最多 2-3 个）</h3><p>断点不是越多越好。根据你的假设，在<strong>关键数据产生的位置</strong>打断点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数据从哪来？ → 在数据源头打断点</span><br><span class="line">数据在哪变的？ → 在中间处理逻辑打断点  </span><br><span class="line">数据在哪出错？ → 在报错行的前一行打断点</span><br></pre></td></tr></table></figure>
+
+<p><strong>核心原则：断点打在”数据流转的关键节点”，不是随便打。</strong></p>
+<h3 id="步骤四：观察变量，验证-or-推翻假设"><a href="#步骤四：观察变量，验证-or-推翻假设" class="headerlink" title="步骤四：观察变量，验证 or 推翻假设"></a>步骤四：观察变量，验证 or 推翻假设</h3><p>程序暂停后，<strong>悬停看变量值</strong>，回答三个问题：</p>
+<ol>
+<li>这个变量的值是我预期的吗？</li>
+<li>如果不是，它是在哪一步变错的？</li>
+<li>往上追溯，谁给它赋的值？</li>
+</ol>
+<h3 id="完整示意图"><a href="#完整示意图" class="headerlink" title="完整示意图"></a>完整示意图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">报错信息 → 定位到 com.sky.xxx 的具体行号</span><br><span class="line">              ↓</span><br><span class="line">         形成假设：&quot;可能是 xxx 变量为 null&quot;</span><br><span class="line">              ↓</span><br><span class="line">         在数据源头打 1 个断点，在出错行前打 1 个断点</span><br><span class="line">              ↓</span><br><span class="line">         F5 启动 → 复现 Bug → 程序停在断点</span><br><span class="line">              ↓</span><br><span class="line">         悬停看变量 → 确认是 null</span><br><span class="line">              ↓</span><br><span class="line">         F10 步过 / F11 步入 → 追踪 null 的来源</span><br><span class="line">              ↓</span><br><span class="line">         找到根因 → 修复</span><br></pre></td></tr></table></figure>
+
+<h3 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h3><blockquote>
+<p><strong>Debug 的核心不是”打断点”，而是”形成假设再验证”。</strong> 断点只是验证工具，假设才是灵魂。</p>
+</blockquote>
+<p>这也是为什么实验一你觉得”没有特别深的感悟”——因为你是在<strong>已知答案的情况下操作</strong>，没有经历”猜测→验证”的过程。等你后续真的遇到一个未知 Bug，你就会体会到这套方法论的威力了。</p>
+<hr>
+<h2 id="二、Knife4j-是怎么来的？它怎么知道你的项目？"><a href="#二、Knife4j-是怎么来的？它怎么知道你的项目？" class="headerlink" title="二、Knife4j 是怎么来的？它怎么知道你的项目？"></a>二、Knife4j 是怎么来的？它怎么知道你的项目？</h2><p>答案就在你当前打开的文件里。来看 WebMvcConfiguration.java 中的这段代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> Docket <span class="title function_">docket</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ApiInfo</span> <span class="variable">apiInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ApiInfoBuilder</span>()</span><br><span class="line">            .title(<span class="string">&quot;苍穹外卖项目接口文档&quot;</span>)</span><br><span class="line">            .version(<span class="string">&quot;2.0&quot;</span>)</span><br><span class="line">            .description(<span class="string">&quot;苍穹外卖项目接口文档&quot;</span>)</span><br><span class="line">            .build();</span><br><span class="line">    <span class="type">Docket</span> <span class="variable">docket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Docket</span>(DocumentationType.SWAGGER_2)</span><br><span class="line">            .apiInfo(apiInfo)</span><br><span class="line">            .select()</span><br><span class="line">            .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.sky.controller&quot;</span>))</span><br><span class="line">            <span class="comment">//          ↑↑↑ 关键！扫描这个包下所有 Controller ↑↑↑</span></span><br><span class="line">            .paths(PathSelectors.any())</span><br><span class="line">            .build();</span><br><span class="line">    <span class="keyword">return</span> docket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>整个链路是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1. 项目 pom.xml 引入了 Knife4j 依赖（它是 Swagger 的增强 UI）</span><br><span class="line"></span><br><span class="line">2. WebMvcConfiguration 中配置了 Docket Bean</span><br><span class="line">   → 指定扫描 &quot;com.sky.controller&quot; 包</span><br><span class="line"></span><br><span class="line">3. Spring 启动时，Knife4j 自动扫描这个包下的所有 Controller</span><br><span class="line">   → 读取 @RestController、@PostMapping、@RequestBody 等注解</span><br><span class="line">   → 自动生成接口文档</span><br><span class="line"></span><br><span class="line">4. 访问 http://localhost:8080/doc.html 就能看到</span><br></pre></td></tr></table></figure>
+
+<p><strong>所以它”知道”你的项目，是因为你在配置类里告诉了它去扫描哪个包。</strong> 它和 Postman&#x2F;Apifox 的区别是：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Knife4j&#x2F;Swagger</strong></td>
+<td>自动从代码注解生成文档，接口改了文档自动更新</td>
+</tr>
+<tr>
+<td><strong>Postman&#x2F;Apifox</strong></td>
+<td>手动填写 URL、参数、请求体，需要自己维护</td>
+</tr>
+</tbody></table>
+<p>后续你给 Controller 方法加上 <code>@ApiOperation(&quot;新增员工&quot;)</code> 这种注解，Knife4j 页面上就会显示中文说明，非常方便。</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2026/02/27/Debug%E8%83%BD%E5%8A%9B/">https://lin-sist.github.io/2026/02/27/Debug%E8%83%BD%E5%8A%9B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E8%83%BD%E5%8A%9B/">工程能力</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/" title="RAG前端开发Bug"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">RAG前端开发Bug</div></div><div class="info-2"><div class="info-item-1">项目启动遇到报错：端口占用1Ran terminal command: netstat -ano | findstr &quot;:8080&quot; | findstr &quot;LISTENING&quot;  1Ran terminal command: Get-Process -Id 12560 -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime, @&#123;N=&#x27;CmdLine&#x27;;E=&#123;(Get-CimInstance Win32_Process -Filter &quot;ProcessId=$($_.Id)&quot;).CommandLine.Substring(0, [Math]::Min(200, (Get-CimInstance Win32_Process -Filter &quot;ProcessId=$($_.Id)&quot;).CommandLine.Length))&#125;&#125; | Format-List ...</div></div></div></a><a class="pagination-related" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="Redis核心应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Redis核心应用</div></div><div class="info-2"><div class="info-item-1">🗺️ Redis 在项目中的七大核心应用12345678910111213graph LR    subgraph Redis在黑马点评中的应用全景        A[1.登录态存储&lt;br/&gt;Hash]         B[2.缓存商户&lt;br/&gt;String]        C[3.全局唯一ID&lt;br/&gt;String自增]        D[4.秒杀预判+消息&lt;br/&gt;Lua+Stream]        E[5.分布式锁&lt;br/&gt;String/Redisson]        F[6.点赞排行&lt;br/&gt;ZSet]        G[7.关注/共同关注&lt;br/&gt;Set]        H[8.Feed流推送&lt;br/&gt;ZSet滚动分页]        I[9.GEO附近商户&lt;br/&gt;GEO]        J[10.UV统计&lt;br/&gt;HyperLogLog]    end  下面逐个给你拆解 业务场景 → 用了什么Redis数据结构 → 为什么这么用 → 面试怎...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Debug-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E7%BB%B4%EF%BC%88%E6%9E%B6%E6%9E%84%E5%B8%88%E8%A7%86%E8%A7%92%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">一、Debug 的核心思维（架构师视角）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E5%AD%A6%E4%BC%9A-Debug-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%883-%E5%88%86%E9%92%9F%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">先学会 Debug 基本操作（3 分钟）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80%EF%BC%9A%E8%AF%BB%E6%8A%A5%E9%94%99%E4%BF%A1%E6%81%AF%EF%BC%8880-%E7%9A%84-Bug-%E5%9C%A8%E8%BF%99%E4%B8%80%E6%AD%A5%E5%B0%B1%E8%83%BD%E5%AE%9A%E4%BD%8D%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">步骤一：读报错信息（80% 的 Bug 在这一步就能定位）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8C%EF%BC%9A%E5%BD%A2%E6%88%90%E5%81%87%E8%AE%BE%EF%BC%88%E4%B8%8D%E8%A6%81%E6%80%A5%E7%9D%80%E6%89%93%E6%96%AD%E7%82%B9%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">步骤二：形成假设（不要急着打断点）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%89%EF%BC%9A%E6%89%93%E6%96%AD%E7%82%B9%E9%AA%8C%E8%AF%81%E5%81%87%E8%AE%BE%EF%BC%88%E6%9C%80%E5%A4%9A-2-3-%E4%B8%AA%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">步骤三：打断点验证假设（最多 2-3 个）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E5%9B%9B%EF%BC%9A%E8%A7%82%E5%AF%9F%E5%8F%98%E9%87%8F%EF%BC%8C%E9%AA%8C%E8%AF%81-or-%E6%8E%A8%E7%BF%BB%E5%81%87%E8%AE%BE"><span class="toc-number">1.5.</span> <span class="toc-text">步骤四：观察变量，验证 or 推翻假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-number">1.6.</span> <span class="toc-text">完整示意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">一句话总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Knife4j-%E6%98%AF%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84%EF%BC%9F%E5%AE%83%E6%80%8E%E4%B9%88%E7%9F%A5%E9%81%93%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">二、Knife4j 是怎么来的？它怎么知道你的项目？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" title="RAG前端开发">RAG前端开发</a><time datetime="2026-02-28T15:28:24.614Z" title="发表于 2026-02-28 23:28:24">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/" title="RAG前端开发Bug">RAG前端开发Bug</a><time datetime="2026-02-28T14:22:58.946Z" title="发表于 2026-02-28 22:22:58">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/" title="Debug能力">Debug能力</a><time datetime="2026-02-27T15:28:41.820Z" title="发表于 2026-02-27 23:28:41">2026-02-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="Redis核心应用">Redis核心应用</a><time datetime="2026-02-26T05:17:35.673Z" title="发表于 2026-02-26 13:17:35">2026-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/" title="《黑马点评》路线图">《黑马点评》路线图</a><time datetime="2026-02-25T14:38:18.644Z" title="发表于 2026-02-25 22:38:18">2026-02-25</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
+  window.ChatraID = ''
+  window.Chatra = window.Chatra || function() {
+    (window.Chatra.q = window.Chatra.q || []).push(arguments)
+  }
+
+  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
+    const isChatBtn = false
+    const isChatHideShow = false
+
+    if (isChatBtn) {
+      const close = () => {
+        Chatra('minimizeWidget')
+        Chatra('hide')
+      }
+
+      const open = () => {
+        Chatra('openChat', true)
+        Chatra('show')
+      }
+
+      window.ChatraSetup = { startHidden: true }
+    
+      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
+
+      document.getElementById('chat-btn').style.display = 'block'
+    } else if (isChatHideShow) {
+      window.chatBtn = {
+        hide: () => Chatra('hide'),
+        show: () => Chatra('show')
+      }
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

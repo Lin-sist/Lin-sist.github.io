@@ -1,0 +1,404 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Redis核心应用 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🗺️ Redis 在项目中的七大核心应用12345678910111213graph LR    subgraph Redis在黑马点评中的应用全景        A[1.登录态存储&lt;br&#x2F;&gt;Hash]         B[2.缓存商户&lt;br&#x2F;&gt;String]        C[3.全局唯一ID&lt;br&#x2F;&gt;String自增]        D[4.秒杀预判+消息">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis核心应用">
+<meta property="og:url" content="https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Lin说">
+<meta property="og:description" content="🗺️ Redis 在项目中的七大核心应用12345678910111213graph LR    subgraph Redis在黑马点评中的应用全景        A[1.登录态存储&lt;br&#x2F;&gt;Hash]         B[2.缓存商户&lt;br&#x2F;&gt;String]        C[3.全局唯一ID&lt;br&#x2F;&gt;String自增]        D[4.秒杀预判+消息">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
+<meta property="article:published_time" content="2026-02-26T05:17:35.673Z">
+<meta property="article:modified_time" content="2026-02-26T05:18:40.553Z">
+<meta property="article:author" content="Lin">
+<meta property="article:tag" content="黑马点评">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Redis核心应用",
+  "url": "https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/",
+  "image": "https://lin-sist.github.io/img/Lin.jpg",
+  "datePublished": "2026-02-26T05:17:35.673Z",
+  "dateModified": "2026-02-26T05:18:40.553Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lin",
+      "url": "https://Lin-sist.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Redis核心应用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">Redis核心应用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Redis核心应用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-26T05:17:35.673Z" title="发表于 2026-02-26 13:17:35">2026-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-26T05:18:40.553Z" title="更新于 2026-02-26 13:18:40">2026-02-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="🗺️-Redis-在项目中的七大核心应用"><a href="#🗺️-Redis-在项目中的七大核心应用" class="headerlink" title="🗺️ Redis 在项目中的七大核心应用"></a>🗺️ Redis 在项目中的七大核心应用</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    subgraph Redis在黑马点评中的应用全景</span><br><span class="line">        A[1.登录态存储&lt;br/&gt;Hash] </span><br><span class="line">        B[2.缓存商户&lt;br/&gt;String]</span><br><span class="line">        C[3.全局唯一ID&lt;br/&gt;String自增]</span><br><span class="line">        D[4.秒杀预判+消息&lt;br/&gt;Lua+Stream]</span><br><span class="line">        E[5.分布式锁&lt;br/&gt;String/Redisson]</span><br><span class="line">        F[6.点赞排行&lt;br/&gt;ZSet]</span><br><span class="line">        G[7.关注/共同关注&lt;br/&gt;Set]</span><br><span class="line">        H[8.Feed流推送&lt;br/&gt;ZSet滚动分页]</span><br><span class="line">        I[9.GEO附近商户&lt;br/&gt;GEO]</span><br><span class="line">        J[10.UV统计&lt;br/&gt;HyperLogLog]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+
+<p>下面逐个给你拆解 <strong>业务场景 → 用了什么Redis数据结构 → 为什么这么用 → 面试怎么问</strong>：</p>
+<hr>
+<h3 id="📌-1-用户登录态：替代-Session（Hash）"><a href="#📌-1-用户登录态：替代-Session（Hash）" class="headerlink" title="📌 1. 用户登录态：替代 Session（Hash）"></a>📌 1. 用户登录态：替代 Session（Hash）</h3><p><strong>业务流程：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 客户端</span><br><span class="line">    participant 服务端</span><br><span class="line">    participant Redis</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 1. 发送手机号请求验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 2. SET login:code:&#123;phone&#125; &#123;code&#125; EX 2min</span><br><span class="line">    服务端--&gt;&gt;客户端: 3. 返回OK（验证码打日志模拟发送）</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 4. 提交手机号+验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 5. GET login:code:&#123;phone&#125; 校验验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 6. HSET login:token:&#123;UUID&#125; 存用户信息，TTL 30min</span><br><span class="line">    服务端--&gt;&gt;客户端: 7. 返回 token</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 8. 后续请求带 token（Header: authorization）</span><br><span class="line">    服务端-&gt;&gt;Redis: 9. HGETALL login:token:&#123;token&#125;，刷新TTL</span><br><span class="line">    服务端-&gt;&gt;服务端: 10. 用户信息存入 ThreadLocal</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么用 Hash 而不是 String 存 JSON？</strong></p>
+<ul>
+<li>Hash 可以对单个字段独立读写（比如只取昵称），不用整体反序列化</li>
+<li>节省内存（Redis 对小 Hash 有 ziplist 优化）</li>
+</ul>
+<p><strong>关键代码位置：</strong></p>
+<ul>
+<li>发码 &amp; 登录：UserServiceImpl.java</li>
+<li>Token 拦截器 &amp; 续命：RefreshTokenInterceptor.java</li>
+</ul>
+<blockquote>
+<p>🔥 <strong>面试高频追问：</strong></p>
+<ol>
+<li><strong>“为什么不用 Session 而用 Redis 存 Token？”</strong> → 集群部署时 Session 不共享，Redis 天然是集中式存储，支持水平扩展</li>
+<li><strong>“Token 续命是怎么实现的？不续命会怎样？”</strong> → 每次请求刷新 TTL。不续命的话，活跃用户30分钟也会被踢下线</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="📌-2-商户缓存：解决穿透-击穿-雪崩（String）"><a href="#📌-2-商户缓存：解决穿透-击穿-雪崩（String）" class="headerlink" title="📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）"></a>📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）</h3><p>这是项目中 Redis 用得<strong>最深的模块</strong>，覆盖了缓存三大经典问题：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>含义</th>
+<th>项目解法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>缓存穿透</strong></td>
+<td>查一个数据库也没有的数据，请求直接打到DB</td>
+<td><strong>缓存空值</strong>（空字符串””，TTL 2min）</td>
+</tr>
+<tr>
+<td><strong>缓存击穿</strong></td>
+<td>热点Key过期的瞬间，大量请求涌入DB</td>
+<td><strong>互斥锁</strong> 或 <strong>逻辑过期</strong></td>
+</tr>
+<tr>
+<td><strong>缓存雪崩</strong></td>
+<td>大面积Key同时过期</td>
+<td>给TTL加随机值</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[客户端请求商户详情] --&gt; B&#123;Redis有缓存?&#125;</span><br><span class="line">    B --&gt;|命中且有值| C[直接返回]</span><br><span class="line">    B --&gt;|命中但为空值| D[返回null,拦截穿透]</span><br><span class="line">    B --&gt;|未命中| E[查数据库]</span><br><span class="line">    E --&gt; F&#123;数据库有?&#125;</span><br><span class="line">    F --&gt;|有| G[写入Redis,设置TTL]</span><br><span class="line">    F --&gt;|无| H[写入空值到Redis,短TTL]</span><br><span class="line">    G --&gt; C</span><br><span class="line">    H --&gt; D</span><br></pre></td></tr></table></figure>
+
+<p><strong>更新策略：</strong> 先更新DB，再删Redis缓存（Cache Aside Pattern）</p>
+<p><strong>关键代码位置：</strong></p>
+<ul>
+<li>缓存工具类（封装了穿透&#x2F;击穿方案）：CacheClient.java</li>
+<li>商户缓存更新（先改DB再删缓存 + <code>@Transactional</code>）：<a href="src/main/java/com/hmdp/service/impl/ShopServiceImpl.java">ShopServiceImpl.java</a></li>
+</ul>
+<blockquote>
+<p>🔥 <strong>面试高频追问：</strong></p>
+<ol>
+<li><strong>“先删缓存还是先更新数据库？为什么？”</strong> → 先更新DB再删缓存。如果先删缓存，另一个线程可能读到旧DB数据写回缓存，造成不一致</li>
+<li><strong>“逻辑过期方案的缺点是什么？”</strong> → 数据不一致窗口期内返回旧数据，牺牲强一致性换高可用</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="📌-3-全局唯一ID生成器（String-INCR）"><a href="#📌-3-全局唯一ID生成器（String-INCR）" class="headerlink" title="📌 3. 全局唯一ID生成器（String INCR）"></a>📌 3. 全局唯一ID生成器（String INCR）</h3><p><strong>业务需求：</strong> 秒杀订单需要全局唯一、趋势递增的订单ID（不能直接用自增主键——暴露信息量、分库分表有冲突）</p>
+<p><strong>设计方案：</strong> 64位 &#x3D; 1位符号位 + 31位时间戳 + 32位序列号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0 - 00000000 00000000 00000000 0000000 - 00000000 00000000 00000000 00000000</span><br><span class="line">符号   31位秒级时间戳（可用约68年）         32位序列号（Redis INCR，按天分Key）</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键代码：</strong> RedisIdWorker.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Long</span> <span class="variable">count</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().increment(<span class="string">&quot;icr:&quot;</span> + keyPrefix + <span class="string">&quot;:&quot;</span> + today);</span><br><span class="line"><span class="keyword">return</span> timestamp &lt;&lt; <span class="number">32</span> | count;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>🔥 <strong>面试高频追问：</strong></p>
+<ol>
+<li><strong>“为什么用 Redis 的 INCR 而不是 UUID？”</strong> → UUID 无序，对 B+Tree 索引不友好；INCR 趋势递增，插入性能高</li>
+<li><strong>“这个方案每天最多支持多少个订单？”</strong> → $2^{32} \approx 42.9$ 亿条&#x2F;天&#x2F;业务</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）"><a href="#📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）" class="headerlink" title="📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）"></a>📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</h3><p>这是项目技术含量<strong>最高</strong>的模块，体现了「Redis 判资格，异步写DB」的思想：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 用户</span><br><span class="line">    participant Redis</span><br><span class="line">    participant 消费者线程</span><br><span class="line">    participant 数据库</span><br><span class="line"></span><br><span class="line">    用户-&gt;&gt;Redis: 1. 执行 Lua 脚本（原子操作）</span><br><span class="line">    Note over Redis: 判断库存&gt;0？&lt;br/&gt;判断用户未重复下单？&lt;br/&gt;扣减库存 INCRBY -1&lt;br/&gt;记录用户 SADD&lt;br/&gt;发消息 XADD stream.orders</span><br><span class="line">    Redis--&gt;&gt;用户: 2. 返回0=成功 / 1=库存不足 / 2=重复下单</span><br><span class="line"></span><br><span class="line">    消费者线程-&gt;&gt;Redis: 3. XREADGROUP 从 Stream 读消息</span><br><span class="line">    消费者线程-&gt;&gt;数据库: 4. 创建订单 + 扣减DB库存</span><br><span class="line">    消费者线程-&gt;&gt;Redis: 5. XACK 确认消息</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么要用 Lua 脚本？</strong> → 判库存、判一人一单、扣库存这三步必须<strong>原子性</strong>执行，否则并发下会超卖</p>
+<p><strong>关键代码位置：</strong></p>
+<ul>
+<li>Lua脚本：seckill.lua</li>
+<li>消费者线程（Stream 读取 + PendingList 处理）：VoucherOrderServiceImpl.java</li>
+</ul>
+<blockquote>
+<p>🔥 <strong>面试高频追问：</strong></p>
+<ol>
+<li><strong>“为什么不直接用数据库乐观锁？要先走Redis？”</strong> → 数据库QPS有限（几千），Redis可以扛十几万QPS。先在Redis挡住绝大部分请求，只有合法请求才异步写DB</li>
+<li><strong>“如果消费者宕机了，消息会丢吗？”</strong> → 不会。Stream 的消费者组机制有 PendingList，未 ACK 的消息会重新消费</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="📌-5-分布式锁（String-SETNX-→-Redisson）"><a href="#📌-5-分布式锁（String-SETNX-→-Redisson）" class="headerlink" title="📌 5. 分布式锁（String SETNX → Redisson）"></a>📌 5. 分布式锁（String SETNX → Redisson）</h3><p>项目展示了<strong>锁的演进过程</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>实现</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1 简易锁</td>
+<td><code>SETNX key value EX timeout</code></td>
+<td>释放锁不是原子操作（判断+删除中间可能锁过期被别人拿了）</td>
+</tr>
+<tr>
+<td>V2 Lua脚本释放</td>
+<td>释放时先GET比对线程标识再DEL（原子性）</td>
+<td>不可重入、不可重试、无主从一致性</td>
+</tr>
+<tr>
+<td>V3 Redisson</td>
+<td><code>redissonClient.getLock()</code></td>
+<td>生产级方案：可重入、看门狗续期、Pub&#x2F;Sub重试</td>
+</tr>
+</tbody></table>
+<p><strong>关键代码：</strong></p>
+<ul>
+<li>简易锁：SimpleRedisLock.java, unlock.lua</li>
+<li>Redisson锁（秒杀兜底）：VoucherOrderServiceImpl.java</li>
+</ul>
+<blockquote>
+<p>🔥 <strong>面试高频追问：</strong></p>
+<ol>
+<li><strong>“Redisson 看门狗机制是什么？”</strong> → 默认锁30秒，每10秒续期一次。如果持有锁的线程挂了，不续期则30秒后自动释放</li>
+<li><strong>“Redis主从切换时分布式锁会不会失效？”</strong> → 会！Master加锁后宕机，Slave晋升时可能没同步到锁。解决方案是 RedLock（多节点加锁）</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="📌-6-点赞排行（ZSet）"><a href="#📌-6-点赞排行（ZSet）" class="headerlink" title="📌 6. 点赞排行（ZSet）"></a>📌 6. 点赞排行（ZSet）</h3><p><strong>为什么用 ZSet 而不是 Set？</strong> → 需要按点赞时间排序，ZSet 的 score 存时间戳</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ZADD blog:liked:&#123;blogId&#125; &#123;timestamp&#125; &#123;userId&#125;     -- 点赞</span><br><span class="line">ZREM blog:liked:&#123;blogId&#125; &#123;userId&#125;                  -- 取消</span><br><span class="line">ZSCORE blog:liked:&#123;blogId&#125; &#123;userId&#125;                -- 判断是否已赞</span><br><span class="line">ZRANGE blog:liked:&#123;blogId&#125; 0 4                     -- Top5</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键代码：</strong> BlogServiceImpl.java</p>
+<hr>
+<h3 id="📌-7-共同关注（Set-求交集）"><a href="#📌-7-共同关注（Set-求交集）" class="headerlink" title="📌 7. 共同关注（Set 求交集）"></a>📌 7. 共同关注（Set 求交集）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD follows:&#123;userId&#125; &#123;followUserId&#125;           -- 关注</span><br><span class="line">SREM follows:&#123;userId&#125; &#123;followUserId&#125;           -- 取关</span><br><span class="line">SINTER follows:&#123;我的id&#125; follows:&#123;他的id&#125;        -- 共同关注</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键代码：</strong> FollowServiceImpl.java</p>
+<hr>
+<h3 id="📌-8-Feed-流推送-滚动分页（ZSet）"><a href="#📌-8-Feed-流推送-滚动分页（ZSet）" class="headerlink" title="📌 8. Feed 流推送 + 滚动分页（ZSet）"></a>📌 8. Feed 流推送 + 滚动分页（ZSet）</h3><p>用推模式（发布时推给粉丝信箱），用 <code>ZREVRANGEBYSCORE</code> 实现基于时间戳的滚动分页（避免传统分页的数据重复&#x2F;遗漏问题）。</p>
+<hr>
+<h3 id="📌-9-10-GEO附近商户-HyperLogLog-UV统计"><a href="#📌-9-10-GEO附近商户-HyperLogLog-UV统计" class="headerlink" title="📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计"></a>📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</h3><ul>
+<li><strong>GEO</strong>：<code>GEOADD</code> 存商户坐标，<code>GEOSEARCH</code> 按距离查附近商户</li>
+<li><strong>HyperLogLog</strong>：百万UV去重统计，内存只需12KB，误差率约0.81%</li>
+</ul>
+<hr>
+<h2 id="📊-Redis-数据结构使用总结"><a href="#📊-Redis-数据结构使用总结" class="headerlink" title="📊 Redis 数据结构使用总结"></a>📊 Redis 数据结构使用总结</h2><table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>应用场景</th>
+<th>Key 示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>String</strong></td>
+<td>验证码、缓存商户JSON、分布式锁、ID自增</td>
+<td><code>login:code:&#123;phone&#125;</code>, <code>cache:shop:&#123;id&#125;</code>, <code>lock:shop:&#123;id&#125;</code></td>
+</tr>
+<tr>
+<td><strong>Hash</strong></td>
+<td>用户登录态</td>
+<td><code>login:token:&#123;token&#125;</code></td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td>商户类型缓存</td>
+<td><code>cache:type</code></td>
+</tr>
+<tr>
+<td><strong>Set</strong></td>
+<td>关注列表、秒杀一人一单判重</td>
+<td><code>follows:&#123;userId&#125;</code>, <code>seckill:order:&#123;voucherId&#125;</code></td>
+</tr>
+<tr>
+<td><strong>ZSet</strong></td>
+<td>点赞排行、Feed流信箱</td>
+<td><code>blog:liked:&#123;blogId&#125;</code>, <code>feed:&#123;userId&#125;</code></td>
+</tr>
+<tr>
+<td><strong>Stream</strong></td>
+<td>秒杀异步消息队列</td>
+<td><code>stream.orders</code></td>
+</tr>
+<tr>
+<td><strong>GEO</strong></td>
+<td>附近商户</td>
+<td><code>shop:geo:&#123;typeId&#125;</code></td>
+</tr>
+<tr>
+<td><strong>HyperLogLog</strong></td>
+<td>UV统计</td>
+<td>自定义</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🎯-学习建议"><a href="#🎯-学习建议" class="headerlink" title="🎯 学习建议"></a>🎯 学习建议</h2><p>按这个顺序深入，<strong>每个模块搞懂三件事</strong>：</p>
+<ol>
+<li><strong>业务流程</strong>是什么？（能画出来）</li>
+<li><strong>为什么选这个数据结构？</strong> 换一个行不行？</li>
+<li><strong>面试怎么问？</strong> 能答出底层原理</li>
+</ol>
+<p>你想先深入哪个模块？我建议从 <strong>「1.登录态 + 拦截器」</strong> 或 <strong>「2.商户缓存三大问题」</strong> 开始，这两个是面试命中率最高的。告诉我你想从哪个开始，我带你逐行拆代码！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/">https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/">黑马点评</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/" title="Debug能力"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Debug能力</div></div><div class="info-2"><div class="info-item-1">一、Debug 的核心思维（架构师视角）很多初学者的 Debug 方式是：哪里报错改哪里，到处加断点碰运气。这是错的。 资深工程师的 Debug 思路是一套固定方法论，任何 Bug 都按这个流程走： 先学会 Debug 基本操作（3 分钟）在 VS Code 中调试 Java 程序，你只需要掌握 5 个按钮：🔴 断点 (Breakpoint)     → 在代码行号左边点一下，出现红点▶️  启动调试 (F5)         → 以 Debug 模式启动 Spring Boot⏭️  步过 (F10 &#x2F; Step Over)  → 执行当前行，跳到下一行（不进入方法内部）⏬  步入 (F11 &#x2F; Step Into)  → 进入当前行调用的方法内部⏫  步出 (Shift+F11 &#x2F; Step Out) → 从当前方法内部跳出来，回到调用处▶️  继续 (F5 &#x2F; Continue)   → 放行，直接跑到下一个断点 步骤一：读报错信息（80% 的 Bug 在这一步就能定位）Java 报错会给你一个 Exception Stack Tr...</div></div></div></a><a class="pagination-related" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/" title="《黑马点评》路线图"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">《黑马点评》路线图</div></div><div class="info-2"><div class="info-item-1"> [[Redis核心应用]]   Redis 知识点学习路线（按模块顺序）第一阶段：基础 - 登录与 Session 替换核心问题： 传统 Session 无法在集群间共享 涉及文件：  LoginInterceptor.java — 登录校验拦截器 RefreshTokenInterceptor.java — Token 刷新拦截器 UserServiceImpl.java — 登录逻辑  Redis 知识点：  String 类型存储验证码（带 TTL） Hash 类型存储用户信息 Token 作为 key，实现无状态登录 双拦截器设计：一个刷新 TTL，一个校验登录   第二阶段：缓存 - 商铺查询优化核心问题： 缓存穿透、缓存雪崩、缓存击穿 涉及文件：  ShopServiceImpl.java — 三种缓存问题的解决方案 CacheClient.java — 封装的通用缓存工具类 RedisData.java — 逻辑过期数据封装  Redis 知识点：    问题 解决方案 Redis 用法    缓存穿透 缓存空值 set key &quot;&quot;   缓存...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/" title="《黑马点评》路线图"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-25</div><div class="info-item-2">《黑马点评》路线图</div></div><div class="info-2"><div class="info-item-1"> [[Redis核心应用]]   Redis 知识点学习路线（按模块顺序）第一阶段：基础 - 登录与 Session 替换核心问题： 传统 Session 无法在集群间共享 涉及文件：  LoginInterceptor.java — 登录校验拦截器 RefreshTokenInterceptor.java — Token 刷新拦截器 UserServiceImpl.java — 登录逻辑  Redis 知识点：  String 类型存储验证码（带 TTL） Hash 类型存储用户信息 Token 作为 key，实现无状态登录 双拦截器设计：一个刷新 TTL，一个校验登录   第二阶段：缓存 - 商铺查询优化核心问题： 缓存穿透、缓存雪崩、缓存击穿 涉及文件：  ShopServiceImpl.java — 三种缓存问题的解决方案 CacheClient.java — 封装的通用缓存工具类 RedisData.java — 逻辑过期数据封装  Redis 知识点：    问题 解决方案 Redis 用法    缓存穿透 缓存空值 set key &quot;&quot;   缓存...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%97%BA%EF%B8%8F-Redis-%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">🗺️ Redis 在项目中的七大核心应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-1-%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%80%81%EF%BC%9A%E6%9B%BF%E4%BB%A3-Session%EF%BC%88Hash%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">📌 1. 用户登录态：替代 Session（Hash）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-2-%E5%95%86%E6%88%B7%E7%BC%93%E5%AD%98%EF%BC%9A%E8%A7%A3%E5%86%B3%E7%A9%BF%E9%80%8F-%E5%87%BB%E7%A9%BF-%E9%9B%AA%E5%B4%A9%EF%BC%88String%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-3-%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88String-INCR%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">📌 3. 全局唯一ID生成器（String INCR）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-4-%E7%A7%92%E6%9D%80%EF%BC%9ALua-%E8%84%9A%E6%9C%AC-Stream-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88%E5%BC%82%E6%AD%A5%E4%B8%8B%E5%8D%95%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-5-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88String-SETNX-%E2%86%92-Redisson%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">📌 5. 分布式锁（String SETNX → Redisson）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-6-%E7%82%B9%E8%B5%9E%E6%8E%92%E8%A1%8C%EF%BC%88ZSet%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">📌 6. 点赞排行（ZSet）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-7-%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%EF%BC%88Set-%E6%B1%82%E4%BA%A4%E9%9B%86%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">📌 7. 共同关注（Set 求交集）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-8-Feed-%E6%B5%81%E6%8E%A8%E9%80%81-%E6%BB%9A%E5%8A%A8%E5%88%86%E9%A1%B5%EF%BC%88ZSet%EF%BC%89"><span class="toc-number">1.8.</span> <span class="toc-text">📌 8. Feed 流推送 + 滚动分页（ZSet）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8C-9-10-GEO%E9%99%84%E8%BF%91%E5%95%86%E6%88%B7-HyperLogLog-UV%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.9.</span> <span class="toc-text">📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8A-Redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">📊 Redis 数据结构使用总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%AF-%E5%AD%A6%E4%B9%A0%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">🎯 学习建议</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" title="RAG前端开发">RAG前端开发</a><time datetime="2026-02-28T15:28:24.614Z" title="发表于 2026-02-28 23:28:24">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/" title="RAG前端开发Bug">RAG前端开发Bug</a><time datetime="2026-02-28T14:22:58.946Z" title="发表于 2026-02-28 22:22:58">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/" title="Debug能力">Debug能力</a><time datetime="2026-02-27T15:28:41.820Z" title="发表于 2026-02-27 23:28:41">2026-02-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="Redis核心应用">Redis核心应用</a><time datetime="2026-02-26T05:17:35.673Z" title="发表于 2026-02-26 13:17:35">2026-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/" title="《黑马点评》路线图">《黑马点评》路线图</a><time datetime="2026-02-25T14:38:18.644Z" title="发表于 2026-02-25 22:38:18">2026-02-25</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
+  window.ChatraID = ''
+  window.Chatra = window.Chatra || function() {
+    (window.Chatra.q = window.Chatra.q || []).push(arguments)
+  }
+
+  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
+    const isChatBtn = false
+    const isChatHideShow = false
+
+    if (isChatBtn) {
+      const close = () => {
+        Chatra('minimizeWidget')
+        Chatra('hide')
+      }
+
+      const open = () => {
+        Chatra('openChat', true)
+        Chatra('show')
+      }
+
+      window.ChatraSetup = { startHidden: true }
+    
+      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
+
+      document.getElementById('chat-btn').style.display = 'block'
+    } else if (isChatHideShow) {
+      window.chatBtn = {
+        hide: () => Chatra('hide'),
+        show: () => Chatra('show')
+      }
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
