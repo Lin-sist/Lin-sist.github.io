@@ -403,6 +403,38 @@ public interface EmployeeMapper {
 </select>
 ```
 
+在 Spring 项目中，你需要区分代码注释（Javadoc）和框架注解（Annotation），因为它们的用途完全不同。
+
+1. `@Param`：数据持久层参数绑定
+
+这是 **MyBatis** 或 **Spring Data JPA** 中常用的框架注解，主要用于将接口方法的参数与 SQL 语句中的变量名进行显式绑定。 
+
+- **MyBatis 中的作用**：
+    - **多参数映射**：当 Mapper 接口方法有多个参数时，MyBatis 无法自动识别对应的 XML 变量，必须使用 `@Param` 指定名称。
+    - **动态 SQL 引用**：方便在 SQL 语句中使用 `#{paramName}` 引用参数。
+- **Spring Data JPA 中的作用**：
+    - **命名参数绑定**：在 `@Query` 注解编写原生或 JPQL 查询时，通过 `@Param` 将方法参数映射到占位符（如 `:name`）上。 
+
+2. `@param` 和 `@return`：代码文档说明 (Javadoc)
+
+如果你看到的是**小写开头的标签**（位于代码上方的 `/** ... */` 注释块中），它们属于标准 Java 文档工具。 
+
+- **`@param`**：用于描述方法的一个特定输入参数，说明该参数的含义、取值范围或约束条件。
+- **`@return`**：用于描述方法的返回值，说明返回的数据代表什么。
+- **主要作用**：
+    - **生成 API 文档**：通过 Javadoc 工具生成 HTML 格式的说明文档。
+    - **IDE 提示**：当你调用该方法时，IntelliJ IDEA 或 Eclipse 会悬浮显示这些注释内容，帮助开发者理解如何使用该方法。
+3. 易混淆注解对比
+
+|注解/标签|类型|场景|核心作用|
+|---|---|---|---|
+|**`@Param`**|框架注解|Mapper/Repository 接口|**绑定 SQL 参数**，解决多参数匹配问题|
+|**`@RequestParam`**|框架注解|Controller 方法|**提取 HTTP 请求参数**（如 URL 中的 Query String）|
+|**`@param`**|Javadoc 标签|任意方法上方注释|**描述参数含义**，仅用于生成文档或 IDE 提示|
+|**`@return`**|Javadoc 标签|任意方法上方注释|**描述返回值含义**|
+
+**注意：** Spring 本身并没有大写开头的 `@Return` 注解，通常与返回值相关的 Spring 注解是 `@ResponseBody`（表示返回 JSON 数据）
+
 ---
 
 # 🎯 第二部分：Lombok 注解全解析
