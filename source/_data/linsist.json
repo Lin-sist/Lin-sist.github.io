@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "featured_sources": [
+    {"source":"_posts/RAG前端开发.md","summary":"从 Vue、Vite 到状态管理，梳理前端项目的整体结构。","group":"project","group_label":"项目实践"},
+    {"source":"_posts/RAG前端开发Bug.md","summary":"记录项目启动与联调时遇到的问题，留下排查的过程。","group":"project","group_label":"项目实践"},
+    {"source":"_posts/Debug能力.md","summary":"从报错现象出发，建立一条可验证的排查路径。","group":"engineering","group_label":"工程笔记"}
+  ]
+}

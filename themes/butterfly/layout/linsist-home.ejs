@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-asset-base="<%= url_for('linsist/assets/') %>" data-search-index="<%= url_for('linsist/search.json') %>" data-site-root="<%= url_for('/') %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Lin说，Linsist 的个人主页。记录 Java 后端、RAG 与 AI 应用开发中的思考与实践。">
+  <link rel="canonical" href="<%= config.url %><%= config.root %>">
+  <meta name="theme-color" content="#0b1420">
+  <title>Lin说 · 让思考留下轨迹</title>
+  <link rel="icon" href="<%= url_for('linsist/assets/favicon.svg') %>" type="image/svg+xml">
+  <link rel="stylesheet" href="<%= url_for('linsist/style.css') %>">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')||'dark'}catch{}</script>
+  <script src="<%= url_for('linsist/app.js') %>" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳转到正文</a>
+  <header class="site-header">
+    <a class="wordmark" href="#home" aria-label="Lin说，返回首页">Lin<span>说</span><i aria-hidden="true">✦</i></a>
+    <nav class="desktop-nav" aria-label="主导航">
+      <a href="#home" aria-current="page">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd> / </kbd></button>
+      <button class="icon-button theme-toggle" type="button" aria-label="切换为浅色主题"><span aria-hidden="true">◐</span></button>
+      <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
+    </div>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="#home">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a></nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-media" aria-hidden="true"><img class="hero-poster" src="<%= url_for('linsist/assets/hero-poster.jpg') %>" alt="" fetchpriority="high" width="1920" height="1080"><video id="hero-video" muted loop playsinline preload="none" tabindex="-1" poster="<%= url_for('linsist/assets/hero-poster.jpg') %>"></video></div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="hero-name">Linsist</p>
+        <h1 id="hero-title">让思考，<br>留下轨迹<span>。</span></h1>
+        <p class="hero-description">在代码里构建，也在文字里记录。<br>关于 AI 应用、后端工程，和一路走来的好奇心。</p>
+        <div class="hero-links"><a class="primary-link" href="#work">探索我的作品 <span aria-hidden="true">↗</span></a><a class="quiet-link" href="#writing">读一些文字 <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="hero-foot"><p>重要的是叶子在飘落时划出的轨迹。</p><div class="video-tools"><span id="video-status" role="status">天台与流星</span><button id="video-toggle" type="button" aria-label="播放背景视频"><span class="play-symbol" aria-hidden="true">▷</span><span class="video-label">播放</span></button></div></div>
+    </section>
+
+    <div class="content-wrap">
+      <section class="intro section reveal" id="about" aria-labelledby="intro-title">
+        <div class="intro-identity"><span class="section-label">关于我</span><h2 id="intro-title">你好，我是 Linsist。</h2><a class="text-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">在 GitHub 找到我 <span aria-hidden="true">↗</span></a></div>
+        <div class="intro-copy"><p>一名软件工程在读学生，<br>正在把好奇心，写成可以运行的东西。</p><p>我用 Java 构建后端，也探索 RAG 与 Agent。比起一个漂亮的答案，我更关心它从哪里来、如何被验证，以及系统出错时会发生什么。</p><div class="expertise"><span>Java / Spring Boot</span><span>RAG / AI 应用</span><span>TypeScript / Vue</span></div></div>
+      </section>
+
+      <section class="section work-section" id="work" aria-labelledby="work-title">
+        <div class="section-heading reveal"><span class="section-label">精选作品</span><h2 id="work-title">把想法，做到具体。</h2><p>从知识问答到个人记录，探索技术如何成为可用的产品。</p></div>
+        <div class="project-grid">
+          <article class="project project-rag reveal">
+            <a class="project-image rag-image" href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer" aria-label="查看企业知识库问答项目源码"><img src="<%= url_for('linsist/assets/rag-interface.webp') %>" alt="RAG 应用的问答偏好设置界面，展示快捷键与来源片段选项" loading="lazy" width="1440" height="900"></a>
+            <div class="project-body"><p class="project-kind">AI 应用 / 全栈开发</p><h3><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">让知识，有据可循。<span aria-hidden="true">↗</span></a></h3><p>企业知识库问答系统。从文档上传、解析与检索，到流式回答，让信息能够被找到，也能够被追溯。</p><div class="project-bottom"><span>Spring Boot · Vue · Milvus</span><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：应用问答偏好界面</p></div>
+          </article>
+          <article class="project project-flashback reveal">
+            <a class="project-image flashback-image" href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer" aria-label="查看时光回序项目源码"><img src="<%= url_for('linsist/assets/flashback-home.webp') %>" alt="时光回序首页设计稿：今天的你，想留下些什么？" loading="lazy" width="583" height="1271"></a>
+            <div class="project-body"><p class="project-kind">微信小程序 / 产品实践</p><h3><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">时光回序<span aria-hidden="true">↗</span></a></h3><p>把此刻交给未来。一个关于个人表达、封存与延迟回看的记录空间，让理解留给时间。</p><div class="project-bottom"><span>Uni-app · Spring Boot</span><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：首页设计稿</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section writing-section" id="writing" aria-labelledby="writing-title">
+        <div class="writing-header reveal"><div class="section-heading"><span class="section-label">文字与思考</span><h2 id="writing-title">沿途，记下这些。</h2><p>开发中的理解、踩过的坑，以及重新想明白的瞬间。</p></div><a class="text-link" href="<%= url_for('archives/') %>" target="_blank" rel="noopener noreferrer">全部文章 <span aria-hidden="true">↗</span></a></div>
+        <div class="writing-toolbar reveal"><div class="filters" aria-label="按主题筛选文章"><button type="button" data-filter="all" aria-pressed="true">全部</button><button type="button" data-filter="project" aria-pressed="false">项目实践</button><button type="button" data-filter="engineering" aria-pressed="false">工程笔记</button></div><span class="writing-year"><%= page.linsist.posts[0].year %></span></div>
+        <div id="article-list">
+          <% page.linsist.posts.forEach(function(post) { %>
+          <article class="article-row reveal" data-category="<%= post.group %>" data-search="<%= post.title %> <%= post.summary %>">
+            <time datetime="<%= post.date %>"><%= post.shortDate %></time>
+            <a href="<%= url_for(post.path) %>"><h3><%= post.title %></h3><p><%= post.summary %></p></a>
+            <span class="article-topic"><%= post.groupLabel %></span><span class="article-arrow" aria-hidden="true">↗</span>
+          </article>
+          <% }); %>
+        </div>
+        <p id="filter-status" class="sr-only" role="status"></p>
+      </section>
+
+      <section class="contact section reveal" aria-labelledby="contact-title"><span class="section-label">保持联络</span><h2 id="contact-title">下一个想法，<br>也许从一次交流开始。</h2><a class="contact-link" href="mailto:linitsolong@gmail.com">给我写信 <span aria-hidden="true">↗</span></a><p>关于技术、作品，或任何值得认真聊聊的事。</p></section>
+      <footer><a class="wordmark" href="#home">Lin<span>说</span></a><p>记录思考，保持好奇。</p><div><a href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="<%= url_for('archives/') %>" target="_blank" rel="noopener noreferrer">文章归档 ↗</a><a href="#home">回到顶部 ↑</a></div></footer>
+    </div>
+  </main>
+
+  <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint">搜索全部文章的标题、标签与分类 · 按 Esc 关闭</p><div id="search-results" aria-live="polite"></div><a class="search-archive" href="<%= url_for('archives/') %>" target="_blank" rel="noopener noreferrer">浏览完整文章归档 ↗</a></dialog>
+</body>
+</html>
