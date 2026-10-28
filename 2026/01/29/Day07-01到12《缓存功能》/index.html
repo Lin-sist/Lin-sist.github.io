@@ -1,194 +1,81 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Day07-01到12《缓存功能》 | Lin说</title><meta name="author" content="Lin"><meta name="copyright" content="Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🎥 Day07-01到05 缓存菜品 [[Day07-13到19《购物车功能》]]  🧩 本节概述 一句话总结：通过 Redis 缓存菜品数据，减少数据库查询操作，提升系统性能  主要内容关键词：Redis缓存、SpringCache  🧠 模块目标 小程序展示菜品数据是通过数据库获得，若用户端访问量大，数据库访问压力随之增大 通过 Redis 缓存菜品数据，减少数据库查询操作   🔄 实">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Day07-01到12《缓存功能》">
-<meta property="og:url" content="https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/index.html">
-<meta property="og:site_name" content="Lin说">
-<meta property="og:description" content="🎥 Day07-01到05 缓存菜品 [[Day07-13到19《购物车功能》]]  🧩 本节概述 一句话总结：通过 Redis 缓存菜品数据，减少数据库查询操作，提升系统性能  主要内容关键词：Redis缓存、SpringCache  🧠 模块目标 小程序展示菜品数据是通过数据库获得，若用户端访问量大，数据库访问压力随之增大 通过 Redis 缓存菜品数据，减少数据库查询操作   🔄 实">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://lin-sist.github.io/img/Lin.jpg">
-<meta property="article:published_time" content="2026-01-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-02-10T14:43:47.255Z">
-<meta property="article:author" content="Lin">
-<meta property="article:tag" content="一刷苍穹外卖">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://lin-sist.github.io/img/Lin.jpg"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Day07-01到12《缓存功能》",
-  "url": "https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/",
-  "image": "https://lin-sist.github.io/img/Lin.jpg",
-  "datePublished": "2026-01-28T16:00:00.000Z",
-  "dateModified": "2026-02-10T14:43:47.255Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "Lin",
-      "url": "https://Lin-sist.github.io"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-search-index="/linsist/search.json" data-site-root="/">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0b1420">
+  <meta name="description" content="Day07-01到12《缓存功能》">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Day07-01到12《缓存功能》">
+  <meta property="og:description" content="Day07-01到12《缓存功能》">
+  <meta property="og:url" content="https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/">
+  <meta property="article:published_time" content="2026-01-28T16:00:00.000Z">
+  <meta property="article:modified_time" content="2026-02-10T14:43:47.255Z">
+  <link rel="canonical" href="https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/">
+  <title>Day07-01到12《缓存功能》 · Lin说 / Linsist</title>
+  <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/linsist/style.css">
+  <link rel="stylesheet" href="/linsist/reading.css">
+  <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
+  <script src="/linsist/reading.js" defer></script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="reading-page">
+  <a class="skip-link" href="#article-container">跳转到正文</a>
+  <header class="site-header is-scrolled reading-header">
+    <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav class="desktop-nav" aria-label="主导航">
+      <a href="/">首页</a><a href="/#work">作品</a><a href="/#writing" aria-current="page">文章</a><a href="/#about">关于</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd>/</kbd></button>
+      <button class="icon-button theme-toggle" type="button" aria-label="切换为浅色主题"><span aria-hidden="true">◐</span></button>
+      <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
+    </div>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="/">首页</a><a href="/#work">作品</a><a href="/#writing">文章</a><a href="/#about">关于</a></nav>
+    <div class="reading-track" aria-hidden="true"><span id="reading-progress"></span></div>
+  </header>
 
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: '复制成功',
-    error: '复制失败',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: undefined,
-  lightbox: 'null',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
-    buttonText: '加载更多'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: false,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Day07-01到12《缓存功能》',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/YourName.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lin说</span></a><a class="nav-page-title" href="/"><span class="site-name">Day07-01到12《缓存功能》</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Day07-01到12《缓存功能》</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-28T16:00:00.000Z" title="发表于 2026-01-29 00:00:00">2026-01-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-10T14:43:47.255Z" title="更新于 2026-02-10 22:43:47">2026-02-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="🎥-Day07-01到05-缓存菜品"><a href="#🎥-Day07-01到05-缓存菜品" class="headerlink" title="🎥 Day07-01到05 缓存菜品"></a>🎥 Day07-01到05 缓存菜品</h1><ul>
+  <main class="reading-shell" id="main">
+    <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
+    <div class="reading-layout">
+      <div class="reading-column">
+        <header class="article-heading" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
+          <h1>Day07-01到12《缓存功能》</h1>
+                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-01-28T16:00:00.000Z">2026.01.29</time><span aria-hidden="true">/</span><span>约 8 分钟</span></div>
+          <p class="article-updated">更新于 <time datetime="2026-02-10T14:43:47.255Z">2026.02.10</time></p>          <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E4%B8%80%E5%88%B7%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/"># 一刷苍穹外卖</a></li></ul>        </header>
+        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="Day07-01到12《缓存功能》正文"><h2 id="🎥-Day07-01到05-缓存菜品"><a href="#🎥-Day07-01到05-缓存菜品" class="headerlink" title="🎥 Day07-01到05 缓存菜品"></a>🎥 Day07-01到05 缓存菜品</h2><ul>
 <li>[[Day07-13到19《购物车功能》]]</li>
 </ul>
-<h2 id="🧩-本节概述"><a href="#🧩-本节概述" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h2><blockquote>
+<h3 id="🧩-本节概述"><a href="#🧩-本节概述" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h3><blockquote>
 <p><strong>一句话总结</strong>：通过 Redis 缓存菜品数据，减少数据库查询操作，提升系统性能</p>
 </blockquote>
 <p><strong>主要内容关键词</strong>：<code>Redis缓存</code>、<code>SpringCache</code></p>
 <hr>
-<h2 id="🧠-模块目标"><a href="#🧠-模块目标" class="headerlink" title="🧠 模块目标"></a>🧠 模块目标</h2><ul>
+<h3 id="🧠-模块目标"><a href="#🧠-模块目标" class="headerlink" title="🧠 模块目标"></a>🧠 模块目标</h3><ul>
 <li>小程序展示菜品数据是通过数据库获得，若用户端访问量大，数据库访问压力随之增大</li>
 <li>通过 Redis 缓存菜品数据，减少数据库查询操作</li>
 </ul>
 <hr>
-<h2 id="🔄-实现流程"><a href="#🔄-实现流程" class="headerlink" title="🔄 实现流程"></a>🔄 实现流程</h2><ol>
+<h3 id="🔄-实现流程"><a href="#🔄-实现流程" class="headerlink" title="🔄 实现流程"></a>🔄 实现流程</h3><ol>
 <li>用户小程序查询菜品数据</li>
 <li>到达后端服务，先判断缓存是否有菜品数据</li>
 <li>有缓存数据 → 读取缓存数据</li>
 <li>没有缓存数据 → 查询数据库并响应 → 将数据载入缓存</li>
 </ol>
 <hr>
-<h2 id="🔄-缓存逻辑"><a href="#🔄-缓存逻辑" class="headerlink" title="🔄 缓存逻辑"></a>🔄 缓存逻辑</h2><ol>
+<h3 id="🔄-缓存逻辑"><a href="#🔄-缓存逻辑" class="headerlink" title="🔄 缓存逻辑"></a>🔄 缓存逻辑</h3><ol>
 <li>每个分类下的菜品保存一份缓存数据，将分类作为 key，菜品转为 String 作为 value</li>
 <li>数据库中菜品有变更时要清理缓存数据</li>
 </ol>
 <hr>
-<h2 id="📘-学到的知识"><a href="#📘-学到的知识" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h2><h3 id="📚-Part-1-注解基础恶补"><a href="#📚-Part-1-注解基础恶补" class="headerlink" title="📚 Part 1: 注解基础恶补"></a>📚 Part 1: 注解基础恶补</h3><p>代码里的注解分成三类：</p>
+<h3 id="📘-学到的知识"><a href="#📘-学到的知识" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h3><h4 id="📚-Part-1-注解基础恶补"><a href="#📚-Part-1-注解基础恶补" class="headerlink" title="📚 Part 1: 注解基础恶补"></a>📚 Part 1: 注解基础恶补</h4><p>代码里的注解分成三类：</p>
 <ul>
 <li>[[spring核心注解]]</li>
 </ul>
-<h4 id="🟢-Spring-框架注解（必须掌握）"><a href="#🟢-Spring-框架注解（必须掌握）" class="headerlink" title="🟢 Spring 框架注解（必须掌握）"></a>🟢 Spring 框架注解（必须掌握）</h4><table>
+<h5 id="🟢-Spring-框架注解（必须掌握）"><a href="#🟢-Spring-框架注解（必须掌握）" class="headerlink" title="🟢 Spring 框架注解（必须掌握）"></a>🟢 Spring 框架注解（必须掌握）</h5><table>
 <thead>
 <tr>
 <th>注解</th>
@@ -230,7 +117,7 @@
 <li>不写参数也行，Spring 会自动用类名（首字母小写）作为名字</li>
 </ul>
 </blockquote>
-<h4 id="🟡-Lombok-注解（简化代码）"><a href="#🟡-Lombok-注解（简化代码）" class="headerlink" title="🟡 Lombok 注解（简化代码）"></a>🟡 Lombok 注解（简化代码）</h4><table>
+<h5 id="🟡-Lombok-注解（简化代码）"><a href="#🟡-Lombok-注解（简化代码）" class="headerlink" title="🟡 Lombok 注解（简化代码）"></a>🟡 Lombok 注解（简化代码）</h5><table>
 <thead>
 <tr>
 <th>注解</th>
@@ -244,7 +131,7 @@
 <td>省得你写 <code>Logger log = LoggerFactory.getLogger(...)</code></td>
 </tr>
 </tbody></table>
-<h4 id="🔵-Swagger-注解（生成-API-文档）"><a href="#🔵-Swagger-注解（生成-API-文档）" class="headerlink" title="🔵 Swagger 注解（生成 API 文档）"></a>🔵 Swagger 注解（生成 API 文档）</h4><table>
+<h5 id="🔵-Swagger-注解（生成-API-文档）"><a href="#🔵-Swagger-注解（生成-API-文档）" class="headerlink" title="🔵 Swagger 注解（生成 API 文档）"></a>🔵 Swagger 注解（生成 API 文档）</h5><table>
 <thead>
 <tr>
 <th>注解</th>
@@ -264,7 +151,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="🧠-Part-2-代码编写的思考过程"><a href="#🧠-Part-2-代码编写的思考过程" class="headerlink" title="🧠 Part 2: 代码编写的思考过程"></a>🧠 Part 2: 代码编写的思考过程</h3><p>你问得好：<strong>是不是要在 DishVO, DishService, DishServiceImpl, DishController 中来回辗转？</strong></p>
+<h4 id="🧠-Part-2-代码编写的思考过程"><a href="#🧠-Part-2-代码编写的思考过程" class="headerlink" title="🧠 Part 2: 代码编写的思考过程"></a>🧠 Part 2: 代码编写的思考过程</h4><p>你问得好：<strong>是不是要在 DishVO, DishService, DishServiceImpl, DishController 中来回辗转？</strong></p>
 <p>答案是：<strong>在这个简单场景下，你只需要关注 Controller 层</strong>！</p>
 <p>让我画个图帮你理解分工：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    subgraph 你现在要写的</span><br><span class="line">        A[DishController&lt;br/&gt;用户端控制器]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 已经写好的-直接调用</span><br><span class="line">        B[DishService&lt;br/&gt;业务接口]</span><br><span class="line">        C[DishServiceImpl&lt;br/&gt;业务实现]</span><br><span class="line">        D[DishVO&lt;br/&gt;数据对象]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 工具类-直接用</span><br><span class="line">        E[RedisTemplate&lt;br/&gt;操作Redis]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    A --&gt;|调用| B</span><br><span class="line">    B --&gt;|实现| C</span><br><span class="line">    A --&gt;|使用| D</span><br><span class="line">    A --&gt;|使用| E</span><br></pre></td></tr></table></figure>
@@ -276,16 +163,16 @@
 <li>你只需要在 Controller 里<strong>组装逻辑</strong></li>
 </ul>
 <hr>
-<h3 id="✍️-Part-3-手把手带你写代码"><a href="#✍️-Part-3-手把手带你写代码" class="headerlink" title="✍️ Part 3: 手把手带你写代码"></a>✍️ Part 3: 手把手带你写代码</h3><p>我把代码拆成<strong>6个小步骤</strong>，每步我先问你问题，你思考后我再给答案：</p>
-<h4 id="Step-1-构造-Redis-的-Key"><a href="#Step-1-构造-Redis-的-Key" class="headerlink" title="Step 1: 构造 Redis 的 Key"></a>Step 1: 构造 Redis 的 Key</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br></pre></td></tr></table></figure>
+<h4 id="✍️-Part-3-手把手带你写代码"><a href="#✍️-Part-3-手把手带你写代码" class="headerlink" title="✍️ Part 3: 手把手带你写代码"></a>✍️ Part 3: 手把手带你写代码</h4><p>我把代码拆成<strong>6个小步骤</strong>，每步我先问你问题，你思考后我再给答案：</p>
+<h5 id="Step-1-构造-Redis-的-Key"><a href="#Step-1-构造-Redis-的-Key" class="headerlink" title="Step 1: 构造 Redis 的 Key"></a>Step 1: 构造 Redis 的 Key</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br></pre></td></tr></table></figure>
 
 <p>✅ 你这步已经写对了！就是字符串拼接。</p>
 <hr>
-<h4 id="Step-2-从-Redis-查询数据"><a href="#Step-2-从-Redis-查询数据" class="headerlink" title="Step 2: 从 Redis 查询数据"></a>Step 2: 从 Redis 查询数据</h4><p><strong>问你</strong>：<code>redisTemplate</code> 有个方法可以根据 key 获取 value，你猜是什么？</p>
+<h5 id="Step-2-从-Redis-查询数据"><a href="#Step-2-从-Redis-查询数据" class="headerlink" title="Step 2: 从 Redis 查询数据"></a>Step 2: 从 Redis 查询数据</h5><p><strong>问你</strong>：<code>redisTemplate</code> 有个方法可以根据 key 获取 value，你猜是什么？</p>
 <details>
 <summary>👉 点击看答案</summary>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>&lt;DishVO&gt; <span class="variable">list</span> <span class="operator">=</span> (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;DishVO&gt; list = (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br></pre></td></tr></table></figure>
 
 <p><strong>解释</strong>：</p>
 <ul>
@@ -296,7 +183,7 @@
 </details>
 
 <hr>
-<h4 id="Step-3-判断缓存是否命中"><a href="#Step-3-判断缓存是否命中" class="headerlink" title="Step 3: 判断缓存是否命中"></a>Step 3: 判断缓存是否命中</h4><p><strong>问你</strong>：怎么判断 <code>list</code> 里有数据？（提示：两个条件）</p>
+<h5 id="Step-3-判断缓存是否命中"><a href="#Step-3-判断缓存是否命中" class="headerlink" title="Step 3: 判断缓存是否命中"></a>Step 3: 判断缓存是否命中</h5><p><strong>问你</strong>：怎么判断 <code>list</code> 里有数据？（提示：两个条件）</p>
 <details>
 <summary>👉 点击看答案</summary>
 
@@ -310,7 +197,7 @@
 </details>
 
 <hr>
-<h4 id="Step-4-命中缓存-→-直接返回"><a href="#Step-4-命中缓存-→-直接返回" class="headerlink" title="Step 4: 命中缓存 → 直接返回"></a>Step 4: 命中缓存 → 直接返回</h4><p><strong>问你</strong>：怎么把数据包装成统一的返回格式？（提示：看方法返回值类型）</p>
+<h5 id="Step-4-命中缓存-→-直接返回"><a href="#Step-4-命中缓存-→-直接返回" class="headerlink" title="Step 4: 命中缓存 → 直接返回"></a>Step 4: 命中缓存 → 直接返回</h5><p><strong>问你</strong>：怎么把数据包装成统一的返回格式？（提示：看方法返回值类型）</p>
 <details>
 <summary>👉 点击看答案</summary>
 
@@ -320,7 +207,7 @@
 </details>
 
 <hr>
-<h4 id="Step-5-未命中-→-查询数据库"><a href="#Step-5-未命中-→-查询数据库" class="headerlink" title="Step 5: 未命中 → 查询数据库"></a>Step 5: 未命中 → 查询数据库</h4><p><strong>问你</strong>：需要查询”某分类下、起售中”的菜品，怎么告诉 Service 这两个条件？</p>
+<h5 id="Step-5-未命中-→-查询数据库"><a href="#Step-5-未命中-→-查询数据库" class="headerlink" title="Step 5: 未命中 → 查询数据库"></a>Step 5: 未命中 → 查询数据库</h5><p><strong>问你</strong>：需要查询”某分类下、起售中”的菜品，怎么告诉 Service 这两个条件？</p>
 <details>
 <summary>👉 点击看答案</summary>
 
@@ -335,7 +222,7 @@
 </details>
 
 <hr>
-<h4 id="Step-6-存入Redis-返回"><a href="#Step-6-存入Redis-返回" class="headerlink" title="Step 6: 存入Redis + 返回"></a>Step 6: 存入Redis + 返回</h4><p><strong>问你</strong>：怎么把数据存进Redis？（提示：和get相反的方法）</p>
+<h5 id="Step-6-存入Redis-返回"><a href="#Step-6-存入Redis-返回" class="headerlink" title="Step 6: 存入Redis + 返回"></a>Step 6: 存入Redis + 返回</h5><p><strong>问你</strong>：怎么把数据存进Redis？（提示：和get相反的方法）</p>
 <details>
 <summary>👉 点击看答案</summary>
 
@@ -344,36 +231,36 @@
 </details>
 
 <hr>
-<h2 id="🎯-完整代码（你对照检查）"><a href="#🎯-完整代码（你对照检查）" class="headerlink" title="🎯 完整代码（你对照检查）"></a>🎯 完整代码（你对照检查）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line"><span class="meta">@ApiOperation(&quot;根据分类id查询菜品&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">Result</span>&lt;List&lt;DishVO&gt;&gt; <span class="title function_">list</span><span class="params">(Long categoryId)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 构造Redis的Key</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 查询Redis</span></span><br><span class="line">    <span class="type">List</span>&lt;DishVO&gt; <span class="variable">list</span> <span class="operator">=</span> (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3-4. 命中缓存，直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (list != <span class="literal">null</span> &amp;&amp; list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Result.success(list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 未命中，查询数据库</span></span><br><span class="line">    <span class="type">Dish</span> <span class="variable">dish</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Dish</span>();</span><br><span class="line">    dish.setCategoryId(categoryId);</span><br><span class="line">    dish.setStatus(StatusConstant.ENABLE);</span><br><span class="line">    list = dishService.listWithFlavor(dish);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 存入Redis并返回</span></span><br><span class="line">    redisTemplate.opsForValue().set(key, list);</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="🎯-完整代码（你对照检查）"><a href="#🎯-完整代码（你对照检查）" class="headerlink" title="🎯 完整代码（你对照检查）"></a>🎯 完整代码（你对照检查）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line"><span class="meta">@ApiOperation(&quot;根据分类id查询菜品&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result&lt;List&lt;DishVO&gt;&gt; <span class="title function_">list</span><span class="params">(Long categoryId)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 构造Redis的Key</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 查询Redis</span></span><br><span class="line">    List&lt;DishVO&gt; list = (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3-4. 命中缓存，直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (list != <span class="literal">null</span> &amp;&amp; list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Result.success(list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 未命中，查询数据库</span></span><br><span class="line">    <span class="type">Dish</span> <span class="variable">dish</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Dish</span>();</span><br><span class="line">    dish.setCategoryId(categoryId);</span><br><span class="line">    dish.setStatus(StatusConstant.ENABLE);</span><br><span class="line">    list = dishService.listWithFlavor(dish);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 存入Redis并返回</span></span><br><span class="line">    redisTemplate.opsForValue().set(key, list);</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="🎤-面试会怎么问这些基础？"><a href="#🎤-面试会怎么问这些基础？" class="headerlink" title="🎤 面试会怎么问这些基础？"></a>🎤 面试会怎么问这些基础？</h2><p><strong>Q1: <code>@RestController</code> 和 <code>@Controller</code> 有什么区别？</strong></p>
+<h3 id="🎤-面试会怎么问这些基础？"><a href="#🎤-面试会怎么问这些基础？" class="headerlink" title="🎤 面试会怎么问这些基础？"></a>🎤 面试会怎么问这些基础？</h3><p><strong>Q1: <code>@RestController</code> 和 <code>@Controller</code> 有什么区别？</strong></p>
 <p>👉 <code>@RestController</code> &#x3D; <code>@Controller</code> + <code>@ResponseBody</code>，返回值自动转 JSON</p>
 <p><strong>Q2: <code>@Autowired</code> 的原理是什么？</strong></p>
 <p>👉 依赖注入(DI)，Spring 容器启动时自动把对象注入进来（面试深问会涉及<strong>反射</strong>）</p>
 <hr>
-<h2 id="🗂️-关联文件"><a href="#🗂️-关联文件" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com/sky/controller/admin/DishController.java</span><br><span class="line">com/sky/controller/user/DishController.java</span><br></pre></td></tr></table></figure>
+<h3 id="🗂️-关联文件"><a href="#🗂️-关联文件" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com/sky/controller/admin/DishController.java</span><br><span class="line">com/sky/controller/user/DishController.java</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h1 id="🎥-Day07-06到12-缓存套餐"><a href="#🎥-Day07-06到12-缓存套餐" class="headerlink" title="🎥 Day07-06到12 缓存套餐"></a>🎥 Day07-06到12 缓存套餐</h1><h2 id="🧩-本节概述-1"><a href="#🧩-本节概述-1" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h2><blockquote>
+<h2 id="🎥-Day07-06到12-缓存套餐"><a href="#🎥-Day07-06到12-缓存套餐" class="headerlink" title="🎥 Day07-06到12 缓存套餐"></a>🎥 Day07-06到12 缓存套餐</h2><h3 id="🧩-本节概述-1"><a href="#🧩-本节概述-1" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h3><blockquote>
 <p><strong>一句话总结</strong>：通过 Spring Cache 注解实现套餐缓存，简化缓存代码编写</p>
 </blockquote>
 <p><strong>主要内容关键词</strong>：<code>Redis缓存</code>、<code>Spring Cache</code></p>
 <hr>
-<h2 id="📘-学到的知识-1"><a href="#📘-学到的知识-1" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h2><h3 id="🤔-为什么需要-Spring-Cache？"><a href="#🤔-为什么需要-Spring-Cache？" class="headerlink" title="🤔 为什么需要 Spring Cache？"></a>🤔 为什么需要 Spring Cache？</h3><p>对比一下你刚学的<strong>菜品缓存</strong>（手动方式）：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动操作Redis - 菜品模块的做法</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br><span class="line"><span class="type">List</span>&lt;DishVO&gt; <span class="variable">list</span> <span class="operator">=</span> (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br><span class="line"><span class="keyword">if</span> (list != <span class="literal">null</span> &amp;&amp; list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br><span class="line">list = dishService.listWithFlavor(dish);</span><br><span class="line">redisTemplate.opsForValue().set(key, list);  <span class="comment">// 还要手动存</span></span><br><span class="line"><span class="keyword">return</span> Result.success(list);</span><br></pre></td></tr></table></figure>
+<h3 id="📘-学到的知识-1"><a href="#📘-学到的知识-1" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h3><h4 id="🤔-为什么需要-Spring-Cache？"><a href="#🤔-为什么需要-Spring-Cache？" class="headerlink" title="🤔 为什么需要 Spring Cache？"></a>🤔 为什么需要 Spring Cache？</h4><p>对比一下你刚学的<strong>菜品缓存</strong>（手动方式）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 手动操作Redis - 菜品模块的做法</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;dish_&quot;</span> + categoryId;</span><br><span class="line">List&lt;DishVO&gt; list = (List&lt;DishVO&gt;) redisTemplate.opsForValue().get(key);</span><br><span class="line"><span class="keyword">if</span> (list != <span class="literal">null</span> &amp;&amp; list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br><span class="line">list = dishService.listWithFlavor(dish);</span><br><span class="line">redisTemplate.opsForValue().set(key, list);  <span class="comment">// 还要手动存</span></span><br><span class="line"><span class="keyword">return</span> Result.success(list);</span><br></pre></td></tr></table></figure>
 
 <p><strong>问题</strong>：每个需要缓存的方法都要写一堆重复代码！</p>
 <p><strong>Spring Cache 的解决方案</strong>：用注解，一行搞定！</p>
 <hr>
-<h3 id="🏗️-Spring-Cache-架构图"><a href="#🏗️-Spring-Cache-架构图" class="headerlink" title="🏗️ Spring Cache 架构图"></a>🏗️ Spring Cache 架构图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    subgraph 你的代码</span><br><span class="line">        A[&quot;@Cacheable&lt;br/&gt;查询时用&quot;]</span><br><span class="line">        B[&quot;@CacheEvict&lt;br/&gt;删除/修改时用&quot;]</span><br><span class="line">        C[&quot;@CachePut&lt;br/&gt;更新缓存&quot;]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph Spring Cache抽象层</span><br><span class="line">        D[CacheManager&lt;br/&gt;缓存管理器]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 底层实现-可切换</span><br><span class="line">        E1[Redis]</span><br><span class="line">        E2[Caffeine&lt;br/&gt;本地缓存]</span><br><span class="line">        E3[EhCache]</span><br><span class="line">        E4[Simple&lt;br/&gt;ConcurrentHashMap]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    A &amp; B &amp; C --&gt; D</span><br><span class="line">    D --&gt; E1 &amp; E2 &amp; E3 &amp; E4</span><br><span class="line">    </span><br><span class="line">    style E1 fill:#FF6B6B</span><br></pre></td></tr></table></figure>
+<h4 id="🏗️-Spring-Cache-架构图"><a href="#🏗️-Spring-Cache-架构图" class="headerlink" title="🏗️ Spring Cache 架构图"></a>🏗️ Spring Cache 架构图</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    subgraph 你的代码</span><br><span class="line">        A[&quot;@Cacheable&lt;br/&gt;查询时用&quot;]</span><br><span class="line">        B[&quot;@CacheEvict&lt;br/&gt;删除/修改时用&quot;]</span><br><span class="line">        C[&quot;@CachePut&lt;br/&gt;更新缓存&quot;]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph Spring Cache抽象层</span><br><span class="line">        D[CacheManager&lt;br/&gt;缓存管理器]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 底层实现-可切换</span><br><span class="line">        E1[Redis]</span><br><span class="line">        E2[Caffeine&lt;br/&gt;本地缓存]</span><br><span class="line">        E3[EhCache]</span><br><span class="line">        E4[Simple&lt;br/&gt;ConcurrentHashMap]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    A &amp; B &amp; C --&gt; D</span><br><span class="line">    D --&gt; E1 &amp; E2 &amp; E3 &amp; E4</span><br><span class="line">    </span><br><span class="line">    style E1 fill:#FF6B6B</span><br></pre></td></tr></table></figure>
 
 <p><strong>核心思想</strong>：Spring Cache 是一个<strong>抽象层</strong>，底层可以接 Redis、本地缓存等多种实现，你的代码<strong>不用改</strong>！</p>
 <hr>
-<h3 id="🔑-三大核心注解"><a href="#🔑-三大核心注解" class="headerlink" title="🔑 三大核心注解"></a>🔑 三大核心注解</h3><h4 id="1️⃣-EnableCaching-开启缓存功能"><a href="#1️⃣-EnableCaching-开启缓存功能" class="headerlink" title="1️⃣ @EnableCaching - 开启缓存功能"></a>1️⃣ <code>@EnableCaching</code> - 开启缓存功能</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在启动类上添加，项目中已有 ✅</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableCaching</span>  <span class="comment">// 👈 没有这个，其他注解都不生效！</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SkyApplication</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="🔑-三大核心注解"><a href="#🔑-三大核心注解" class="headerlink" title="🔑 三大核心注解"></a>🔑 三大核心注解</h4><h5 id="1️⃣-EnableCaching-开启缓存功能"><a href="#1️⃣-EnableCaching-开启缓存功能" class="headerlink" title="1️⃣ @EnableCaching - 开启缓存功能"></a>1️⃣ <code>@EnableCaching</code> - 开启缓存功能</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在启动类上添加，项目中已有 ✅</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableCaching</span>  <span class="comment">// 👈 没有这个，其他注解都不生效！</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SkyApplication</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="2️⃣-Cacheable-查询缓存（最常用）"><a href="#2️⃣-Cacheable-查询缓存（最常用）" class="headerlink" title="2️⃣ @Cacheable - 查询缓存（最常用）"></a>2️⃣ <code>@Cacheable</code> - 查询缓存（最常用）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line"><span class="meta">@Cacheable(cacheNames = &quot;setmealCache&quot;, key = &quot;#categoryId&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">Result</span>&lt;List&lt;Setmeal&gt;&gt; <span class="title function_">list</span><span class="params">(Long categoryId)</span> &#123;</span><br><span class="line">    <span class="comment">// 业务代码...直接写，不用管缓存！</span></span><br><span class="line">    <span class="type">List</span>&lt;Setmeal&gt; <span class="variable">list</span> <span class="operator">=</span> setmealService.list(setmeal);</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2️⃣-Cacheable-查询缓存（最常用）"><a href="#2️⃣-Cacheable-查询缓存（最常用）" class="headerlink" title="2️⃣ @Cacheable - 查询缓存（最常用）"></a>2️⃣ <code>@Cacheable</code> - 查询缓存（最常用）</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line"><span class="meta">@Cacheable(cacheNames = &quot;setmealCache&quot;, key = &quot;#categoryId&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result&lt;List&lt;Setmeal&gt;&gt; <span class="title function_">list</span><span class="params">(Long categoryId)</span> &#123;</span><br><span class="line">    <span class="comment">// 业务代码...直接写，不用管缓存！</span></span><br><span class="line">    List&lt;Setmeal&gt; list = setmealService.list(setmeal);</span><br><span class="line">    <span class="keyword">return</span> Result.success(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>执行流程</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[方法被调用] --&gt; B&#123;缓存中有数据?&#125;</span><br><span class="line">    B --&gt;|✅ 有| C[直接返回缓存&lt;br/&gt;方法体不执行!]</span><br><span class="line">    B --&gt;|❌ 没有| D[执行方法体]</span><br><span class="line">    D --&gt; E[将返回值存入缓存]</span><br><span class="line">    E --&gt; F[返回结果]</span><br><span class="line">    </span><br><span class="line">    style C fill:#90EE90</span><br><span class="line">    style D fill:#FFB6C1</span><br></pre></td></tr></table></figure>
@@ -400,7 +287,7 @@
 </tbody></table>
 <p><strong>最终Redis中的Key</strong>：<code>setmealCache::12</code>（cacheNames + “::” + key的值）</p>
 <hr>
-<h4 id="3️⃣-CacheEvict-清除缓存"><a href="#3️⃣-CacheEvict-清除缓存" class="headerlink" title="3️⃣ @CacheEvict - 清除缓存"></a>3️⃣ <code>@CacheEvict</code> - 清除缓存</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新增套餐时，清除该分类的缓存</span></span><br><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="meta">@CacheEvict(cacheNames = &quot;setmealCache&quot;, key = &quot;#setmealDTO.categoryId&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">Result</span> <span class="title function_">save</span><span class="params">(<span class="meta">@RequestBody</span> SetmealDTO setmealDTO)</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除套餐时，清除所有缓存</span></span><br><span class="line"><span class="meta">@DeleteMapping</span></span><br><span class="line"><span class="meta">@CacheEvict(cacheNames = &quot;setmealCache&quot;, allEntries = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">Result</span> <span class="title function_">delete</span><span class="params">(<span class="meta">@RequestParam</span> List&lt;Long&gt; ids)</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3️⃣-CacheEvict-清除缓存"><a href="#3️⃣-CacheEvict-清除缓存" class="headerlink" title="3️⃣ @CacheEvict - 清除缓存"></a>3️⃣ <code>@CacheEvict</code> - 清除缓存</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新增套餐时，清除该分类的缓存</span></span><br><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="meta">@CacheEvict(cacheNames = &quot;setmealCache&quot;, key = &quot;#setmealDTO.categoryId&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">save</span><span class="params">(<span class="meta">@RequestBody</span> SetmealDTO setmealDTO)</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除套餐时，清除所有缓存</span></span><br><span class="line"><span class="meta">@DeleteMapping</span></span><br><span class="line"><span class="meta">@CacheEvict(cacheNames = &quot;setmealCache&quot;, allEntries = true)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">delete</span><span class="params">(<span class="meta">@RequestParam</span> List&lt;Long&gt; ids)</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>参数详解</strong>：</p>
 <table>
@@ -423,7 +310,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="🆚-对比：手动操作-vs-Spring-Cache"><a href="#🆚-对比：手动操作-vs-Spring-Cache" class="headerlink" title="🆚 对比：手动操作 vs Spring Cache"></a>🆚 对比：手动操作 vs Spring Cache</h3><table>
+<h4 id="🆚-对比：手动操作-vs-Spring-Cache"><a href="#🆚-对比：手动操作-vs-Spring-Cache" class="headerlink" title="🆚 对比：手动操作 vs Spring Cache"></a>🆚 对比：手动操作 vs Spring Cache</h4><table>
 <thead>
 <tr>
 <th>对比项</th>
@@ -458,17 +345,17 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="📊-项目中的应用对比图"><a href="#📊-项目中的应用对比图" class="headerlink" title="📊 项目中的应用对比图"></a>📊 项目中的应用对比图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    subgraph 菜品模块-手动方式</span><br><span class="line">        A1[用户查菜品] --&gt; A2[手动查Redis]</span><br><span class="line">        A2 --&gt; A3&#123;命中?&#125;</span><br><span class="line">        A3 --&gt;|是| A4[返回]</span><br><span class="line">        A3 --&gt;|否| A5[查DB → 手动存Redis]</span><br><span class="line">        </span><br><span class="line">        B1[管理员改菜品] --&gt; B2[调用clearCache方法]</span><br><span class="line">        B2 --&gt; B3[redisTemplate.delete]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 套餐模块-SpringCache</span><br><span class="line">        C1[用户查套餐] --&gt; C2[&quot;@Cacheable&lt;br/&gt;一行搞定&quot;]</span><br><span class="line">        </span><br><span class="line">        D1[管理员改套餐] --&gt; D2[&quot;@CacheEvict&lt;br/&gt;一行搞定&quot;]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+<h4 id="📊-项目中的应用对比图"><a href="#📊-项目中的应用对比图" class="headerlink" title="📊 项目中的应用对比图"></a>📊 项目中的应用对比图</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    subgraph 菜品模块-手动方式</span><br><span class="line">        A1[用户查菜品] --&gt; A2[手动查Redis]</span><br><span class="line">        A2 --&gt; A3&#123;命中?&#125;</span><br><span class="line">        A3 --&gt;|是| A4[返回]</span><br><span class="line">        A3 --&gt;|否| A5[查DB → 手动存Redis]</span><br><span class="line">        </span><br><span class="line">        B1[管理员改菜品] --&gt; B2[调用clearCache方法]</span><br><span class="line">        B2 --&gt; B3[redisTemplate.delete]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph 套餐模块-SpringCache</span><br><span class="line">        C1[用户查套餐] --&gt; C2[&quot;@Cacheable&lt;br/&gt;一行搞定&quot;]</span><br><span class="line">        </span><br><span class="line">        D1[管理员改套餐] --&gt; D2[&quot;@CacheEvict&lt;br/&gt;一行搞定&quot;]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="🎯-面试必问点"><a href="#🎯-面试必问点" class="headerlink" title="🎯 面试必问点"></a>🎯 面试必问点</h2><h3 id="Q1-Spring-Cache-的原理是什么？"><a href="#Q1-Spring-Cache-的原理是什么？" class="headerlink" title="Q1: Spring Cache 的原理是什么？"></a>Q1: Spring Cache 的原理是什么？</h3><blockquote>
+<h3 id="🎯-面试必问点"><a href="#🎯-面试必问点" class="headerlink" title="🎯 面试必问点"></a>🎯 面试必问点</h3><h4 id="Q1-Spring-Cache-的原理是什么？"><a href="#Q1-Spring-Cache-的原理是什么？" class="headerlink" title="Q1: Spring Cache 的原理是什么？"></a>Q1: Spring Cache 的原理是什么？</h4><blockquote>
 <p><strong>答</strong>：基于 <strong>AOP（面向切面编程）</strong> 实现。Spring 在运行时为带有缓存注解的方法创建代理对象，在方法执行前后织入缓存逻辑。</p>
 </blockquote>
-<h3 id="Q2（追问）-那-Spring-Cache-有什么坑吗？"><a href="#Q2（追问）-那-Spring-Cache-有什么坑吗？" class="headerlink" title="Q2（追问）: 那 Spring Cache 有什么坑吗？"></a>Q2（追问）: 那 Spring Cache 有什么坑吗？</h3><blockquote>
+<h4 id="Q2（追问）-那-Spring-Cache-有什么坑吗？"><a href="#Q2（追问）-那-Spring-Cache-有什么坑吗？" class="headerlink" title="Q2（追问）: 那 Spring Cache 有什么坑吗？"></a>Q2（追问）: 那 Spring Cache 有什么坑吗？</h4><blockquote>
 <p><strong>答</strong>：有！<strong>同一个类中方法互相调用，缓存注解会失效</strong>！因为内部调用不走代理对象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SetmealController</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">void</span> <span class="title function_">methodA</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.methodB();  <span class="comment">// ❌ 缓存注解失效！</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Cacheable(...)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">void</span> <span class="title function_">methodB</span><span class="params">()</span> &#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SetmealController</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodA</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.methodB();  <span class="comment">// ❌ 缓存注解失效！</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Cacheable(...)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodB</span><span class="params">()</span> &#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </blockquote>
-<h3 id="Q3-Cacheable-的-key-怎么写？"><a href="#Q3-Cacheable-的-key-怎么写？" class="headerlink" title="Q3: @Cacheable 的 key 怎么写？"></a>Q3: @Cacheable 的 key 怎么写？</h3><blockquote>
+<h4 id="Q3-Cacheable-的-key-怎么写？"><a href="#Q3-Cacheable-的-key-怎么写？" class="headerlink" title="Q3: @Cacheable 的 key 怎么写？"></a>Q3: @Cacheable 的 key 怎么写？</h4><blockquote>
 <p><strong>答</strong>：使用 <strong>SpEL（Spring Expression Language）</strong> 表达式：</p>
 <ul>
 <li><code>#参数名</code> → 取方法参数</li>
@@ -477,7 +364,7 @@
 <li><code>#root.methodName</code> → 取方法名</li>
 </ul>
 </blockquote>
-<h3 id="Q4-如果缓存和数据库数据不一致怎么办？"><a href="#Q4-如果缓存和数据库数据不一致怎么办？" class="headerlink" title="Q4: 如果缓存和数据库数据不一致怎么办？"></a>Q4: 如果缓存和数据库数据不一致怎么办？</h3><blockquote>
+<h4 id="Q4-如果缓存和数据库数据不一致怎么办？"><a href="#Q4-如果缓存和数据库数据不一致怎么办？" class="headerlink" title="Q4: 如果缓存和数据库数据不一致怎么办？"></a>Q4: 如果缓存和数据库数据不一致怎么办？</h4><blockquote>
 <p><strong>答</strong>：这就是<strong>缓存一致性问题</strong>！常见策略：</p>
 <ol>
 <li><strong>Cache Aside Pattern</strong>（旁路缓存）- 本项目用的就是这个<ul>
@@ -490,38 +377,22 @@
 </ol>
 </blockquote>
 <hr>
-<h2 id="🗂️-关联文件-1"><a href="#🗂️-关联文件-1" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com/sky/controller/user/SetmealController.java</span><br><span class="line">com/sky/controller/admin/SetmealController.java</span><br></pre></td></tr></table></figure>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Lin-sist.github.io">Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/">https://lin-sist.github.io/2026/01/29/Day07-01%E5%88%B012%E3%80%8A%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD%E3%80%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Lin-sist.github.io" target="_blank">Lin说</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%B8%80%E5%88%B7%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/">一刷苍穹外卖</a></div><div class="post-share"><div class="social-share" data-image="/img/Lin.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/29/Day07%E6%80%BB%E7%BB%93/" title="苍穹外卖Day07总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">苍穹外卖Day07总结</div></div><div class="info-2"><div class="info-item-1">📚 苍穹外卖 - Day07学习笔记总结 [[Day07-01到12《缓存功能》]] [[Day07-13到19《购物车功能》]]   第一部分：缓存模块1.1 为什么需要缓存？12345678910111213flowchart LR    subgraph 无缓存        A1[用户请求] --&gt; B1[(MySQL)]        B1 --&gt; C1[响应 ~50ms]    end        subgraph 有缓存        A2[用户请求] --&gt; D&#123;Redis有数据?&#125;        D --&gt;|命中| E[响应 ~5ms ⚡]        D --&gt;|未命中| F[(MySQL)]        F --&gt; G[写入Redis]        G --&gt; E    end     对比项 无缓存 有缓存    响应速度 慢（50-100ms） 快（1-10ms）   数据库压力 高 低   适用场景 低并发 高并发读多写少    1.2 方式一：手动操作 RedisTemplate...</div></div></div></a><a class="pagination-related" href="/2026/01/25/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97/" title="《苍穹外卖》解决微信登录模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">《苍穹外卖》解决微信登录模块</div></div><div class="info-2"><div class="info-item-1">1. 背景微信小程序点击登录后，login失败，无法正常登录，无法加载菜品页面。 2. 正文内容问题的根源是：@AutoFill 注解是为管理端的实体类设计的（如 Employee、Category 等），这些实体类有 createUser 和 updateUser 字段。但 User 是 C端用户实体，它没有这两个字段。  问题根源详解 ┌─────────────────────────────────────────────────────────────────────────┐│  User 实体类只有：                                                       ││  - id, openid, name, phone, sex, idNumber, avatar, createTime          ││                                                                         ││  AutoFillAspect 尝试调用：         ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/10/Day02/" title="Day02"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-10</div><div class="info-item-2">Day02</div></div><div class="info-2"><div class="info-item-1">初期笔记🔄 实现流程 自定义注解AutoFill，用于标识需要公共字段自动填充的方法。 自定义切面类AutoFillspect，统一拦截加入了AutoFill的方法，通过反射为公共字段赋值。 在Mapper的方法上加入AutoFill注解.   📘 学到的知识 注解：Java里的特殊标记，比如 @Override和 @Test ,目标是 让其他程序根据注解信息来决定怎么执行；  自定义注解：注解本质是一个继承annotation的接口，属性本质是抽象方法； 12345public @interface 注解名称 &#123;    String name();    int age() default 18;    String value(); //特殊属性value,如果注解只有一个value属性，那么value的名字可以省略不写&#125; 元注解：**@Target声明被修饰的注解只能在哪些位置使用；@Retention**声明注解的保留周期；  反射：  枚举：  mybaties：    📋 员工管理模块完整解析一、整体业务流程图1234567891011121...</div></div></div></a><a class="pagination-related" href="/2026/01/17/Day05-02%E5%88%B014%E3%80%8A%E5%85%B3%E4%BA%8Eredis%E3%80%8B/" title="Day05-02到14《关于redis》"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-17</div><div class="info-item-2">Day05-02到14《关于redis》</div></div><div class="info-2"><div class="info-item-1">🎥 dayXX-XX 模块名称📘 学到的知识Redis存储的是key-value结构的数据，其中key是字符串类型，value有5钟常用数据类型。 redis的数据类型:  字符串String ，redis中最简单的数据类型 哈希 hash ，类似Java的HashMap结构 列表 list ，按照插入顺序排序，可以有重复元素，类似Java中的LinkedList 集合 set ， 无序集合，没有重复元素，类似Java中的HashSet 有序集合 sorted set &#x2F; zest ， 集合中每个元素关联一个分数，根据分数升序排序，没有重复元素  redis常用命令 字符串类型：  SET key value       设置指定key的值 GET key             获取指定key的值 SETEX key seconds value     设置key的值，并将key的过期时间设为seconds秒 SETNX key value             只有在key不存在时设置key的值  哈希操作命令：（redis hash 是string类型的fi...</div></div></div></a><a class="pagination-related" href="/2026/01/21/Day06/" title="Day06《HttpClient微信小程序开发》"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-21</div><div class="info-item-2">Day06《HttpClient微信小程序开发》</div></div><div class="info-2"><div class="info-item-1">🎥 Day06-01到04 HttpClient入门概述🧩 本节概述 一句话总结：    主要内容关键词：”HttpClient”  🔄 实现流程 创建HttpClient对象 创建HTTP请求对象 调用HttpClient的execute方法发送请求   📘 学到的知识 HttpClient: 一个支持HTTP协议的客户端编程工具包   🎥 Day06-13到18 微信登录🧠 模块目标小程序微信登录功能  基于微信登录实现小程序的登录功能 如果用户是新用户则需要自动完成注册   接口   登录请求接口，POST；   🔄 报错微信小程序编译后控制台显示登录失败，但status是200，问题是否在secret和appid上面？  🎥 Day06-19到20 导入商品浏览功能导入商品浏览功能  有菜品分类列表 点击可以看到相应的菜品   接口   查询分类，GET; 根据分类id查询菜品,GET; 根据分类id查询套餐,GET; 根据套餐id查询包含的菜品,GET;   🗂️ 关联文件12345sky-server/src/main/java/com/sky/co...</div></div></div></a><a class="pagination-related" href="/2026/01/17/Day05-15%E5%88%B017%E3%80%8A%E5%BA%97%E9%93%BA%E8%90%A5%E4%B8%9A%E7%8A%B6%E6%80%81%E3%80%8B/" title="Day05-15到17《店铺营业状态》"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-17</div><div class="info-item-2">Day05-15到17《店铺营业状态》</div></div><div class="info-2"><div class="info-item-1">🎥 dayXX-XX 模块名称🧩 本节概述 一句话总结：    主要内容关键词：”redisTemplate”,”@AutoWired”, “@ApiOperation”  🧠 模块目标修改营业状态  营业：自动接收任何订单，可点击“打烊”让店铺进入打烊状态 打烊：不接受任何订单，可点击营业手动恢复营业状态   接口   设置营业状态 管理端查询营业状态 用户端查询营业状态   🧰 关键技术 &#x2F; 类   类型 名称 说明    控制层     业务层     工具类     技术栈      🔄 实现流程1.2.3.4.   📘 学到的知识-  🗂️ 关联文件12sky-server/src/main/java/com/sky/controller/admin/ShopController.java/service/   🏁 一句话复盘   </div></div></div></a><a class="pagination-related" href="/2026/01/29/Day07%E6%80%BB%E7%BB%93/" title="苍穹外卖Day07总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-29</div><div class="info-item-2">苍穹外卖Day07总结</div></div><div class="info-2"><div class="info-item-1">📚 苍穹外卖 - Day07学习笔记总结 [[Day07-01到12《缓存功能》]] [[Day07-13到19《购物车功能》]]   第一部分：缓存模块1.1 为什么需要缓存？12345678910111213flowchart LR    subgraph 无缓存        A1[用户请求] --&gt; B1[(MySQL)]        B1 --&gt; C1[响应 ~50ms]    end        subgraph 有缓存        A2[用户请求] --&gt; D&#123;Redis有数据?&#125;        D --&gt;|命中| E[响应 ~5ms ⚡]        D --&gt;|未命中| F[(MySQL)]        F --&gt; G[写入Redis]        G --&gt; E    end     对比项 无缓存 有缓存    响应速度 慢（50-100ms） 快（1-10ms）   数据库压力 高 低   适用场景 低并发 高并发读多写少    1.2 方式一：手动操作 RedisTemplate...</div></div></div></a><a class="pagination-related" href="/2026/01/31/Day08-01%E5%88%B011%E3%80%8A%E7%94%A8%E6%88%B7%E4%B8%8B%E5%8D%95%E3%80%8B/" title="Day08-01到11《用户下单》"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-31</div><div class="info-item-2">Day08-01到11《用户下单》</div></div><div class="info-2"><div class="info-item-1">📚 核心业务模块详解 [[Day08-12到18《订单支付》]]  一、地址簿模块1.1 业务流程图1234567891011121314151617181920212223flowchart TB    subgraph 用户操作        A[用户进入地址管理] --&gt; B&#123;选择操作&#125;        B --&gt;|新增| C[填写地址信息]        B --&gt;|查看| D[展示地址列表]        B --&gt;|修改| E[编辑地址]        B --&gt;|删除| F[删除地址]        B --&gt;|设为默认| G[设置默认地址]    end        subgraph 后端处理        C --&gt; C1[从ThreadLocal获取userId]        C1 --&gt; C2[设置isDefault=0]        C2 --&gt; C3[插入数据库]                G --&gt; G1[先把该用户所有地址设为非默认]        G1 --&...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Lin.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lin</div><div class="author-info-description">做对的事，任何时机都是好时机。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Lin-sist?tab=repositories"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lin-sist/Lin-sist.github.io" target="_blank" title="Github"><i class="fab fa-github" style="color: #6A5ACD;"></i></a><a class="social-icon" href="https://mail.qq.com/" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">我思故我在。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%A5-Day07-01%E5%88%B005-%E7%BC%93%E5%AD%98%E8%8F%9C%E5%93%81"><span class="toc-number">1.</span> <span class="toc-text">🎥 Day07-01到05 缓存菜品</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">🧩 本节概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E6%A8%A1%E5%9D%97%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">🧠 模块目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%84-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">🔄 实现流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%84-%E7%BC%93%E5%AD%98%E9%80%BB%E8%BE%91"><span class="toc-number">1.4.</span> <span class="toc-text">🔄 缓存逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="toc-number">1.5.</span> <span class="toc-text">📘 学到的知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%9A-Part-1-%E6%B3%A8%E8%A7%A3%E5%9F%BA%E7%A1%80%E6%81%B6%E8%A1%A5"><span class="toc-number">1.5.1.</span> <span class="toc-text">📚 Part 1: 注解基础恶补</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%9F%A2-Spring-%E6%A1%86%E6%9E%B6%E6%B3%A8%E8%A7%A3%EF%BC%88%E5%BF%85%E9%A1%BB%E6%8E%8C%E6%8F%A1%EF%BC%89"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">🟢 Spring 框架注解（必须掌握）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%9F%A1-Lombok-%E6%B3%A8%E8%A7%A3%EF%BC%88%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">🟡 Lombok 注解（简化代码）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%94%B5-Swagger-%E6%B3%A8%E8%A7%A3%EF%BC%88%E7%94%9F%E6%88%90-API-%E6%96%87%E6%A1%A3%EF%BC%89"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">🔵 Swagger 注解（生成 API 文档）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A0-Part-2-%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E7%9A%84%E6%80%9D%E8%80%83%E8%BF%87%E7%A8%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text">🧠 Part 2: 代码编写的思考过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%8D%EF%B8%8F-Part-3-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%B8%A6%E4%BD%A0%E5%86%99%E4%BB%A3%E7%A0%81"><span class="toc-number">1.5.3.</span> <span class="toc-text">✍️ Part 3: 手把手带你写代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-1-%E6%9E%84%E9%80%A0-Redis-%E7%9A%84-Key"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">Step 1: 构造 Redis 的 Key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-2-%E4%BB%8E-Redis-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">Step 2: 从 Redis 查询数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-3-%E5%88%A4%E6%96%AD%E7%BC%93%E5%AD%98%E6%98%AF%E5%90%A6%E5%91%BD%E4%B8%AD"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">Step 3: 判断缓存是否命中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-4-%E5%91%BD%E4%B8%AD%E7%BC%93%E5%AD%98-%E2%86%92-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E"><span class="toc-number">1.5.3.4.</span> <span class="toc-text">Step 4: 命中缓存 → 直接返回</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-5-%E6%9C%AA%E5%91%BD%E4%B8%AD-%E2%86%92-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.5.3.5.</span> <span class="toc-text">Step 5: 未命中 → 查询数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-6-%E5%AD%98%E5%85%A5Redis-%E8%BF%94%E5%9B%9E"><span class="toc-number">1.5.3.6.</span> <span class="toc-text">Step 6: 存入Redis + 返回</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%AF-%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BD%A0%E5%AF%B9%E7%85%A7%E6%A3%80%E6%9F%A5%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">🎯 完整代码（你对照检查）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%A4-%E9%9D%A2%E8%AF%95%E4%BC%9A%E6%80%8E%E4%B9%88%E9%97%AE%E8%BF%99%E4%BA%9B%E5%9F%BA%E7%A1%80%EF%BC%9F"><span class="toc-number">1.7.</span> <span class="toc-text">🎤 面试会怎么问这些基础？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6"><span class="toc-number">1.8.</span> <span class="toc-text">🗂️ 关联文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%A5-Day07-06%E5%88%B012-%E7%BC%93%E5%AD%98%E5%A5%97%E9%A4%90"><span class="toc-number">2.</span> <span class="toc-text">🎥 Day07-06到12 缓存套餐</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0-1"><span class="toc-number">2.1.</span> <span class="toc-text">🧩 本节概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86-1"><span class="toc-number">2.2.</span> <span class="toc-text">📘 学到的知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A4%94-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-Spring-Cache%EF%BC%9F"><span class="toc-number">2.2.1.</span> <span class="toc-text">🤔 为什么需要 Spring Cache？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%97%EF%B8%8F-Spring-Cache-%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">2.2.2.</span> <span class="toc-text">🏗️ Spring Cache 架构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%91-%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.2.3.</span> <span class="toc-text">🔑 三大核心注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-EnableCaching-%E5%BC%80%E5%90%AF%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">1️⃣ @EnableCaching - 开启缓存功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-Cacheable-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%EF%BC%88%E6%9C%80%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">2️⃣ @Cacheable - 查询缓存（最常用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-CacheEvict-%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98"><span class="toc-number">2.2.3.3.</span> <span class="toc-text">3️⃣ @CacheEvict - 清除缓存</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%86%9A-%E5%AF%B9%E6%AF%94%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%93%8D%E4%BD%9C-vs-Spring-Cache"><span class="toc-number">2.2.4.</span> <span class="toc-text">🆚 对比：手动操作 vs Spring Cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8A-%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%AF%B9%E6%AF%94%E5%9B%BE"><span class="toc-number">2.2.5.</span> <span class="toc-text">📊 项目中的应用对比图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%E7%82%B9"><span class="toc-number">2.3.</span> <span class="toc-text">🎯 面试必问点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q1-Spring-Cache-%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.3.1.</span> <span class="toc-text">Q1: Spring Cache 的原理是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q2%EF%BC%88%E8%BF%BD%E9%97%AE%EF%BC%89-%E9%82%A3-Spring-Cache-%E6%9C%89%E4%BB%80%E4%B9%88%E5%9D%91%E5%90%97%EF%BC%9F"><span class="toc-number">2.3.2.</span> <span class="toc-text">Q2（追问）: 那 Spring Cache 有什么坑吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q3-Cacheable-%E7%9A%84-key-%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F"><span class="toc-number">2.3.3.</span> <span class="toc-text">Q3: @Cacheable 的 key 怎么写？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q4-%E5%A6%82%E6%9E%9C%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E4%B8%8D%E4%B8%80%E8%87%B4%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">2.3.4.</span> <span class="toc-text">Q4: 如果缓存和数据库数据不一致怎么办？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6-1"><span class="toc-number">2.4.</span> <span class="toc-text">🗂️ 关联文件</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" title="RAG前端开发">RAG前端开发</a><time datetime="2026-02-28T15:28:24.614Z" title="发表于 2026-02-28 23:28:24">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/" title="RAG前端开发Bug">RAG前端开发Bug</a><time datetime="2026-02-28T14:22:58.946Z" title="发表于 2026-02-28 22:22:58">2026-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/" title="Debug能力">Debug能力</a><time datetime="2026-02-27T15:28:41.820Z" title="发表于 2026-02-27 23:28:41">2026-02-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/" title="Redis核心应用">Redis核心应用</a><time datetime="2026-02-26T05:17:35.673Z" title="发表于 2026-02-26 13:17:35">2026-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/" title="《黑马点评》路线图">《黑马点评》路线图</a><time datetime="2026-02-25T14:38:18.644Z" title="发表于 2026-02-25 22:38:18">2026-02-25</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/YourName.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script>(() => {
-  window.ChatraID = ''
-  window.Chatra = window.Chatra || function() {
-    (window.Chatra.q = window.Chatra.q || []).push(arguments)
-  }
-
-  btf.getScript('https://call.chatra.io/chatra.js').then(() => {
-    const isChatBtn = false
-    const isChatHideShow = false
-
-    if (isChatBtn) {
-      const close = () => {
-        Chatra('minimizeWidget')
-        Chatra('hide')
-      }
-
-      const open = () => {
-        Chatra('openChat', true)
-        Chatra('show')
-      }
-
-      window.ChatraSetup = { startHidden: true }
-    
-      window.chatBtnFn = () => document.getElementById('chatra').classList.contains('chatra--expanded') ? close() : open()
-
-      document.getElementById('chat-btn').style.display = 'block'
-    } else if (isChatHideShow) {
-      window.chatBtn = {
-        hide: () => Chatra('hide'),
-        show: () => Chatra('show')
-      }
-    }
-  })
-})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<h3 id="🗂️-关联文件-1"><a href="#🗂️-关联文件-1" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com/sky/controller/user/SetmealController.java</span><br><span class="line">com/sky/controller/admin/SetmealController.java</span><br></pre></td></tr></table></figure>
+</article>
+        <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/10/Day02/"><div><h3>Day02</h3><time>2026.02.10</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/31/Day08-01%E5%88%B011%E3%80%8A%E7%94%A8%E6%88%B7%E4%B8%8B%E5%8D%95%E3%80%8B/"><div><h3>Day08-01到11《用户下单》</h3><time>2026.01.31</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/31/Day08-12%E5%88%B018%E3%80%8A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E3%80%8B/"><div><h3>Day08-12到18《订单支付》</h3><time>2026.01.31</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+      <aside class="reading-sidebar" aria-label="阅读工具">
+        <details class="reading-toc" open>
+          <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
+          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%F0%9F%8E%A5-Day07-01%E5%88%B005-%E7%BC%93%E5%AD%98%E8%8F%9C%E5%93%81">🎥 Day07-01到05 缓存菜品</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0">🧩 本节概述</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A0-%E6%A8%A1%E5%9D%97%E7%9B%AE%E6%A0%87">🧠 模块目标</a></li><li class="toc-level-3"><a href="#%F0%9F%94%84-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B">🔄 实现流程</a></li><li class="toc-level-3"><a href="#%F0%9F%94%84-%E7%BC%93%E5%AD%98%E9%80%BB%E8%BE%91">🔄 缓存逻辑</a></li><li class="toc-level-3"><a href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86">📘 学到的知识</a></li><li class="toc-level-4"><a href="#%F0%9F%93%9A-Part-1-%E6%B3%A8%E8%A7%A3%E5%9F%BA%E7%A1%80%E6%81%B6%E8%A1%A5">📚 Part 1: 注解基础恶补</a></li><li class="toc-level-4"><a href="#%F0%9F%A7%A0-Part-2-%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E7%9A%84%E6%80%9D%E8%80%83%E8%BF%87%E7%A8%8B">🧠 Part 2: 代码编写的思考过程</a></li><li class="toc-level-4"><a href="#%E2%9C%8D%EF%B8%8F-Part-3-%E6%89%8B%E6%8A%8A%E6%89%8B%E5%B8%A6%E4%BD%A0%E5%86%99%E4%BB%A3%E7%A0%81">✍️ Part 3: 手把手带你写代码</a></li><li class="toc-level-3"><a href="#%F0%9F%8E%AF-%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%EF%BC%88%E4%BD%A0%E5%AF%B9%E7%85%A7%E6%A3%80%E6%9F%A5%EF%BC%89">🎯 完整代码（你对照检查）</a></li><li class="toc-level-3"><a href="#%F0%9F%8E%A4-%E9%9D%A2%E8%AF%95%E4%BC%9A%E6%80%8E%E4%B9%88%E9%97%AE%E8%BF%99%E4%BA%9B%E5%9F%BA%E7%A1%80%EF%BC%9F">🎤 面试会怎么问这些基础？</a></li><li class="toc-level-3"><a href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6">🗂️ 关联文件</a></li><li class="toc-level-2"><a href="#%F0%9F%8E%A5-Day07-06%E5%88%B012-%E7%BC%93%E5%AD%98%E5%A5%97%E9%A4%90">🎥 Day07-06到12 缓存套餐</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0-1">🧩 本节概述</a></li><li class="toc-level-3"><a href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86-1">📘 学到的知识</a></li><li class="toc-level-4"><a href="#%F0%9F%A4%94-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-Spring-Cache%EF%BC%9F">🤔 为什么需要 Spring Cache？</a></li><li class="toc-level-4"><a href="#%F0%9F%8F%97%EF%B8%8F-Spring-Cache-%E6%9E%B6%E6%9E%84%E5%9B%BE">🏗️ Spring Cache 架构图</a></li><li class="toc-level-4"><a href="#%F0%9F%94%91-%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3">🔑 三大核心注解</a></li><li class="toc-level-4"><a href="#%F0%9F%86%9A-%E5%AF%B9%E6%AF%94%EF%BC%9A%E6%89%8B%E5%8A%A8%E6%93%8D%E4%BD%9C-vs-Spring-Cache">🆚 对比：手动操作 vs Spring Cache</a></li><li class="toc-level-4"><a href="#%F0%9F%93%8A-%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%AF%B9%E6%AF%94%E5%9B%BE">📊 项目中的应用对比图</a></li><li class="toc-level-3"><a href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%E7%82%B9">🎯 面试必问点</a></li><li class="toc-level-4"><a href="#Q1-Spring-Cache-%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F">Q1: Spring Cache 的原理是什么？</a></li><li class="toc-level-4"><a href="#Q2%EF%BC%88%E8%BF%BD%E9%97%AE%EF%BC%89-%E9%82%A3-Spring-Cache-%E6%9C%89%E4%BB%80%E4%B9%88%E5%9D%91%E5%90%97%EF%BC%9F">Q2（追问）: 那 Spring Cache 有什么坑吗？</a></li><li class="toc-level-4"><a href="#Q3-Cacheable-%E7%9A%84-key-%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F">Q3: @Cacheable 的 key 怎么写？</a></li><li class="toc-level-4"><a href="#Q4-%E5%A6%82%E6%9E%9C%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E4%B8%8D%E4%B8%80%E8%87%B4%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F">Q4: 如果缓存和数据库数据不一致怎么办？</a></li><li class="toc-level-3"><a href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6-1">🗂️ 关联文件</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
+        </details>
+        <div class="reading-tools" hidden><span>字号</span><div><button id="font-smaller" type="button" aria-label="缩小正文字号">A−</button><output id="font-size" aria-label="当前正文字号">18</output><button id="font-larger" type="button" aria-label="放大正文字号">A+</button></div></div>
+        <p class="sidebar-note">让思考，留下轨迹。</p>
+      </aside>
+    </div>
+    <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/#work">查看作品 ↗</a></div></footer>
+  </main>
+  <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint" role="status">搜索文章标题、标签与分类 · 按 Esc 关闭</p><div id="search-results"></div><a class="search-archive" href="/archives/">浏览完整文章归档 ↗</a></dialog>
+  <div id="reading-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>
