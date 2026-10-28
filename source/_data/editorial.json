@@ -202,6 +202,7 @@
       "_posts/Mybatis动态SQL.md"
     ],
     "aliases": [
+      "关于Java连接MySQL数据库",
       "JDBC连接数据库"
     ]
   },
@@ -292,6 +293,7 @@
       "_posts/事务管理 @Transactional.md"
     ],
     "aliases": [
+      "Day03《》",
       "Day03《修改菜品》"
     ]
   },
@@ -307,6 +309,7 @@
       "_posts/《学生管理系统》.md"
     ],
     "aliases": [
+      "《校园快递管理系统生成大纲》",
       "《校园快递管理系统》项目"
     ]
   },
@@ -335,6 +338,7 @@
       "_posts/spring项目三层架构.md"
     ],
     "aliases": [
+      "学生管理系统",
       "《学生管理系统》"
     ]
   },
@@ -350,6 +354,7 @@
       "_posts/《学生管理系统》.md"
     ],
     "aliases": [
+      "《快递物流系统SpringBoot》",
       "《快递物流管理系统SpringBoot》"
     ]
   },
@@ -415,6 +420,7 @@
       "_posts/《苍穹外卖》登录模块.md"
     ],
     "aliases": [
+      "Day06《HttpClient微信小程序开发》",
       "Day06"
     ]
   },
@@ -507,6 +513,7 @@
       "_posts/Spring cache缓存和Redis缓存.md"
     ],
     "aliases": [
+      "苍穹外卖Day07总结",
       "Day07总结"
     ]
   },
@@ -578,6 +585,7 @@
       "_posts/《苍穹外卖》阶段一.md"
     ],
     "aliases": [
+      "无标题",
       "AI学习流"
     ]
   },
@@ -628,6 +636,7 @@
       "_posts/事务管理 @Transactional.md"
     ],
     "aliases": [
+      "《苍穹外卖》概述",
       "spring核心注解"
     ]
   },
@@ -653,6 +662,7 @@
       "_posts/《苍穹外卖》登录模块.md"
     ],
     "aliases": [
+      "《苍穹外卖》概述",
       "spring项目三层架构"
     ]
   },
@@ -766,6 +776,7 @@
       "_posts/Debug能力.md"
     ],
     "aliases": [
+      "无法登录前端页面问题[苍穹外卖]",
       "无法登录前端页面问题-苍穹外卖"
     ]
   },
@@ -899,6 +910,7 @@
       "_posts/AOP切面编程.md"
     ],
     "aliases": [
+      "《苍穹外卖》概述",
       "ThreadLocal核心应用"
     ]
   },
@@ -952,6 +964,7 @@
       "_posts/RAG前端开发Bug.md"
     ],
     "aliases": [
+      "RAG项目概述",
       "RAG项目概况"
     ]
   },
@@ -1276,6 +1289,7 @@
       "_posts/《苍穹外卖》路线图.md"
     ],
     "aliases": [
+      "《苍穹外卖》模块一",
       "《苍穹外卖》阶段一"
     ]
   },

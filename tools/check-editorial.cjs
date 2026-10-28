@@ -28,6 +28,8 @@ for (const [source, edit] of Object.entries(edits)) {
   for (const m of guide.matchAll(/href="#([^"]+)"/g)) assert(ids.has(decodeURIComponent(unescapeHTML(m[1]))));
   if (oldOutput) {
     const old = fs.readFileSync(path.join(oldOutput, post.path), 'utf8');
+    const oldTitle = unescapeHTML(stripHTML(old.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)[1])).trim();
+    assert(record.aliases.includes(oldTitle), `Original published title remains searchable: ${source}`);
     assert.equal(prose(body(html)), prose(body(old)), `Paragraphs or code changed: ${source}`);
     assert.deepEqual([...body(html).matchAll(/<h[1-6]\b[^>]*id="([^"]+)"/g)].map(m => m[1]), [...body(old).matchAll(/<h[1-6]\b[^>]*id="([^"]+)"/g)].map(m => m[1]), 'Stable chapter IDs');
   }
