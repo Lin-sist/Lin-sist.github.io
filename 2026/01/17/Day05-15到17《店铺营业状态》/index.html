@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="Day05-15到17《店铺营业状态》">
+  <meta name="description" content="用营业与打烊状态，理解 RedisTemplate 在业务中的一次读写。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Day05-15到17《店铺营业状态》">
-  <meta property="og:description" content="Day05-15到17《店铺营业状态》">
+  <meta property="og:title" content="店铺营业状态：Redis 实现思路">
+  <meta property="og:description" content="用营业与打烊状态，理解 RedisTemplate 在业务中的一次读写。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/01/17/Day05-15%E5%88%B017%E3%80%8A%E5%BA%97%E9%93%BA%E8%90%A5%E4%B8%9A%E7%8A%B6%E6%80%81%E3%80%8B/">
   <meta property="article:published_time" content="2026-01-16T16:00:00.000Z">
   <meta property="article:modified_time" content="2026-02-10T14:43:47.255Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/01/17/Day05-15%E5%88%B017%E3%80%8A%E5%BA%97%E9%93%BA%E8%90%A5%E4%B8%9A%E7%8A%B6%E6%80%81%E3%80%8B/">
-  <title>Day05-15到17《店铺营业状态》 · Lin说 / Linsist</title>
+  <title>店铺营业状态：Redis 实现思路 · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,17 +41,18 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>Day05-15到17《店铺营业状态》</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-01-16T16:00:00.000Z">2026.01.17</time><span aria-hidden="true">/</span><span>约 1 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 课程笔记</p>
+          <h1>店铺营业状态：Redis 实现思路</h1>
+          <p class="article-deck">用营业与打烊状态，理解 RedisTemplate 在业务中的一次读写。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-01-16T16:00:00.000Z">2026.01.17</time><span aria-hidden="true">/</span><span>约 1 分钟</span></div>
           <p class="article-updated">更新于 <time datetime="2026-02-10T14:43:47.255Z">2026.02.10</time></p>          <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E4%B8%80%E5%88%B7%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/"># 一刷苍穹外卖</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="Day05-15到17《店铺营业状态》正文"><h2 id="🎥-dayXX-XX-模块名称"><a href="#🎥-dayXX-XX-模块名称" class="headerlink" title="🎥 dayXX-XX 模块名称"></a>🎥 dayXX-XX 模块名称</h2><h3 id="🧩-本节概述"><a href="#🧩-本节概述" class="headerlink" title="🧩 本节概述"></a>🧩 本节概述</h3><blockquote>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这是一份简短的模块记录，重点是营业状态与 Redis 的对应关系。完整代码和部分复盘章节尚未展开，可结合后面的缓存笔记继续读。</p></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="店铺营业状态：Redis 实现思路正文"><h2 id="🎥-dayXX-XX-模块名称"><a href="#🎥-dayXX-XX-模块名称" class="headerlink" title="🎥 dayXX-XX 模块名称"></a>dayXX-XX 模块名称</h2><h3 id="🧩-本节概述"><a href="#🧩-本节概述" class="headerlink" title="🧩 本节概述"></a>本节概述</h3><blockquote>
 <p><strong>一句话总结</strong>：  </p>
 </blockquote>
 <p><strong>主要内容关键词</strong>：”redisTemplate”,”@AutoWired”, “@ApiOperation”</p>
 <hr>
-<h3 id="🧠-模块目标"><a href="#🧠-模块目标" class="headerlink" title="🧠 模块目标"></a>🧠 模块目标</h3><p><strong>修改营业状态</strong></p>
+<h3 id="🧠-模块目标"><a href="#🧠-模块目标" class="headerlink" title="🧠 模块目标"></a>模块目标</h3><p><strong>修改营业状态</strong></p>
 <ul>
 <li>营业：自动接收任何订单，可点击“打烊”让店铺进入打烊状态</li>
 <li>打烊：不接受任何订单，可点击营业手动恢复营业状态</li>
@@ -65,7 +66,7 @@
 <li>用户端查询营业状态</li>
 </ul>
 <hr>
-<h3 id="🧰-关键技术-类"><a href="#🧰-关键技术-类" class="headerlink" title="🧰 关键技术 &#x2F; 类"></a>🧰 关键技术 &#x2F; 类</h3><table>
+<h3 id="🧰-关键技术-类"><a href="#🧰-关键技术-类" class="headerlink" title="🧰 关键技术 &#x2F; 类"></a>关键技术 &#x2F; 类</h3><table>
 <thead>
 <tr>
 <th>类型</th>
@@ -95,22 +96,22 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="🔄-实现流程"><a href="#🔄-实现流程" class="headerlink" title="🔄 实现流程"></a>🔄 实现流程</h3><p>1.<br>2.<br>3.<br>4. </p>
+<h3 id="🔄-实现流程"><a href="#🔄-实现流程" class="headerlink" title="🔄 实现流程"></a>实现流程</h3><p>1.<br>2.<br>3.<br>4. </p>
 <hr>
-<h3 id="📘-学到的知识"><a href="#📘-学到的知识" class="headerlink" title="📘 学到的知识"></a>📘 学到的知识</h3><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><hr>
-<h3 id="🗂️-关联文件"><a href="#🗂️-关联文件" class="headerlink" title="🗂️ 关联文件"></a>🗂️ 关联文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sky-server/src/main/java/com/sky/controller/admin/ShopController.java/service/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="📘-学到的知识"><a href="#📘-学到的知识" class="headerlink" title="📘 学到的知识"></a>学到的知识</h3><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><hr>
+<h3 id="🗂️-关联文件"><a href="#🗂️-关联文件" class="headerlink" title="🗂️ 关联文件"></a>关联文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sky-server/src/main/java/com/sky/controller/admin/ShopController.java/service/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <hr>
-<h3 id="🏁-一句话复盘"><a href="#🏁-一句话复盘" class="headerlink" title="🏁 一句话复盘"></a>🏁 一句话复盘</h3><blockquote>
+<h3 id="🏁-一句话复盘"><a href="#🏁-一句话复盘" class="headerlink" title="🏁 一句话复盘"></a>一句话复盘</h3><blockquote>
 </blockquote>
 <hr>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/10/Day02/"><div><h3>Day02</h3><time>2026.02.10</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/31/Day08-01%E5%88%B011%E3%80%8A%E7%94%A8%E6%88%B7%E4%B8%8B%E5%8D%95%E3%80%8B/"><div><h3>Day08-01到11《用户下单》</h3><time>2026.01.31</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/31/Day08-12%E5%88%B018%E3%80%8A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E3%80%8B/"><div><h3>Day08-12到18《订单支付》</h3><time>2026.01.31</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/01/17/Day05-02%E5%88%B014%E3%80%8A%E5%85%B3%E4%BA%8Eredis%E3%80%8B/"><div><h3>Redis 入门：数据类型与常用命令</h3><p>从基础概念到命令索引，整理课程中的 Redis 入门内容。</p><time>2026.01.17</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/17/Spring%20cache%E7%BC%93%E5%AD%98%E5%92%8CRedis%E7%BC%93%E5%AD%98/"><div><h3>Redis 与 Spring Cache：写法和更新边界</h3><p>对照营业状态、菜品与套餐，理解手动缓存和注解缓存的取舍。</p><time>2026.02.17</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
-          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%F0%9F%8E%A5-dayXX-XX-%E6%A8%A1%E5%9D%97%E5%90%8D%E7%A7%B0">🎥 dayXX-XX 模块名称</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0">🧩 本节概述</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A0-%E6%A8%A1%E5%9D%97%E7%9B%AE%E6%A0%87">🧠 模块目标</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%B0-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF-%E7%B1%BB">🧰 关键技术 / 类</a></li><li class="toc-level-3"><a href="#%F0%9F%94%84-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B">🔄 实现流程</a></li><li class="toc-level-3"><a href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86">📘 学到的知识</a></li><li class="toc-level-3"><a href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6">🗂️ 关联文件</a></li><li class="toc-level-3"><a href="#%F0%9F%8F%81-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%A4%8D%E7%9B%98">🏁 一句话复盘</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
+          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%F0%9F%8E%A5-dayXX-XX-%E6%A8%A1%E5%9D%97%E5%90%8D%E7%A7%B0">dayXX-XX 模块名称</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A9-%E6%9C%AC%E8%8A%82%E6%A6%82%E8%BF%B0">本节概述</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%A0-%E6%A8%A1%E5%9D%97%E7%9B%AE%E6%A0%87">模块目标</a></li><li class="toc-level-3"><a href="#%F0%9F%A7%B0-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF-%E7%B1%BB">关键技术 / 类</a></li><li class="toc-level-3"><a href="#%F0%9F%94%84-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B">实现流程</a></li><li class="toc-level-3"><a href="#%F0%9F%93%98-%E5%AD%A6%E5%88%B0%E7%9A%84%E7%9F%A5%E8%AF%86">学到的知识</a></li><li class="toc-level-3"><a href="#%F0%9F%97%82%EF%B8%8F-%E5%85%B3%E8%81%94%E6%96%87%E4%BB%B6">关联文件</a></li><li class="toc-level-3"><a href="#%F0%9F%8F%81-%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%A4%8D%E7%9B%98">一句话复盘</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
         </details>
         <div class="reading-tools" hidden><span>字号</span><div><button id="font-smaller" type="button" aria-label="缩小正文字号">A−</button><output id="font-size" aria-label="当前正文字号">18</output><button id="font-larger" type="button" aria-label="放大正文字号">A+</button></div></div>
         <p class="sidebar-note">让思考，留下轨迹。</p>

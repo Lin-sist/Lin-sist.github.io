@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="RAG知识汇总">
+  <meta name="description" content="把离线入库和在线问答分开，建立检索增强生成的基本流程。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="RAG知识汇总">
-  <meta property="og:description" content="RAG知识汇总">
+  <meta property="og:title" content="RAG 入门：文档处理、检索与生成">
+  <meta property="og:description" content="把离线入库和在线问答分开，建立检索增强生成的基本流程。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/14/RAG%E7%9F%A5%E8%AF%86%E6%B1%87%E6%80%BB/">
   <meta property="article:published_time" content="2026-02-13T16:00:00.000Z">
   <meta property="article:modified_time" content="2026-02-15T07:05:36.915Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/14/RAG%E7%9F%A5%E8%AF%86%E6%B1%87%E6%80%BB/">
-  <title>RAG知识汇总 · Lin说 / Linsist</title>
+  <title>RAG 入门：文档处理、检索与生成 · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,12 +41,13 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>RAG知识汇总</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-13T16:00:00.000Z">2026.02.14</time><span aria-hidden="true">/</span><span>约 5 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 概念笔记</p>
+          <h1>RAG 入门：文档处理、检索与生成</h1>
+          <p class="article-deck">把离线入库和在线问答分开，建立检索增强生成的基本流程。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-13T16:00:00.000Z">2026.02.14</time><span aria-hidden="true">/</span><span>约 5 分钟</span></div>
           <p class="article-updated">更新于 <time datetime="2026-02-15T07:05:36.915Z">2026.02.15</time></p>          <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/RAG/"># RAG</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="RAG知识汇总正文"><h2 id="RAG（检索增强生成）技术详解"><a href="#RAG（检索增强生成）技术详解" class="headerlink" title="RAG（检索增强生成）技术详解"></a>RAG（检索增强生成）技术详解</h2><h3 id="1-什么是-RAG？"><a href="#1-什么是-RAG？" class="headerlink" title="1. 什么是 RAG？"></a>1. 什么是 RAG？</h3><p>RAG（Retrieval-Augmented Generation，检索增强生成）是一种结合了<strong>信息检索</strong>和<strong>文本生成</strong>的 AI 技术架构。</p>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这篇是 RAG 的概念整理，按流程介绍文档处理、检索和回答生成。文中列出的技术选项与评估维度属于学习材料，不代表当前项目的实际配置或实验结果。</p><nav aria-label="建议阅读入口"><a href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-RAG%EF%BC%9F">先理解概念<span aria-hidden="true"> ↓</span></a><a href="#2-RAG-%E6%9E%B6%E6%9E%84%E6%B5%81%E7%A8%8B">架构流程<span aria-hidden="true"> ↓</span></a><a href="#3-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF">核心技术<span aria-hidden="true"> ↓</span></a></nav></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="RAG 入门：文档处理、检索与生成正文"><h2 id="RAG（检索增强生成）技术详解"><a href="#RAG（检索增强生成）技术详解" class="headerlink" title="RAG（检索增强生成）技术详解"></a>RAG（检索增强生成）技术详解</h2><h3 id="1-什么是-RAG？"><a href="#1-什么是-RAG？" class="headerlink" title="1. 什么是 RAG？"></a>1. 什么是 RAG？</h3><p>RAG（Retrieval-Augmented Generation，检索增强生成）是一种结合了<strong>信息检索</strong>和<strong>文本生成</strong>的 AI 技术架构。</p>
 <h4 id="1-1-核心思想"><a href="#1-1-核心思想" class="headerlink" title="1.1 核心思想"></a>1.1 核心思想</h4><p>传统的大语言模型（LLM）依赖于训练时学到的知识，但存在以下问题：</p>
 <ul>
 <li><p><strong>知识截止</strong>：只知道训练时的数据</p>
@@ -283,7 +284,7 @@
 <p><strong>RAG 是 AI 应用的核心技术之一，掌握它能大大提升你的竞争力！🚀</strong></p>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>从文档上传、检索到流式回答，继续查看项目源码。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG前端开发</h3><p>从 Vue、Vite 到状态管理，梳理前端项目的整体结构。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/"><div><h3>RAG前端开发Bug</h3><p>记录项目启动与联调时遇到的问题，留下排查的过程。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/14/RAG%E9%A1%B9%E7%9B%AE%E6%A6%82%E5%86%B5/"><div><h3>RAG项目概述</h3><time>2026.02.14</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a target="_blank" rel="noopener" href="https://github.com/Lin-sist/RAG"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>查看项目源码，结合代码理解文档入库、检索与回答的流程。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/14/RAG%E9%A1%B9%E7%9B%AE%E6%A6%82%E5%86%B5/"><div><h3>RAG 项目概况：入库与问答两条链路</h3><p>对照历史项目笔记，了解文档如何进入知识库，以及问题如何得到回答。</p><time>2026.02.14</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG 前端如何组织路由、状态与请求</h3><p>从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>

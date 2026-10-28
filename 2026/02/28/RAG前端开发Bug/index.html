@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="记录项目启动与联调时遇到的问题，留下排查的过程。">
+  <meta name="description" content="一次 RAG 项目启动记录：区分 IDE 管理的实例与命令行启动的 Java 进程。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="RAG前端开发Bug">
-  <meta property="og:description" content="记录项目启动与联调时遇到的问题，留下排查的过程。">
+  <meta property="og:title" content="IDEA 停了，8080 为什么还被占用？">
+  <meta property="og:description" content="一次 RAG 项目启动记录：区分 IDE 管理的实例与命令行启动的 Java 进程。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/">
   <meta property="article:published_time" content="2026-02-28T14:22:58.946Z">
   <meta property="article:modified_time" content="2026-02-28T15:28:48.201Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/">
-  <title>RAG前端开发Bug · Lin说 / Linsist</title>
+  <title>IDEA 停了，8080 为什么还被占用？ · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,12 +41,13 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 项目实践</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 项目实践</p>
-          <h1>RAG前端开发Bug</h1>
-          <p class="article-deck">记录项目启动与联调时遇到的问题，留下排查的过程。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-28T14:22:58.946Z">2026.02.28</time><span aria-hidden="true">/</span><span>约 2 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 排错记录</p>
+          <h1>IDEA 停了，8080 为什么还被占用？</h1>
+          <p class="article-deck">一次 RAG 项目启动记录：区分 IDE 管理的实例与命令行启动的 Java 进程。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-28T14:22:58.946Z">2026.02.28</time><span aria-hidden="true">/</span><span>约 2 分钟</span></div>
                     <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/RAG/"># RAG</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="RAG前端开发Bug正文"><h2 id="项目启动遇到报错：端口占用"><a href="#项目启动遇到报错：端口占用" class="headerlink" title="项目启动遇到报错：端口占用"></a>项目启动遇到报错：端口占用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ran terminal <span class="built_in">command</span>: netstat -ano | findstr <span class="string">&quot;:8080&quot;</span> | findstr <span class="string">&quot;LISTENING&quot;</span></span><br></pre></td></tr></table></figure>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这篇记录的是一次端口占用问题：IDEA 中的实例停止后，命令行启动的进程仍在监听 8080。下文保留当时的排查过程，PID 和启动时间只对应那一次运行；复用命令时，需要重新确认进程。</p></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="IDEA 停了，8080 为什么还被占用？正文"><h2 id="项目启动遇到报错：端口占用"><a href="#项目启动遇到报错：端口占用" class="headerlink" title="项目启动遇到报错：端口占用"></a>从端口占用，追到仍在运行的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ran terminal <span class="built_in">command</span>: netstat -ano | findstr <span class="string">&quot;:8080&quot;</span> | findstr <span class="string">&quot;LISTENING&quot;</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ran terminal <span class="built_in">command</span>: Get-Process -Id 12560 -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime, @&#123;N=<span class="string">&#x27;CmdLine&#x27;</span>;E=&#123;(Get-CimInstance Win32_Process -Filter <span class="string">&quot;ProcessId=<span class="subst">$($_.Id)</span>&quot;</span>).CommandLine.Substring(0, [Math]::Min(200, (Get-CimInstance Win32_Process -Filter <span class="string">&quot;ProcessId=<span class="subst">$($_.Id)</span>&quot;</span>).CommandLine.Length))&#125;&#125; | Format-List</span><br></pre></td></tr></table></figure>
 
@@ -61,11 +62,11 @@
 <p><strong>以后遇到端口占用，一行命令搞定</strong>：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查谁占了8080</span></span><br><span class="line">netstat <span class="literal">-ano</span> | findstr <span class="string">&quot;:8080&quot;</span> | findstr <span class="string">&quot;LISTENING&quot;</span></span><br><span class="line"><span class="comment"># 杀掉它（把PID换成实际的）</span></span><br><span class="line"><span class="built_in">Stop-Process</span> <span class="literal">-Id</span> &lt;PID&gt; <span class="literal">-Force</span></span><br></pre></td></tr></table></figure></article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>从文档上传、检索到流式回答，继续查看项目源码。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG前端开发</h3><p>从 Vue、Vite 到状态管理，梳理前端项目的整体结构。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/14/RAG%E7%9F%A5%E8%AF%86%E6%B1%87%E6%80%BB/"><div><h3>RAG知识汇总</h3><time>2026.02.14</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/14/RAG%E9%A1%B9%E7%9B%AE%E6%A6%82%E5%86%B5/"><div><h3>RAG项目概述</h3><time>2026.02.14</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a target="_blank" rel="noopener" href="https://github.com/Lin-sist/RAG"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>查看项目源码，结合代码理解文档入库、检索与回答的流程。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/"><div><h3>Java 调试：从异常栈到接口文档</h3><p>先形成假设，再用断点和变量验证；随后理解 Knife4j 如何从代码生成接口文档。</p><time>2026.02.27</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG 前端如何组织路由、状态与请求</h3><p>从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
-          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8%E9%81%87%E5%88%B0%E6%8A%A5%E9%94%99%EF%BC%9A%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8">项目启动遇到报错：端口占用</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
+          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8%E9%81%87%E5%88%B0%E6%8A%A5%E9%94%99%EF%BC%9A%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8">从端口占用，追到仍在运行的进程</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
         </details>
         <div class="reading-tools" hidden><span>字号</span><div><button id="font-smaller" type="button" aria-label="缩小正文字号">A−</button><output id="font-size" aria-label="当前正文字号">18</output><button id="font-larger" type="button" aria-label="放大正文字号">A+</button></div></div>
         <p class="sidebar-note">让思考，留下轨迹。</p>

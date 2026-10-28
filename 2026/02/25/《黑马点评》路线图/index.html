@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="《黑马点评》路线图">
+  <meta name="description" content="从登录与缓存，走向秒杀、锁、排行榜和地理位置等应用。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="《黑马点评》路线图">
-  <meta property="og:description" content="《黑马点评》路线图">
+  <meta property="og:title" content="黑马点评：沿业务模块学习 Redis">
+  <meta property="og:description" content="从登录与缓存，走向秒杀、锁、排行榜和地理位置等应用。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/">
   <meta property="article:published_time" content="2026-02-25T14:38:18.644Z">
   <meta property="article:modified_time" content="2026-02-26T05:19:49.197Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/">
-  <title>《黑马点评》路线图 · Lin说 / Linsist</title>
+  <title>黑马点评：沿业务模块学习 Redis · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,12 +41,13 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>《黑马点评》路线图</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-25T14:38:18.644Z">2026.02.25</time><span aria-hidden="true">/</span><span>约 4 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 学习路线</p>
+          <h1>黑马点评：沿业务模块学习 Redis</h1>
+          <p class="article-deck">从登录与缓存，走向秒杀、锁、排行榜和地理位置等应用。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-25T14:38:18.644Z">2026.02.25</time><span aria-hidden="true">/</span><span>约 4 分钟</span></div>
                     <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/"># 黑马点评</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="《黑马点评》路线图正文"><ul>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这份路线按业务模块组织 Redis 相关知识，方便安排学习顺序。每个阶段仍需要自己的代码、运行和复述来检验，路线本身不表示掌握程度。</p><nav aria-label="建议阅读入口"><a href="#Redis-%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%EF%BC%88%E6%8C%89%E6%A8%A1%E5%9D%97%E9%A1%BA%E5%BA%8F%EF%BC%89">模块路线<span aria-hidden="true"> ↓</span></a><a href="#%E6%8E%A8%E8%8D%90%E5%AD%A6%E4%B9%A0%E9%A1%BA%E5%BA%8F">推荐顺序<span aria-hidden="true"> ↓</span></a></nav></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="黑马点评：沿业务模块学习 Redis正文"><ul>
 <li>[[Redis核心应用]]</li>
 <li></li>
 </ul>
@@ -267,7 +268,7 @@
 </ul>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/"><div><h3>Redis核心应用</h3><time>2026.02.26</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG前端开发</h3><p>从 Vue、Vite 到状态管理，梳理前端项目的整体结构。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/"><div><h3>RAG前端开发Bug</h3><p>记录项目启动与联调时遇到的问题，留下排查的过程。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/"><div><h3>Redis 数据结构如何落到业务中</h3><p>对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。</p><time>2026.02.26</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/17/Day05-02%E5%88%B014%E3%80%8A%E5%85%B3%E4%BA%8Eredis%E3%80%8B/"><div><h3>Redis 入门：数据类型与常用命令</h3><p>从基础概念到命令索引，整理课程中的 Redis 入门内容。</p><time>2026.01.17</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/17/Spring%20cache%E7%BC%93%E5%AD%98%E5%92%8CRedis%E7%BC%93%E5%AD%98/"><div><h3>Redis 与 Spring Cache：写法和更新边界</h3><p>对照营业状态、菜品与套餐，理解手动缓存和注解缓存的取舍。</p><time>2026.02.17</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>

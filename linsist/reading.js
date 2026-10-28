@@ -35,8 +35,10 @@
     menuButton.setAttribute('aria-label', open ? '关闭导航菜单' : '打开导航菜单');
   });
   menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+  matchMedia('(min-width: 701px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 
   const body = $('#article-container');
+  if (body && $('.reading-toc')) {
   const toc = $('.reading-toc');
   const mobile = matchMedia('(max-width: 860px)');
   function responsiveTools() { toc.open = !mobile.matches; closeMenu(); }
@@ -138,6 +140,8 @@
   });
   const copyArticle = $('#copy-article-link'); copyArticle.hidden = false;
   copyArticle.addEventListener('click', () => copy($('link[rel="canonical"]').href, copyArticle, '复制文章链接 ↗'));
+  scheduleReading();
+  }
 
   const dialog = $('#search-dialog');
   const input = $('#search-input');
@@ -149,7 +153,7 @@
   function renderSearch() {
     if (!records) return;
     const query = input.value.trim().toLocaleLowerCase();
-    const matches = records.filter(post => [post.title, ...(post.tags || []), ...(post.categories || [])].join(' ').toLocaleLowerCase().includes(query));
+    const matches = records.filter(post => [post.title, ...(post.aliases || []), ...(post.tags || []), ...(post.categories || [])].join(' ').toLocaleLowerCase().includes(query));
     results.replaceChildren();
     hint.textContent = matches.length ? `找到 ${matches.length} 篇文章${matches.length > 50 ? '，显示前 50 篇' : ''} · 按 Esc 关闭` : '没有找到相关文章，换个关键词试试。';
     const base = new URL(document.documentElement.dataset.siteRoot, location.origin);
@@ -195,5 +199,4 @@
       event.preventDefault(); openSearch();
     }
   });
-  scheduleReading();
 })();

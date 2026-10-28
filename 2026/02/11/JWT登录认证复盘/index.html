@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="JWT登录认证复盘">
+  <meta name="description" content="从一次复述出发，重新区分配置、令牌字段和上下文清理的职责。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="JWT登录认证复盘">
-  <meta property="og:description" content="JWT登录认证复盘">
+  <meta property="og:title" content="JWT 复盘：概念纠正与遗漏补充">
+  <meta property="og:description" content="从一次复述出发，重新区分配置、令牌字段和上下文清理的职责。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/">
   <meta property="article:published_time" content="2026-02-10T16:00:00.000Z">
   <meta property="article:modified_time" content="2026-02-15T07:05:36.905Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E5%A4%8D%E7%9B%98/">
-  <title>JWT登录认证复盘 · Lin说 / Linsist</title>
+  <title>JWT 复盘：概念纠正与遗漏补充 · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,15 +41,16 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>JWT登录认证复盘</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-10T16:00:00.000Z">2026.02.11</time><span aria-hidden="true">/</span><span>约 9 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 问答复盘</p>
+          <h1>JWT 复盘：概念纠正与遗漏补充</h1>
+          <p class="article-deck">从一次复述出发，重新区分配置、令牌字段和上下文清理的职责。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-10T16:00:00.000Z">2026.02.11</time><span aria-hidden="true">/</span><span>约 9 分钟</span></div>
           <p class="article-updated">更新于 <time datetime="2026-02-15T07:05:36.905Z">2026.02.15</time></p>          <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/"># 苍穹外卖</a></li><li><a href="/tags/JWT/"># JWT</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="JWT登录认证复盘正文"><p>[[JWT登录认证]]</p>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这篇保留了原始回答及逐条纠正。建议先读自己的表述，再对照补充部分，最后用文末问题检查是否能够重新讲清楚。</p><nav aria-label="建议阅读入口"><a href="#%E2%9C%85-%E4%BD%A0%E7%90%86%E8%A7%A3%E6%AD%A3%E7%A1%AE%E7%9A%84%E9%83%A8%E5%88%86">理解与遗漏<span aria-hidden="true"> ↓</span></a><a href="#%E2%9D%8C-%E9%80%90%E6%9D%A1%E7%BA%A0%E6%AD%A3%E4%B8%8E%E8%A1%A5%E5%85%85">逐条纠正<span aria-hidden="true"> ↓</span></a></nav></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="JWT 复盘：概念纠正与遗漏补充正文"><p>[[JWT登录认证]]</p>
 <p>非常好！用费曼学习法来验证理解，说明你已经在认真消化知识了。我逐条给你纠正和补充：</p>
 <hr>
-<h2 id="✅-你理解正确的部分"><a href="#✅-你理解正确的部分" class="headerlink" title="✅ 你理解正确的部分"></a><strong>✅ 你理解正确的部分</strong></h2><p>整体职责划分方向是对的，但有一些<strong>错误理解</strong>和<strong>关键遗漏</strong>需要纠正。</p>
+<h2 id="✅-你理解正确的部分"><a href="#✅-你理解正确的部分" class="headerlink" title="✅ 你理解正确的部分"></a>你理解正确的部分</h2><p>整体职责划分方向是对的，但有一些<strong>错误理解</strong>和<strong>关键遗漏</strong>需要纠正。</p>
 <ol>
 <li>关于JwtProperties类，通过@ConfigurationProperties(prefix &#x3D; “sky.jwt”)注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌;</li>
 <li>关于JwtUtil类，用于生成和解析校验jwt令牌，主要用到两个方法createJWT和parseJWT;</li>
@@ -60,7 +61,7 @@
 <li>JwtTokenAdminInterceptor类和JwtTokenUserInterceptor类，在用户登录后，如果用户操作调用的是controller层方法，都需要经过jwt令牌校验才可以后续操作。</li>
 </ol>
 <hr>
-<h2 id="❌-逐条纠正与补充"><a href="#❌-逐条纠正与补充" class="headerlink" title="❌ 逐条纠正与补充"></a><strong>❌ 逐条纠正与补充</strong></h2><h3 id="1-JwtProperties类-基本正确，但有重要遗漏"><a href="#1-JwtProperties类-基本正确，但有重要遗漏" class="headerlink" title="1. JwtProperties类 - 基本正确，但有重要遗漏"></a><strong>1. JwtProperties类 - 基本正确，但有重要遗漏</strong></h3><p><strong>你的理解：</strong></p>
+<h2 id="❌-逐条纠正与补充"><a href="#❌-逐条纠正与补充" class="headerlink" title="❌ 逐条纠正与补充"></a>逐条纠正与补充</h2><h3 id="1-JwtProperties类-基本正确，但有重要遗漏"><a href="#1-JwtProperties类-基本正确，但有重要遗漏" class="headerlink" title="1. JwtProperties类 - 基本正确，但有重要遗漏"></a><strong>1. JwtProperties类 - 基本正确，但有重要遗漏</strong></h3><p><strong>你的理解：</strong></p>
 <blockquote>
 <p>通过@ConfigurationProperties(prefix &#x3D; “sky.jwt”)注解，将application.yml的sky.jwt中的数据读取出来，这些数据在EmployeeController和UserController用于生成jwt令牌，在JwtTokenAdminInterceptor和JwtTokenUserInterceptor用于校验令牌。</p>
 </blockquote>
@@ -223,7 +224,7 @@
 <p>拦截器在每次HTTP请求到达Controller之前执行，从请求头读取token并调用JwtUtil验证签名和过期时间，验证成功后解析出用户ID写入ThreadLocal，失败则返回401。请求结束后在afterCompletion中清理ThreadLocal防止内存泄漏。</p>
 </blockquote>
 <hr>
-<h2 id="🎯-费曼学习法检验结果"><a href="#🎯-费曼学习法检验结果" class="headerlink" title="🎯 费曼学习法检验结果"></a><strong>🎯 费曼学习法检验结果</strong></h2><p><strong>你的理解程度：70分</strong></p>
+<h2 id="🎯-费曼学习法检验结果"><a href="#🎯-费曼学习法检验结果" class="headerlink" title="🎯 费曼学习法检验结果"></a>费曼学习法检验结果</h2><p><strong>你的理解程度：70分</strong></p>
 <ul>
 <li>✅ <strong>优点</strong>：抓住了每个类的核心职责，整体流程方向正确</li>
 <li>❌ <strong>问题</strong>：<ol>
@@ -235,13 +236,13 @@
 </li>
 </ul>
 <hr>
-<h2 id="📝-完整串联（标准答案）"><a href="#📝-完整串联（标准答案）" class="headerlink" title="📝 完整串联（标准答案）"></a><strong>📝 完整串联（标准答案）</strong></h2><p>让我给你一个完整的业务流程串联，你可以用这个来重新理解：</p>
+<h2 id="📝-完整串联（标准答案）"><a href="#📝-完整串联（标准答案）" class="headerlink" title="📝 完整串联（标准答案）"></a>完整串联（标准答案）</h2><p>让我给你一个完整的业务流程串联，你可以用这个来重新理解：</p>
 <h3 id="流程1：登录生成JWT"><a href="#流程1：登录生成JWT" class="headerlink" title="流程1：登录生成JWT"></a><strong>流程1：登录生成JWT</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">前端发起登录请求 </span><br><span class="line">→ WebMvcConfiguration放行/login接口（因为此时还没有token）</span><br><span class="line">→ EmployeeController.login接收请求</span><br><span class="line">→ 调用Service验证账号密码</span><br><span class="line">→ 验证成功后，从JwtProperties读取secretKey和ttl</span><br><span class="line">→ 构建claims（put(&quot;empId&quot;, id)，key名来自JwtClaimsConstant）</span><br><span class="line">→ 调用JwtUtil.createJWT生成token</span><br><span class="line">→ 封装到VO返回给前端</span><br><span class="line">→ 前端保存token到localStorage</span><br></pre></td></tr></table></figure>
 
 <h3 id="流程2：携带JWT访问受保护接口"><a href="#流程2：携带JWT访问受保护接口" class="headerlink" title="流程2：携带JWT访问受保护接口"></a><strong>流程2：携带JWT访问受保护接口</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">前端发起业务请求，Header携带token</span><br><span class="line">→ WebMvcConfiguration拦截/admin/**</span><br><span class="line">→ JwtTokenAdminInterceptor.preHandle()执行</span><br><span class="line">→ 判断是否是Controller方法（是才继续，否则放行）</span><br><span class="line">→ 从请求头读取token（header名称来自JwtProperties.adminTokenName）</span><br><span class="line">→ 调用JwtUtil.parseJWT验证签名和过期时间</span><br><span class="line">→ 验证成功，解析出empId（key名来自JwtClaimsConstant）</span><br><span class="line">→ 调用BaseContext.setCurrentId写入ThreadLocal</span><br><span class="line">→ 放行请求</span><br><span class="line">→ Controller/Service通过BaseContext.getCurrentId()获取当前用户</span><br><span class="line">→ 业务处理完成，返回响应</span><br><span class="line">→ JwtTokenAdminInterceptor.afterCompletion()执行</span><br><span class="line">→ 调用BaseContext.removeCurrentId()清理ThreadLocal</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="🔥-面试必问追问题（用来自测）"><a href="#🔥-面试必问追问题（用来自测）" class="headerlink" title="🔥 面试必问追问题（用来自测）"></a><strong>🔥 面试必问追问题（用来自测）</strong></h2><p>你现在可以用这些问题来检验自己是否真正理解：</p>
+<h2 id="🔥-面试必问追问题（用来自测）"><a href="#🔥-面试必问追问题（用来自测）" class="headerlink" title="🔥 面试必问追问题（用来自测）"></a>面试必问追问题（用来自测）</h2><p>你现在可以用这些问题来检验自己是否真正理解：</p>
 <ol>
 <li><p><strong>为什么需要两套JWT配置（admin和user）？</strong> <details><summary>答案</summary>实现权限隔离，管理员token不能访问C端接口，反之亦然。如果用同一套配置，管理员可以伪造用户端token。</details></p>
 </li>
@@ -258,11 +259,11 @@
 <p><strong>你现在可以用自己的话，重新完整讲一遍JWT登录模块的流程，确保没有遗漏和错误理解。准备好了告诉我，我来检验！</strong> 🎓</p>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/12/JWT%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"><div><h3>JWT登录模块架构设计</h3><time>2026.02.12</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81code%20review/"><div><h3>JWT登录认证code review</h3><time>2026.02.11</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/"><div><h3>JWT登录认证</h3><time>2026.02.11</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/11/JWT%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/"><div><h3>JWT 登录：签发、校验与请求清理</h3><p>沿登录和受保护接口的请求，串起 JWT、拦截器与 ThreadLocal。</p><time>2026.02.11</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/12/ThreadLocal%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/"><div><h3>ThreadLocal：请求中的身份如何传递</h3><p>从基本 API 和线程隔离，读到 BaseContext 的使用与清理。</p><time>2026.02.12</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/21/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E9%98%B6%E6%AE%B5%E4%B8%80/"><div><h3>ThreadLocal 与登录链路：一次问答复盘</h3><p>保留原始回答、纠正与追问，检查对用户上下文和登录流程的理解。</p><time>2026.02.21</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
-          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%E2%9C%85-%E4%BD%A0%E7%90%86%E8%A7%A3%E6%AD%A3%E7%A1%AE%E7%9A%84%E9%83%A8%E5%88%86">✅ 你理解正确的部分</a></li><li class="toc-level-2"><a href="#%E2%9D%8C-%E9%80%90%E6%9D%A1%E7%BA%A0%E6%AD%A3%E4%B8%8E%E8%A1%A5%E5%85%85">❌ 逐条纠正与补充</a></li><li class="toc-level-3"><a href="#1-JwtProperties%E7%B1%BB-%E5%9F%BA%E6%9C%AC%E6%AD%A3%E7%A1%AE%EF%BC%8C%E4%BD%86%E6%9C%89%E9%87%8D%E8%A6%81%E9%81%97%E6%BC%8F">1. JwtProperties类 - 基本正确，但有重要遗漏</a></li><li class="toc-level-3"><a href="#2-JwtUtil%E7%B1%BB-%E6%AD%A3%E7%A1%AE%E4%BD%86%E5%A4%AA%E7%AC%BC%E7%BB%9F">2. JwtUtil类 - 正确但太笼统</a></li><li class="toc-level-3"><a href="#3-JwtClaimsConstant%E7%B1%BB-%E2%9D%8C-%E6%9C%89%E9%94%99%E8%AF%AF%E7%90%86%E8%A7%A3">3. JwtClaimsConstant类 - ❌ 有错误理解</a></li><li class="toc-level-3"><a href="#4-BaseContext%E7%B1%BB-%E5%9F%BA%E6%9C%AC%E6%AD%A3%E7%A1%AE%EF%BC%8C%E4%BD%86%E9%81%97%E6%BC%8F%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">4. BaseContext类 - 基本正确，但遗漏核心原理</a></li><li class="toc-level-3"><a href="#5-EmployeeController%E5%92%8CUserController-%E6%AD%A3%E7%A1%AE%E4%BD%86%E5%A4%AA%E7%AE%80%E7%95%A5">5. EmployeeController和UserController - 正确但太简略</a></li><li class="toc-level-3"><a href="#6-WebMvcConfiguration-%E8%A1%A8%E8%BF%B0%E4%B8%8D%E5%A4%9F%E5%87%86%E7%A1%AE">6. WebMvcConfiguration - 表述不够准确</a></li><li class="toc-level-3"><a href="#7-JwtTokenAdminInterceptor%E5%92%8CJwtTokenUserInterceptor-%E2%9D%8C-%E7%90%86%E8%A7%A3%E6%9C%89%E5%81%8F%E5%B7%AE">7. JwtTokenAdminInterceptor和JwtTokenUserInterceptor - ❌ 理解有偏差</a></li><li class="toc-level-2"><a href="#%F0%9F%8E%AF-%E8%B4%B9%E6%9B%BC%E5%AD%A6%E4%B9%A0%E6%B3%95%E6%A3%80%E9%AA%8C%E7%BB%93%E6%9E%9C">🎯 费曼学习法检验结果</a></li><li class="toc-level-2"><a href="#%F0%9F%93%9D-%E5%AE%8C%E6%95%B4%E4%B8%B2%E8%81%94%EF%BC%88%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88%EF%BC%89">📝 完整串联（标准答案）</a></li><li class="toc-level-3"><a href="#%E6%B5%81%E7%A8%8B1%EF%BC%9A%E7%99%BB%E5%BD%95%E7%94%9F%E6%88%90JWT">流程1：登录生成JWT</a></li><li class="toc-level-3"><a href="#%E6%B5%81%E7%A8%8B2%EF%BC%9A%E6%90%BA%E5%B8%A6JWT%E8%AE%BF%E9%97%AE%E5%8F%97%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3">流程2：携带JWT访问受保护接口</a></li><li class="toc-level-2"><a href="#%F0%9F%94%A5-%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%E8%BF%BD%E9%97%AE%E9%A2%98%EF%BC%88%E7%94%A8%E6%9D%A5%E8%87%AA%E6%B5%8B%EF%BC%89">🔥 面试必问追问题（用来自测）</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
+          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%E2%9C%85-%E4%BD%A0%E7%90%86%E8%A7%A3%E6%AD%A3%E7%A1%AE%E7%9A%84%E9%83%A8%E5%88%86">你理解正确的部分</a></li><li class="toc-level-2"><a href="#%E2%9D%8C-%E9%80%90%E6%9D%A1%E7%BA%A0%E6%AD%A3%E4%B8%8E%E8%A1%A5%E5%85%85">逐条纠正与补充</a></li><li class="toc-level-3"><a href="#1-JwtProperties%E7%B1%BB-%E5%9F%BA%E6%9C%AC%E6%AD%A3%E7%A1%AE%EF%BC%8C%E4%BD%86%E6%9C%89%E9%87%8D%E8%A6%81%E9%81%97%E6%BC%8F">1. JwtProperties类 - 基本正确，但有重要遗漏</a></li><li class="toc-level-3"><a href="#2-JwtUtil%E7%B1%BB-%E6%AD%A3%E7%A1%AE%E4%BD%86%E5%A4%AA%E7%AC%BC%E7%BB%9F">2. JwtUtil类 - 正确但太笼统</a></li><li class="toc-level-3"><a href="#3-JwtClaimsConstant%E7%B1%BB-%E2%9D%8C-%E6%9C%89%E9%94%99%E8%AF%AF%E7%90%86%E8%A7%A3">3. JwtClaimsConstant类 - ❌ 有错误理解</a></li><li class="toc-level-3"><a href="#4-BaseContext%E7%B1%BB-%E5%9F%BA%E6%9C%AC%E6%AD%A3%E7%A1%AE%EF%BC%8C%E4%BD%86%E9%81%97%E6%BC%8F%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">4. BaseContext类 - 基本正确，但遗漏核心原理</a></li><li class="toc-level-3"><a href="#5-EmployeeController%E5%92%8CUserController-%E6%AD%A3%E7%A1%AE%E4%BD%86%E5%A4%AA%E7%AE%80%E7%95%A5">5. EmployeeController和UserController - 正确但太简略</a></li><li class="toc-level-3"><a href="#6-WebMvcConfiguration-%E8%A1%A8%E8%BF%B0%E4%B8%8D%E5%A4%9F%E5%87%86%E7%A1%AE">6. WebMvcConfiguration - 表述不够准确</a></li><li class="toc-level-3"><a href="#7-JwtTokenAdminInterceptor%E5%92%8CJwtTokenUserInterceptor-%E2%9D%8C-%E7%90%86%E8%A7%A3%E6%9C%89%E5%81%8F%E5%B7%AE">7. JwtTokenAdminInterceptor和JwtTokenUserInterceptor - ❌ 理解有偏差</a></li><li class="toc-level-2"><a href="#%F0%9F%8E%AF-%E8%B4%B9%E6%9B%BC%E5%AD%A6%E4%B9%A0%E6%B3%95%E6%A3%80%E9%AA%8C%E7%BB%93%E6%9E%9C">费曼学习法检验结果</a></li><li class="toc-level-2"><a href="#%F0%9F%93%9D-%E5%AE%8C%E6%95%B4%E4%B8%B2%E8%81%94%EF%BC%88%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88%EF%BC%89">完整串联（标准答案）</a></li><li class="toc-level-3"><a href="#%E6%B5%81%E7%A8%8B1%EF%BC%9A%E7%99%BB%E5%BD%95%E7%94%9F%E6%88%90JWT">流程1：登录生成JWT</a></li><li class="toc-level-3"><a href="#%E6%B5%81%E7%A8%8B2%EF%BC%9A%E6%90%BA%E5%B8%A6JWT%E8%AE%BF%E9%97%AE%E5%8F%97%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3">流程2：携带JWT访问受保护接口</a></li><li class="toc-level-2"><a href="#%F0%9F%94%A5-%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%E8%BF%BD%E9%97%AE%E9%A2%98%EF%BC%88%E7%94%A8%E6%9D%A5%E8%87%AA%E6%B5%8B%EF%BC%89">面试必问追问题（用来自测）</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
         </details>
         <div class="reading-tools" hidden><span>字号</span><div><button id="font-smaller" type="button" aria-label="缩小正文字号">A−</button><output id="font-size" aria-label="当前正文字号">18</output><button id="font-larger" type="button" aria-label="放大正文字号">A+</button></div></div>
         <p class="sidebar-note">让思考，留下轨迹。</p>

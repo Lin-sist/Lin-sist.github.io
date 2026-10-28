@@ -102,7 +102,7 @@ async function loadSearchIndex(){
 function renderSearch(){
   const q=$('#search-input').value.trim().toLocaleLowerCase();
   if(searchRecords){
-    const matches=searchRecords.filter(post=>[post.title,...(post.tags||[]),...(post.categories||[])].join(' ').toLocaleLowerCase().includes(q));
+    const matches=searchRecords.filter(post=>[post.title,...(post.aliases||[]),...(post.tags||[]),...(post.categories||[])].join(' ').toLocaleLowerCase().includes(q));
     const root=$('#search-results');root.replaceChildren();
     if(!matches.length){const empty=document.createElement('p');empty.className='search-empty';empty.textContent='没有找到相关文章，换个关键词试试。';root.append(empty);return}
     const base=new URL(document.documentElement.dataset.siteRoot||'/',location.origin);

@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="WebSocket 实时通信">
+  <meta name="description" content="从配置与连接管理，追踪支付成功和催单消息的发送。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="WebSocket 实时通信">
-  <meta property="og:description" content="WebSocket 实时通信">
+  <meta property="og:title" content="WebSocket：订单提醒如何推送到浏览器">
+  <meta property="og:description" content="从配置与连接管理，追踪支付成功和催单消息的发送。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/17/WebSocket%20%E5%AE%9E%E6%97%B6%E9%80%9A%E4%BF%A1/">
   <meta property="article:published_time" content="2026-02-17T01:31:59.989Z">
   <meta property="article:modified_time" content="2026-02-17T07:41:39.198Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/17/WebSocket%20%E5%AE%9E%E6%97%B6%E9%80%9A%E4%BF%A1/">
-  <title>WebSocket 实时通信 · Lin说 / Linsist</title>
+  <title>WebSocket：订单提醒如何推送到浏览器 · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,12 +41,13 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>WebSocket 实时通信</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-17T01:31:59.989Z">2026.02.17</time><span aria-hidden="true">/</span><span>约 5 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 模块笔记</p>
+          <h1>WebSocket：订单提醒如何推送到浏览器</h1>
+          <p class="article-deck">从配置与连接管理，追踪支付成功和催单消息的发送。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-17T01:31:59.989Z">2026.02.17</time><span aria-hidden="true">/</span><span>约 5 分钟</span></div>
                     <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96/"># 苍穹外卖</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="WebSocket 实时通信正文"><h2 id="一、核心业务逻辑（简单理解）"><a href="#一、核心业务逻辑（简单理解）" class="headerlink" title="一、核心业务逻辑（简单理解）"></a>一、核心业务逻辑（简单理解）</h2><p><strong>WebSocket 是什么？</strong><br>想象你和朋友打电话，可以双向实时对话，不需要挂断再拨打。WebSocket 就是这样的技术——服务器和浏览器之间建立一个<strong>持久的双向通道</strong>，服务器可以主动推送消息给客户端。</p>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>先看服务端与浏览器之间的通信方式，再沿 OrderServiceImpl 找到消息产生的位置。后面的学习步骤与问答可用于补充连接管理的理解。</p><nav aria-label="建议阅读入口"><a href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%EF%BC%88%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%EF%BC%89">业务逻辑<span aria-hidden="true"> ↓</span></a><a href="#%E4%BA%8C%E3%80%81%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95">实现位置<span aria-hidden="true"> ↓</span></a></nav></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="WebSocket：订单提醒如何推送到浏览器正文"><h2 id="一、核心业务逻辑（简单理解）"><a href="#一、核心业务逻辑（简单理解）" class="headerlink" title="一、核心业务逻辑（简单理解）"></a>一、核心业务逻辑（简单理解）</h2><p><strong>WebSocket 是什么？</strong><br>想象你和朋友打电话，可以双向实时对话，不需要挂断再拨打。WebSocket 就是这样的技术——服务器和浏览器之间建立一个<strong>持久的双向通道</strong>，服务器可以主动推送消息给客户端。</p>
 <p><strong>在”苍穹外卖”项目中的核心应用场景：</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 用户(手机端)</span><br><span class="line">    participant 后端服务器</span><br><span class="line">    participant 商家(管理端)</span><br><span class="line">    </span><br><span class="line">    用户(手机端)-&gt;&gt;后端服务器: 下单并支付成功</span><br><span class="line">    后端服务器-&gt;&gt;商家(管理端): 【WebSocket推送】新订单提醒！</span><br><span class="line">    Note over 商家(管理端): 浏览器响铃/弹窗提示</span><br><span class="line">    </span><br><span class="line">    用户(手机端)-&gt;&gt;后端服务器: 催单操作</span><br><span class="line">    后端服务器-&gt;&gt;商家(管理端): 【WebSocket推送】客户催单！</span><br><span class="line">    Note over 商家(管理端): 浏览器提示催单信息</span><br></pre></td></tr></table></figure>
 
@@ -219,7 +220,7 @@
 <p>有任何疑问随时问我！比如想深入理解某个方法，或者想知道如何优化代码。</p>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/21/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E9%98%B6%E6%AE%B5%E4%B8%80/"><div><h3>《苍穹外卖》模块一</h3><time>2026.02.21</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/21/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/"><div><h3>《苍穹外卖》路线图</h3><time>2026.02.21</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/17/DTO-VO-Entity%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><div><h3>DTO-VO-Entity 设计模式</h3><time>2026.02.17</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/01/31/Day08-01%E5%88%B011%E3%80%8A%E7%94%A8%E6%88%B7%E4%B8%8B%E5%8D%95%E3%80%8B/"><div><h3>用户下单：地址、订单与支付的衔接</h3><p>从地址簿进入下单流程，再理解支付及相关线程上下文问题。</p><time>2026.01.31</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/17/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%20@Scheduled/"><div><h3>定时任务：用 @Scheduled 处理订单状态</h3><p>结合 OrderTask 的例子，整理任务开启、执行周期与状态变更。</p><time>2026.02.17</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/10/%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E7%99%BB%E5%BD%95%E6%A8%A1%E5%9D%97/"><div><h3>苍穹外卖登录：从请求到身份上下文</h3><p>对照管理员和微信用户的登录流程，查看核心类如何协作。</p><time>2026.02.10</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>

@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0b1420">
-  <meta name="description" content="Redis核心应用">
+  <meta name="description" content="对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Redis核心应用">
-  <meta property="og:description" content="Redis核心应用">
+  <meta property="og:title" content="Redis 数据结构如何落到业务中">
+  <meta property="og:description" content="对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。">
   <meta property="og:url" content="https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/">
   <meta property="article:published_time" content="2026-02-26T05:17:35.673Z">
   <meta property="article:modified_time" content="2026-02-26T05:18:40.553Z">
   <link rel="canonical" href="https://lin-sist.github.io/2026/02/26/Redis%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8/">
-  <title>Redis核心应用 · Lin说 / Linsist</title>
+  <title>Redis 数据结构如何落到业务中 · Lin说 / Linsist</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="reading-page">
+<body class="reading-page has-editorial">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -41,16 +41,17 @@
     <div class="reading-kicker"><a href="/#writing">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> 工程笔记</span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 工程笔记</p>
-          <h1>Redis核心应用</h1>
-                    <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-26T05:17:35.673Z">2026.02.26</time><span aria-hidden="true">/</span><span>约 7 分钟</span></div>
+        <header class="article-heading is-edited" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> 概念笔记</p>
+          <h1>Redis 数据结构如何落到业务中</h1>
+          <p class="article-deck">对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。</p>          <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="2026-02-26T05:17:35.673Z">2026.02.26</time><span aria-hidden="true">/</span><span>约 7 分钟</span></div>
                     <ul class="reading-tags" aria-label="文章标签"><li><a href="/tags/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/"># 黑马点评</a></li></ul>        </header>
-        <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="Redis核心应用正文"><h2 id="🗺️-Redis-在项目中的七大核心应用"><a href="#🗺️-Redis-在项目中的七大核心应用" class="headerlink" title="🗺️ Redis 在项目中的七大核心应用"></a>🗺️ Redis 在项目中的七大核心应用</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    subgraph Redis在黑马点评中的应用全景</span><br><span class="line">        A[1.登录态存储&lt;br/&gt;Hash] </span><br><span class="line">        B[2.缓存商户&lt;br/&gt;String]</span><br><span class="line">        C[3.全局唯一ID&lt;br/&gt;String自增]</span><br><span class="line">        D[4.秒杀预判+消息&lt;br/&gt;Lua+Stream]</span><br><span class="line">        E[5.分布式锁&lt;br/&gt;String/Redisson]</span><br><span class="line">        F[6.点赞排行&lt;br/&gt;ZSet]</span><br><span class="line">        G[7.关注/共同关注&lt;br/&gt;Set]</span><br><span class="line">        H[8.Feed流推送&lt;br/&gt;ZSet滚动分页]</span><br><span class="line">        I[9.GEO附近商户&lt;br/&gt;GEO]</span><br><span class="line">        J[10.UV统计&lt;br/&gt;HyperLogLog]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+                <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p>这篇从业务问题出发，连接到 Redis 的数据结构和常见方案。先找自己熟悉的场景，再回看对应的类型与操作；示例不代表这些方案都已在个人项目中实现。</p><nav aria-label="建议阅读入口"><a href="#%F0%9F%93%8C-1-%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%80%81%EF%BC%9A%E6%9B%BF%E4%BB%A3-Session%EF%BC%88Hash%EF%BC%89">登录态<span aria-hidden="true"> ↓</span></a><a href="#%F0%9F%93%8C-2-%E5%95%86%E6%88%B7%E7%BC%93%E5%AD%98%EF%BC%9A%E8%A7%A3%E5%86%B3%E7%A9%BF%E9%80%8F-%E5%87%BB%E7%A9%BF-%E9%9B%AA%E5%B4%A9%EF%BC%88String%EF%BC%89">商户缓存<span aria-hidden="true"> ↓</span></a><a href="#%F0%9F%93%8C-4-%E7%A7%92%E6%9D%80%EF%BC%9ALua-%E8%84%9A%E6%9C%AC-Stream-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88%E5%BC%82%E6%AD%A5%E4%B8%8B%E5%8D%95%EF%BC%89">秒杀链路<span aria-hidden="true"> ↓</span></a></nav></aside>
+                <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="Redis 数据结构如何落到业务中正文"><h2 id="🗺️-Redis-在项目中的七大核心应用"><a href="#🗺️-Redis-在项目中的七大核心应用" class="headerlink" title="🗺️ Redis 在项目中的七大核心应用"></a>Redis 在项目中的业务应用</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    subgraph Redis在黑马点评中的应用全景</span><br><span class="line">        A[1.登录态存储&lt;br/&gt;Hash] </span><br><span class="line">        B[2.缓存商户&lt;br/&gt;String]</span><br><span class="line">        C[3.全局唯一ID&lt;br/&gt;String自增]</span><br><span class="line">        D[4.秒杀预判+消息&lt;br/&gt;Lua+Stream]</span><br><span class="line">        E[5.分布式锁&lt;br/&gt;String/Redisson]</span><br><span class="line">        F[6.点赞排行&lt;br/&gt;ZSet]</span><br><span class="line">        G[7.关注/共同关注&lt;br/&gt;Set]</span><br><span class="line">        H[8.Feed流推送&lt;br/&gt;ZSet滚动分页]</span><br><span class="line">        I[9.GEO附近商户&lt;br/&gt;GEO]</span><br><span class="line">        J[10.UV统计&lt;br/&gt;HyperLogLog]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
 
 <p>下面逐个给你拆解 <strong>业务场景 → 用了什么Redis数据结构 → 为什么这么用 → 面试怎么问</strong>：</p>
 <hr>
-<h3 id="📌-1-用户登录态：替代-Session（Hash）"><a href="#📌-1-用户登录态：替代-Session（Hash）" class="headerlink" title="📌 1. 用户登录态：替代 Session（Hash）"></a>📌 1. 用户登录态：替代 Session（Hash）</h3><p><strong>业务流程：</strong></p>
+<h3 id="📌-1-用户登录态：替代-Session（Hash）"><a href="#📌-1-用户登录态：替代-Session（Hash）" class="headerlink" title="📌 1. 用户登录态：替代 Session（Hash）"></a>1. 用户登录态：替代 Session（Hash）</h3><p><strong>业务流程：</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 客户端</span><br><span class="line">    participant 服务端</span><br><span class="line">    participant Redis</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 1. 发送手机号请求验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 2. SET login:code:&#123;phone&#125; &#123;code&#125; EX 2min</span><br><span class="line">    服务端--&gt;&gt;客户端: 3. 返回OK（验证码打日志模拟发送）</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 4. 提交手机号+验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 5. GET login:code:&#123;phone&#125; 校验验证码</span><br><span class="line">    服务端-&gt;&gt;Redis: 6. HSET login:token:&#123;UUID&#125; 存用户信息，TTL 30min</span><br><span class="line">    服务端--&gt;&gt;客户端: 7. 返回 token</span><br><span class="line"></span><br><span class="line">    客户端-&gt;&gt;服务端: 8. 后续请求带 token（Header: authorization）</span><br><span class="line">    服务端-&gt;&gt;Redis: 9. HGETALL login:token:&#123;token&#125;，刷新TTL</span><br><span class="line">    服务端-&gt;&gt;服务端: 10. 用户信息存入 ThreadLocal</span><br></pre></td></tr></table></figure>
 
 <p><strong>为什么用 Hash 而不是 String 存 JSON？</strong></p>
@@ -71,7 +72,7 @@
 </ol>
 </blockquote>
 <hr>
-<h3 id="📌-2-商户缓存：解决穿透-击穿-雪崩（String）"><a href="#📌-2-商户缓存：解决穿透-击穿-雪崩（String）" class="headerlink" title="📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）"></a>📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）</h3><p>这是项目中 Redis 用得<strong>最深的模块</strong>，覆盖了缓存三大经典问题：</p>
+<h3 id="📌-2-商户缓存：解决穿透-击穿-雪崩（String）"><a href="#📌-2-商户缓存：解决穿透-击穿-雪崩（String）" class="headerlink" title="📌 2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）"></a>2. 商户缓存：解决穿透 &#x2F; 击穿 &#x2F; 雪崩（String）</h3><p>这是项目中 Redis 用得<strong>最深的模块</strong>，覆盖了缓存三大经典问题：</p>
 <table>
 <thead>
 <tr>
@@ -112,7 +113,7 @@
 </ol>
 </blockquote>
 <hr>
-<h3 id="📌-3-全局唯一ID生成器（String-INCR）"><a href="#📌-3-全局唯一ID生成器（String-INCR）" class="headerlink" title="📌 3. 全局唯一ID生成器（String INCR）"></a>📌 3. 全局唯一ID生成器（String INCR）</h3><p><strong>业务需求：</strong> 秒杀订单需要全局唯一、趋势递增的订单ID（不能直接用自增主键——暴露信息量、分库分表有冲突）</p>
+<h3 id="📌-3-全局唯一ID生成器（String-INCR）"><a href="#📌-3-全局唯一ID生成器（String-INCR）" class="headerlink" title="📌 3. 全局唯一ID生成器（String INCR）"></a>3. 全局唯一ID生成器（String INCR）</h3><p><strong>业务需求：</strong> 秒杀订单需要全局唯一、趋势递增的订单ID（不能直接用自增主键——暴露信息量、分库分表有冲突）</p>
 <p><strong>设计方案：</strong> 64位 &#x3D; 1位符号位 + 31位时间戳 + 32位序列号</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0 - 00000000 00000000 00000000 0000000 - 00000000 00000000 00000000 00000000</span><br><span class="line">符号   31位秒级时间戳（可用约68年）         32位序列号（Redis INCR，按天分Key）</span><br></pre></td></tr></table></figure>
 
@@ -127,7 +128,7 @@
 </ol>
 </blockquote>
 <hr>
-<h3 id="📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）"><a href="#📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）" class="headerlink" title="📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）"></a>📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</h3><p>这是项目技术含量<strong>最高</strong>的模块，体现了「Redis 判资格，异步写DB」的思想：</p>
+<h3 id="📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）"><a href="#📌-4-秒杀：Lua-脚本-Stream-消息队列（异步下单）" class="headerlink" title="📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）"></a>4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</h3><p>这是项目技术含量<strong>最高</strong>的模块，体现了「Redis 判资格，异步写DB」的思想：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant 用户</span><br><span class="line">    participant Redis</span><br><span class="line">    participant 消费者线程</span><br><span class="line">    participant 数据库</span><br><span class="line"></span><br><span class="line">    用户-&gt;&gt;Redis: 1. 执行 Lua 脚本（原子操作）</span><br><span class="line">    Note over Redis: 判断库存&gt;0？&lt;br/&gt;判断用户未重复下单？&lt;br/&gt;扣减库存 INCRBY -1&lt;br/&gt;记录用户 SADD&lt;br/&gt;发消息 XADD stream.orders</span><br><span class="line">    Redis--&gt;&gt;用户: 2. 返回0=成功 / 1=库存不足 / 2=重复下单</span><br><span class="line"></span><br><span class="line">    消费者线程-&gt;&gt;Redis: 3. XREADGROUP 从 Stream 读消息</span><br><span class="line">    消费者线程-&gt;&gt;数据库: 4. 创建订单 + 扣减DB库存</span><br><span class="line">    消费者线程-&gt;&gt;Redis: 5. XACK 确认消息</span><br></pre></td></tr></table></figure>
 
 <p><strong>为什么要用 Lua 脚本？</strong> → 判库存、判一人一单、扣库存这三步必须<strong>原子性</strong>执行，否则并发下会超卖</p>
@@ -144,7 +145,7 @@
 </ol>
 </blockquote>
 <hr>
-<h3 id="📌-5-分布式锁（String-SETNX-→-Redisson）"><a href="#📌-5-分布式锁（String-SETNX-→-Redisson）" class="headerlink" title="📌 5. 分布式锁（String SETNX → Redisson）"></a>📌 5. 分布式锁（String SETNX → Redisson）</h3><p>项目展示了<strong>锁的演进过程</strong>：</p>
+<h3 id="📌-5-分布式锁（String-SETNX-→-Redisson）"><a href="#📌-5-分布式锁（String-SETNX-→-Redisson）" class="headerlink" title="📌 5. 分布式锁（String SETNX → Redisson）"></a>5. 分布式锁（String SETNX → Redisson）</h3><p>项目展示了<strong>锁的演进过程</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -182,23 +183,23 @@
 </ol>
 </blockquote>
 <hr>
-<h3 id="📌-6-点赞排行（ZSet）"><a href="#📌-6-点赞排行（ZSet）" class="headerlink" title="📌 6. 点赞排行（ZSet）"></a>📌 6. 点赞排行（ZSet）</h3><p><strong>为什么用 ZSet 而不是 Set？</strong> → 需要按点赞时间排序，ZSet 的 score 存时间戳</p>
+<h3 id="📌-6-点赞排行（ZSet）"><a href="#📌-6-点赞排行（ZSet）" class="headerlink" title="📌 6. 点赞排行（ZSet）"></a>6. 点赞排行（ZSet）</h3><p><strong>为什么用 ZSet 而不是 Set？</strong> → 需要按点赞时间排序，ZSet 的 score 存时间戳</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ZADD blog:liked:&#123;blogId&#125; &#123;timestamp&#125; &#123;userId&#125;     -- 点赞</span><br><span class="line">ZREM blog:liked:&#123;blogId&#125; &#123;userId&#125;                  -- 取消</span><br><span class="line">ZSCORE blog:liked:&#123;blogId&#125; &#123;userId&#125;                -- 判断是否已赞</span><br><span class="line">ZRANGE blog:liked:&#123;blogId&#125; 0 4                     -- Top5</span><br></pre></td></tr></table></figure>
 
 <p><strong>关键代码：</strong> BlogServiceImpl.java</p>
 <hr>
-<h3 id="📌-7-共同关注（Set-求交集）"><a href="#📌-7-共同关注（Set-求交集）" class="headerlink" title="📌 7. 共同关注（Set 求交集）"></a>📌 7. 共同关注（Set 求交集）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD follows:&#123;userId&#125; &#123;followUserId&#125;           -- 关注</span><br><span class="line">SREM follows:&#123;userId&#125; &#123;followUserId&#125;           -- 取关</span><br><span class="line">SINTER follows:&#123;我的id&#125; follows:&#123;他的id&#125;        -- 共同关注</span><br></pre></td></tr></table></figure>
+<h3 id="📌-7-共同关注（Set-求交集）"><a href="#📌-7-共同关注（Set-求交集）" class="headerlink" title="📌 7. 共同关注（Set 求交集）"></a>7. 共同关注（Set 求交集）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD follows:&#123;userId&#125; &#123;followUserId&#125;           -- 关注</span><br><span class="line">SREM follows:&#123;userId&#125; &#123;followUserId&#125;           -- 取关</span><br><span class="line">SINTER follows:&#123;我的id&#125; follows:&#123;他的id&#125;        -- 共同关注</span><br></pre></td></tr></table></figure>
 
 <p><strong>关键代码：</strong> FollowServiceImpl.java</p>
 <hr>
-<h3 id="📌-8-Feed-流推送-滚动分页（ZSet）"><a href="#📌-8-Feed-流推送-滚动分页（ZSet）" class="headerlink" title="📌 8. Feed 流推送 + 滚动分页（ZSet）"></a>📌 8. Feed 流推送 + 滚动分页（ZSet）</h3><p>用推模式（发布时推给粉丝信箱），用 <code>ZREVRANGEBYSCORE</code> 实现基于时间戳的滚动分页（避免传统分页的数据重复&#x2F;遗漏问题）。</p>
+<h3 id="📌-8-Feed-流推送-滚动分页（ZSet）"><a href="#📌-8-Feed-流推送-滚动分页（ZSet）" class="headerlink" title="📌 8. Feed 流推送 + 滚动分页（ZSet）"></a>8. Feed 流推送 + 滚动分页（ZSet）</h3><p>用推模式（发布时推给粉丝信箱），用 <code>ZREVRANGEBYSCORE</code> 实现基于时间戳的滚动分页（避免传统分页的数据重复&#x2F;遗漏问题）。</p>
 <hr>
-<h3 id="📌-9-10-GEO附近商户-HyperLogLog-UV统计"><a href="#📌-9-10-GEO附近商户-HyperLogLog-UV统计" class="headerlink" title="📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计"></a>📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</h3><ul>
+<h3 id="📌-9-10-GEO附近商户-HyperLogLog-UV统计"><a href="#📌-9-10-GEO附近商户-HyperLogLog-UV统计" class="headerlink" title="📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计"></a>9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</h3><ul>
 <li><strong>GEO</strong>：<code>GEOADD</code> 存商户坐标，<code>GEOSEARCH</code> 按距离查附近商户</li>
 <li><strong>HyperLogLog</strong>：百万UV去重统计，内存只需12KB，误差率约0.81%</li>
 </ul>
 <hr>
-<h2 id="📊-Redis-数据结构使用总结"><a href="#📊-Redis-数据结构使用总结" class="headerlink" title="📊 Redis 数据结构使用总结"></a>📊 Redis 数据结构使用总结</h2><table>
+<h2 id="📊-Redis-数据结构使用总结"><a href="#📊-Redis-数据结构使用总结" class="headerlink" title="📊 Redis 数据结构使用总结"></a>Redis 数据结构使用总结</h2><table>
 <thead>
 <tr>
 <th>数据结构</th>
@@ -248,7 +249,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2 id="🎯-学习建议"><a href="#🎯-学习建议" class="headerlink" title="🎯 学习建议"></a>🎯 学习建议</h2><p>按这个顺序深入，<strong>每个模块搞懂三件事</strong>：</p>
+<h2 id="🎯-学习建议"><a href="#🎯-学习建议" class="headerlink" title="🎯 学习建议"></a>学习建议</h2><p>按这个顺序深入，<strong>每个模块搞懂三件事</strong>：</p>
 <ol>
 <li><strong>业务流程</strong>是什么？（能画出来）</li>
 <li><strong>为什么选这个数据结构？</strong> 换一个行不行？</li>
@@ -257,11 +258,11 @@
 <p>你想先深入哪个模块？我建议从 <strong>「1.登录态 + 拦截器」</strong> 或 <strong>「2.商户缓存三大问题」</strong> 开始，这两个是面试命中率最高的。告诉我你想从哪个开始，我带你逐行拆代码！</p>
 </article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/"><div><h3>《黑马点评》路线图</h3><time>2026.02.25</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG前端开发</h3><p>从 Vue、Vite 到状态管理，梳理前端项目的整体结构。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91Bug/"><div><h3>RAG前端开发Bug</h3><p>记录项目启动与联调时遇到的问题，留下排查的过程。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+                <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/25/%E3%80%8A%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E3%80%8B%E8%B7%AF%E7%BA%BF%E5%9B%BE/"><div><h3>黑马点评：沿业务模块学习 Redis</h3><p>从登录与缓存，走向秒杀、锁、排行榜和地理位置等应用。</p><time>2026.02.25</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/01/17/Day05-02%E5%88%B014%E3%80%8A%E5%85%B3%E4%BA%8Eredis%E3%80%8B/"><div><h3>Redis 入门：数据类型与常用命令</h3><p>从基础概念到命令索引，整理课程中的 Redis 入门内容。</p><time>2026.01.17</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/17/Spring%20cache%E7%BC%93%E5%AD%98%E5%92%8CRedis%E7%BC%93%E5%AD%98/"><div><h3>Redis 与 Spring Cache：写法和更新边界</h3><p>对照营业状态、菜品与套餐，理解手动缓存和注解缓存的取舍。</p><time>2026.02.17</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
-          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%F0%9F%97%BA%EF%B8%8F-Redis-%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8">🗺️ Redis 在项目中的七大核心应用</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-1-%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%80%81%EF%BC%9A%E6%9B%BF%E4%BB%A3-Session%EF%BC%88Hash%EF%BC%89">📌 1. 用户登录态：替代 Session（Hash）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-2-%E5%95%86%E6%88%B7%E7%BC%93%E5%AD%98%EF%BC%9A%E8%A7%A3%E5%86%B3%E7%A9%BF%E9%80%8F-%E5%87%BB%E7%A9%BF-%E9%9B%AA%E5%B4%A9%EF%BC%88String%EF%BC%89">📌 2. 商户缓存：解决穿透 / 击穿 / 雪崩（String）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-3-%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88String-INCR%EF%BC%89">📌 3. 全局唯一ID生成器（String INCR）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-4-%E7%A7%92%E6%9D%80%EF%BC%9ALua-%E8%84%9A%E6%9C%AC-Stream-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88%E5%BC%82%E6%AD%A5%E4%B8%8B%E5%8D%95%EF%BC%89">📌 4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-5-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88String-SETNX-%E2%86%92-Redisson%EF%BC%89">📌 5. 分布式锁（String SETNX → Redisson）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-6-%E7%82%B9%E8%B5%9E%E6%8E%92%E8%A1%8C%EF%BC%88ZSet%EF%BC%89">📌 6. 点赞排行（ZSet）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-7-%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%EF%BC%88Set-%E6%B1%82%E4%BA%A4%E9%9B%86%EF%BC%89">📌 7. 共同关注（Set 求交集）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-8-Feed-%E6%B5%81%E6%8E%A8%E9%80%81-%E6%BB%9A%E5%8A%A8%E5%88%86%E9%A1%B5%EF%BC%88ZSet%EF%BC%89">📌 8. Feed 流推送 + 滚动分页（ZSet）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-9-10-GEO%E9%99%84%E8%BF%91%E5%95%86%E6%88%B7-HyperLogLog-UV%E7%BB%9F%E8%AE%A1">📌 9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</a></li><li class="toc-level-2"><a href="#%F0%9F%93%8A-Redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93">📊 Redis 数据结构使用总结</a></li><li class="toc-level-2"><a href="#%F0%9F%8E%AF-%E5%AD%A6%E4%B9%A0%E5%BB%BA%E8%AE%AE">🎯 学习建议</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
+          <div class="toc-body"><nav aria-label="文章目录"><ol><li class="toc-level-2"><a href="#%F0%9F%97%BA%EF%B8%8F-Redis-%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%BA%94%E7%94%A8">Redis 在项目中的业务应用</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-1-%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%80%81%EF%BC%9A%E6%9B%BF%E4%BB%A3-Session%EF%BC%88Hash%EF%BC%89">1. 用户登录态：替代 Session（Hash）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-2-%E5%95%86%E6%88%B7%E7%BC%93%E5%AD%98%EF%BC%9A%E8%A7%A3%E5%86%B3%E7%A9%BF%E9%80%8F-%E5%87%BB%E7%A9%BF-%E9%9B%AA%E5%B4%A9%EF%BC%88String%EF%BC%89">2. 商户缓存：解决穿透 / 击穿 / 雪崩（String）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-3-%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%88String-INCR%EF%BC%89">3. 全局唯一ID生成器（String INCR）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-4-%E7%A7%92%E6%9D%80%EF%BC%9ALua-%E8%84%9A%E6%9C%AC-Stream-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88%E5%BC%82%E6%AD%A5%E4%B8%8B%E5%8D%95%EF%BC%89">4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-5-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88String-SETNX-%E2%86%92-Redisson%EF%BC%89">5. 分布式锁（String SETNX → Redisson）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-6-%E7%82%B9%E8%B5%9E%E6%8E%92%E8%A1%8C%EF%BC%88ZSet%EF%BC%89">6. 点赞排行（ZSet）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-7-%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%EF%BC%88Set-%E6%B1%82%E4%BA%A4%E9%9B%86%EF%BC%89">7. 共同关注（Set 求交集）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-8-Feed-%E6%B5%81%E6%8E%A8%E9%80%81-%E6%BB%9A%E5%8A%A8%E5%88%86%E9%A1%B5%EF%BC%88ZSet%EF%BC%89">8. Feed 流推送 + 滚动分页（ZSet）</a></li><li class="toc-level-3"><a href="#%F0%9F%93%8C-9-10-GEO%E9%99%84%E8%BF%91%E5%95%86%E6%88%B7-HyperLogLog-UV%E7%BB%9F%E8%AE%A1">9 &amp; 10. GEO附近商户 + HyperLogLog UV统计</a></li><li class="toc-level-2"><a href="#%F0%9F%93%8A-Redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93">Redis 数据结构使用总结</a></li><li class="toc-level-2"><a href="#%F0%9F%8E%AF-%E5%AD%A6%E4%B9%A0%E5%BB%BA%E8%AE%AE">学习建议</a></li></ol></nav><a class="back-to-article" href="#article-top">回到文章开头 ↑</a></div>
         </details>
         <div class="reading-tools" hidden><span>字号</span><div><button id="font-smaller" type="button" aria-label="缩小正文字号">A−</button><output id="font-size" aria-label="当前正文字号">18</output><button id="font-larger" type="button" aria-label="放大正文字号">A+</button></div></div>
         <p class="sidebar-note">让思考，留下轨迹。</p>
