@@ -1,5 +1,6 @@
 ---
-title: RAG知识汇总
+title: "RAG 入门：文档处理、检索与生成"
+description: "把离线入库和在线问答分开，建立检索增强生成的基本流程。"
 tags: [RAG]
 date: 2026-02-14
 ---

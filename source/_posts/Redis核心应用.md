@@ -1,5 +1,6 @@
 ---
-title: Redis核心应用
+title: "Redis 数据结构如何落到业务中"
+description: "对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。"
 tags: [黑马点评]
 date: 
 ---

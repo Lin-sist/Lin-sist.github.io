@@ -1,5 +1,6 @@
 ---
-title: Day05-02到14《关于redis》
+title: "Redis 入门：数据类型与常用命令"
+description: "从基础概念到命令索引，整理课程中的 Redis 入门内容。"
 date: 2026-01-17
 tags: [一刷苍穹外卖]
 

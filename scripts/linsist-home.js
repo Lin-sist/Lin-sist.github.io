@@ -2,6 +2,7 @@
 
 const published = require('../source/_data/published_dates.json').posts;
 const homeConfig = require('../source/_data/linsist.json');
+const editorial = require('../source/_data/editorial.json');
 // Hexo 7 / Warehouse also reconstruct Moment values in the process timezone.
 // Align that timezone before source processing, including UTC CI environments.
 process.env.TZ = hexo.config.timezone || 'Asia/Shanghai';
@@ -39,7 +40,7 @@ hexo.extend.filter.register('before_generate', function () {
       if (!post) throw new Error(`Featured post missing: ${item.source}`);
       return { title: post.title, path: post.path, date: post.date.format('YYYY-MM-DD'),
         shortDate: post.date.format('MM.DD'), year: post.date.format('YYYY'),
-        summary: item.summary, group: item.group, groupLabel: item.group_label };
+        summary: editorial[item.source]?.subtitle || item.summary, group: item.group, groupLabel: item.group_label };
     });
     const root = routes.find(route => route.path === '' || route.path === 'index.html');
     if (!root) throw new Error('Expected root index.html route was not generated');
@@ -54,6 +55,7 @@ hexo.extend.filter.register('before_generate', function () {
 hexo.extend.generator.register('linsist-search', function (locals) {
   const posts = locals.posts.sort('-date').toArray().map(post => ({
     title: post.title, path: post.path, date: post.date.format('YYYY-MM-DD'),
+    aliases: editorial[post.source]?.aliases || [post.source.replace(/^_posts\//, '').replace(/\.md$/, '')],
     tags: post.tags.map(tag => tag.name), categories: post.categories.map(category => category.name)
   }));
   return { path: 'linsist/search.json', data: JSON.stringify({ posts }) };

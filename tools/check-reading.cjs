@@ -7,11 +7,16 @@ const root = path.resolve(__dirname, '..');
 const output = path.join(root, process.argv[2] || 'public');
 const published = require('../source/_data/published_dates.json').posts;
 const original = process.argv[3];
-const bodyText = html => unescapeHTML(stripHTML(html.match(/<article\b[^>]*id="article-container"[^>]*>([\s\S]*?)<\/article>/)[1])).replace(/\s+/g, ' ').trim();
+const editorial = require('../source/_data/editorial.json');
+const bodyText = (html, omitHeadings) => {
+  let content = html.match(/<article\b[^>]*id="article-container"[^>]*>([\s\S]*?)<\/article>/)[1];
+  if (omitHeadings) content = content.replace(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]>/gi, '');
+  return unescapeHTML(stripHTML(content)).replace(/\s+/g, ' ').trim();
+};
 let headings = 0;
-for (const post of Object.values(published)) {
+for (const [source, post] of Object.entries(published)) {
   const html = fs.readFileSync(path.join(output, post.path), 'utf8');
-  assert(html.includes('class="reading-page"'), `Reader missing: ${post.path}`);
+  assert(/class="reading-page(?:\s|")/.test(html), `Reader missing: ${post.path}`);
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `One H1: ${post.path}`);
   assert(!html.includes('<%'), `Unrendered template: ${post.path}`);
   const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => unescapeHTML(match[1])));
@@ -20,6 +25,6 @@ for (const post of Object.values(published)) {
     assert(ids.has(decodeURIComponent(unescapeHTML(match[1]))), `Broken directory target: ${post.path} ${match[1]}`);
     headings++;
   }
-  if (original) assert.equal(bodyText(html), bodyText(fs.readFileSync(path.join(original, post.path), 'utf8')), `Published text changed: ${post.path}`);
+  if (original) assert.equal(bodyText(html, Boolean(editorial[source])), bodyText(fs.readFileSync(path.join(original, post.path), 'utf8'), Boolean(editorial[source])), `Published prose/code changed: ${post.path}`);
 }
-console.log(`Reading layouts: ${Object.keys(published).length}; valid directory headings: ${headings}; original text comparison: ${Boolean(original)} — PASS`);
+console.log(`Reading layouts: ${Object.keys(published).length}; valid directory headings: ${headings}; original paragraphs/code compared: ${Boolean(original)} (curated heading edits excluded) — PASS`);

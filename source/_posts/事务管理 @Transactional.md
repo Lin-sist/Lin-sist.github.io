@@ -1,5 +1,6 @@
 ---
-title: 事务管理 @Transactional
+title: "事务管理：多表操作如何保持一致"
+description: "以菜品、口味和套餐关联为例，理解 @Transactional 的使用。"
 tags: [苍穹外卖]
 date: 
 ---

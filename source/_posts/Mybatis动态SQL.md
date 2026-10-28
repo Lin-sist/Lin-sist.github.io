@@ -1,5 +1,6 @@
 ---
-title: Mybatis动态SQL
+title: "MyBatis 动态 SQL：从 Mapper 到条件查询"
+description: "串起接口、XML、Service 与配置，整理动态查询的常见写法。"
 tags: [苍穹外卖]
 date: 
 ---

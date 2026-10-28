@@ -1,5 +1,6 @@
 ---
-title: JWT登录认证code review
+title: "JWT 手写练习：保留骨架，重写逻辑"
+description: "将认证模块拆成工具类、配置、拦截器与 Controller 的练习顺序。"
 tags: [苍穹外卖, JWT]
 date: 2026-02-11
 ---

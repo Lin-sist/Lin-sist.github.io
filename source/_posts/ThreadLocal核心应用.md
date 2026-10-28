@@ -1,5 +1,6 @@
 ---
-title: 《苍穹外卖》概述
+title: "ThreadLocal：请求中的身份如何传递"
+description: "从基本 API 和线程隔离，读到 BaseContext 的使用与清理。"
 tags: [苍穹外卖]
 date: 
 ---

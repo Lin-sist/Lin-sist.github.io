@@ -1,3 +1,7 @@
+---
+title: "用 AI 辅助学习：从蓝图到主动重构"
+description: "先讲清流程，再尝试手写，最后用 AI 对照和纠错。"
+---
 #### **推荐流程：The "Active Reconstruction" Loop (主动重构环)**
 
 **准备工作：** 左屏 IDEA（你的代码），右屏 VS Code（源码 + Copilot）。

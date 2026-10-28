@@ -1,5 +1,6 @@
 ---
-title: RAG前端开发
+title: "RAG 前端如何组织路由、状态与请求"
+description: "从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。"
 tags: [RAG]
 date: 
 ---

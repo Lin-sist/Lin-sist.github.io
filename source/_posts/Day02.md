@@ -1,5 +1,6 @@
 ---
-title: Day02
+title: "员工管理：从接口流程到公共字段填充"
+description: "把员工模块的增删改查、分页与 @AutoFill 放到同一条业务链路中。"
 tags: [一刷苍穹外卖]
 date:
 ---

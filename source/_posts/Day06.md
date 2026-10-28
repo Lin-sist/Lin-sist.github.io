@@ -1,5 +1,6 @@
 ---
-title: Day06《HttpClient微信小程序开发》
+title: "HttpClient 与微信登录：课程笔记"
+description: "记录 HTTP 请求的基本步骤，以及微信登录和菜品查询的学习线索。"
 tags: [一刷苍穹外卖]
 date: 2026-01-21
 ---

@@ -21,7 +21,7 @@
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="<%= url_for('linsist/reading.js') %>" defer></script>
 </head>
-<body class="reading-page">
+<body class="reading-page<%= reading.editorial ? ' has-editorial' : '' %>">
   <a class="skip-link" href="#article-container">跳转到正文</a>
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="<%= url_for('/') %>" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
@@ -42,17 +42,20 @@
     <div class="reading-kicker"><a href="<%= url_for('/#writing') %>">← 返回文章</a><span>Lin说 <span aria-hidden="true">/</span> <%= reading.category %></span></div>
     <div class="reading-layout">
       <div class="reading-column">
-        <header class="article-heading" id="article-top">
-          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> <%= reading.category %></p>
+        <header class="article-heading<%= reading.editorial ? ' is-edited' : '' %>" id="article-top">
+          <p class="section-label">文字与思考 <span aria-hidden="true">·</span> <%= reading.editorial ? reading.editorial.kind : reading.category %></p>
           <h1><%= page.title %></h1>
           <% if (reading.summary) { %><p class="article-deck"><%= reading.summary %></p><% } -%>
           <div class="article-meta"><span>Linsist</span><span aria-hidden="true">/</span><time datetime="<%= page.date.toISOString() %>"><%= page.date.format('YYYY.MM.DD') %></time><span aria-hidden="true">/</span><span>约 <%= reading.minutes %> 分钟</span></div>
           <% if (page.updated.diff(page.date, 'days') > 0) { %><p class="article-updated">更新于 <time datetime="<%= page.updated.toISOString() %>"><%= page.updated.format('YYYY.MM.DD') %></time></p><% } -%>
           <% if (page.tags.length) { %><ul class="reading-tags" aria-label="文章标签"><% page.tags.forEach(function(tag) { %><li><a href="<%= url_for(tag.path) %>"># <%= tag.name %></a></li><% }); %></ul><% } -%>
         </header>
+        <% if (reading.editorial) { -%>
+        <aside class="editorial-guide" aria-label="读前导览"><p class="editorial-label">读前导览</p><p><%= reading.editorial.intro %></p><% if (reading.editorial.jumps.length) { %><nav aria-label="建议阅读入口"><% reading.editorial.jumps.forEach(function(jump) { %><a href="#<%= encodeURIComponent(jump.id) %>"><%= jump.label %><span aria-hidden="true"> ↓</span></a><% }); %></nav><% } %></aside>
+        <% } -%>
         <article id="article-container" class="post-content reading-content" tabindex="-1" aria-label="<%= page.title %>正文"><%- reading.content %></article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-        <% if (reading.project) { %><aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a href="<%= reading.project.url %>" target="_blank" rel="noopener noreferrer"><strong><%= reading.project.name %></strong><span aria-hidden="true">↗</span></a><p><%= reading.project.description %></p></aside><% } -%>
+        <% if (reading.project) { %><aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a href="<%= url_for(reading.project.url) %>"><strong><%= reading.project.name %></strong><span aria-hidden="true">↗</span></a><p><%= reading.project.description %></p></aside><% } -%>
         <% if (reading.related.length) { %><section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><% reading.related.forEach(function(post) { %><a class="related-row" href="<%= url_for(post.path) %>"><div><h3><%= post.title %></h3><% if (post.summary) { %><p><%= post.summary %></p><% } %><time><%= post.date %></time></div><span aria-hidden="true">↗</span></a><% }); %></div></section><% } -%>
       </div>
       <aside class="reading-sidebar" aria-label="阅读工具">

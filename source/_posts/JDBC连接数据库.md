@@ -1,5 +1,6 @@
 ---
-title: 关于Java连接MySQL数据库
+title: "JDBC 入门：Java 如何连接 MySQL"
+description: "按连接、执行 SQL、读取结果和关闭资源的顺序，回看一段 JDBC 示例。"
 date: 2025-06-25 19:01:01
 tags: [Java,MySQL,JDBC]
 categories: [项目记录]

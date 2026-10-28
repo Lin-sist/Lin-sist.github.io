@@ -1,5 +1,6 @@
 ---
-title: JWT登录认证
+title: "JWT 登录：签发、校验与请求清理"
+description: "沿登录和受保护接口的请求，串起 JWT、拦截器与 ThreadLocal。"
 tags: [苍穹外卖, JWT]
 date: 2026-02-11
 ---

@@ -1,5 +1,6 @@
 ---
-title: DTO-VO-Entity 设计模式
+title: "DTO、VO 与 Entity：请求中的对象分工"
+description: "以员工登录为例，理解输入、输出和持久化对象为什么分开。"
 tags: [苍穹外卖]
 date: 
 ---

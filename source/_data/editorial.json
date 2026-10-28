@@ -1,0 +1,1341 @@
+{
+  "_posts/RAG前端开发.md": {
+    "title": "RAG 前端如何组织路由、状态与请求",
+    "subtitle": "从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。",
+    "kind": "项目导读",
+    "intro": "这是一份对当时 RAG 前端结构的梳理。初读可以先建立整体地图，再沿一次提问串起组件、状态与请求；具体文件和界面细节需对照相应版本源码。",
+    "jumps": [
+      {
+        "label": "先看整体结构",
+        "prefix": "先看整体结构"
+      },
+      {
+        "label": "沿一次提问串起来",
+        "prefix": "16. 一次提问的数据流"
+      },
+      {
+        "label": "找到改动入口",
+        "prefix": "17. 改造前端时的入口"
+      }
+    ],
+    "headings": [
+      {
+        "prefix": "RAG 前端项目完整架构解读",
+        "title": "先看整体结构"
+      },
+      {
+        "prefix": "0. 先用一个比喻理解整体结构",
+        "title": "0. 各部分如何分工"
+      },
+      {
+        "prefix": "1. 项目根配置文件",
+        "title": "1. 项目配置：构建、类型与环境"
+      },
+      {
+        "prefix": "2. 入口文件",
+        "title": "2. 入口文件：应用如何启动"
+      },
+      {
+        "prefix": "3. 路由系统",
+        "title": "3. 路由：页面如何切换"
+      },
+      {
+        "prefix": "4. 样式系统",
+        "title": "4. 样式：变量与全局规则"
+      },
+      {
+        "prefix": "5. 类型定义",
+        "title": "5. 类型：约定数据的形状"
+      },
+      {
+        "prefix": "6. API 层",
+        "title": "6. 请求：Axios 封装与接口"
+      },
+      {
+        "prefix": "7. 工具函数",
+        "title": "7. 工具函数：存储与格式化"
+      },
+      {
+        "prefix": "8. 全局状态管理",
+        "title": "8. 状态：认证、聊天与知识库"
+      },
+      {
+        "prefix": "9. Composables",
+        "title": "9. Composables：认证、流式与轮询"
+      },
+      {
+        "prefix": "10. 布局组件",
+        "title": "10. 布局：登录页与主界面"
+      },
+      {
+        "prefix": "11. 公共组件",
+        "title": "11. 公共组件：侧栏、顶部栏与加载"
+      },
+      {
+        "prefix": "12. 聊天模块",
+        "title": "12. 聊天：消息、输入与引用"
+      },
+      {
+        "prefix": "16. 完整数据流图",
+        "title": "16. 一次提问的数据流"
+      },
+      {
+        "prefix": "17. 你改造前端时最该关注的文件",
+        "title": "17. 改造前端时的入口"
+      },
+      {
+        "prefix": "🙋 理解测试",
+        "title": "读完后，试着回答三个问题"
+      }
+    ],
+    "related": [
+      "_posts/RAG前端开发Bug.md",
+      "_posts/Debug能力.md"
+    ],
+    "aliases": [
+      "RAG前端开发"
+    ]
+  },
+  "_posts/RAG前端开发Bug.md": {
+    "title": "IDEA 停了，8080 为什么还被占用？",
+    "subtitle": "一次 RAG 项目启动记录：区分 IDE 管理的实例与命令行启动的 Java 进程。",
+    "kind": "排错记录",
+    "intro": "这篇记录的是一次端口占用问题：IDEA 中的实例停止后，命令行启动的进程仍在监听 8080。下文保留当时的排查过程，PID 和启动时间只对应那一次运行；复用命令时，需要重新确认进程。",
+    "jumps": [],
+    "headings": [
+      {
+        "prefix": "项目启动遇到报错：端口占用",
+        "title": "从端口占用，追到仍在运行的进程"
+      }
+    ],
+    "related": [
+      "_posts/Debug能力.md",
+      "_posts/RAG前端开发.md"
+    ],
+    "aliases": [
+      "RAG前端开发Bug"
+    ]
+  },
+  "_posts/Debug能力.md": {
+    "title": "Java 调试：从异常栈到接口文档",
+    "subtitle": "先形成假设，再用断点和变量验证；随后理解 Knife4j 如何从代码生成接口文档。",
+    "kind": "学习笔记",
+    "intro": "这份笔记分成两部分：先练习从异常栈定位业务代码，再理解 Knife4j 与 Controller 的关系。调试部分可以按步骤阅读，接口文档部分也可以单独查阅。",
+    "jumps": [
+      {
+        "label": "先读异常栈",
+        "prefix": "步骤一：读异常栈"
+      },
+      {
+        "label": "用断点验证",
+        "prefix": "步骤三：选择断点"
+      },
+      {
+        "label": "看懂接口文档",
+        "prefix": "二、Knife4j 如何生成接口文档"
+      }
+    ],
+    "headings": [
+      {
+        "prefix": "一、Debug 的核心思维",
+        "title": "一、先形成假设，再验证"
+      },
+      {
+        "prefix": "先学会 Debug 基本操作",
+        "title": "先熟悉调试操作"
+      },
+      {
+        "prefix": "步骤一：读报错信息",
+        "title": "步骤一：读异常栈，定位业务代码"
+      },
+      {
+        "prefix": "步骤二：形成假设",
+        "title": "步骤二：根据现象形成假设"
+      },
+      {
+        "prefix": "步骤三：打断点验证假设",
+        "title": "步骤三：选择断点验证假设"
+      },
+      {
+        "prefix": "步骤四：观察变量",
+        "title": "步骤四：用变量确认或推翻假设"
+      },
+      {
+        "prefix": "完整示意图",
+        "title": "把排查步骤连起来"
+      },
+      {
+        "prefix": "一句话总结",
+        "title": "记住这条调试原则"
+      },
+      {
+        "prefix": "二、Knife4j 是怎么来的",
+        "title": "二、Knife4j 如何生成接口文档"
+      }
+    ],
+    "related": [
+      "_posts/RAG前端开发Bug.md",
+      "_posts/RAG前端开发.md"
+    ],
+    "aliases": [
+      "Debug能力"
+    ]
+  },
+  "_posts/JDBC连接数据库.md": {
+    "title": "JDBC 入门：Java 如何连接 MySQL",
+    "subtitle": "按连接、执行 SQL、读取结果和关闭资源的顺序，回看一段 JDBC 示例。",
+    "kind": "基础笔记",
+    "intro": "先看 JDBC 连接的几个步骤，再对照代码中的对象和方法。本文保留入门时的写法，适合建立调用顺序的概念。",
+    "jumps": [
+      {
+        "label": "连接步骤",
+        "prefix": "JDBC连接一般流程"
+      },
+      {
+        "label": "对照代码",
+        "prefix": "代码展示"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/《学生管理系统》.md",
+      "_posts/Mybatis动态SQL.md"
+    ],
+    "aliases": [
+      "JDBC连接数据库"
+    ]
+  },
+  "_posts/如何编写简历.md": {
+    "title": "实习简历：选题与资料索引",
+    "subtitle": "一份尚未展开的写作提纲，记录实习求职的背景与参考入口。",
+    "kind": "资料索引",
+    "intro": "这篇目前保留了写作背景和模板结构，简历内容还没有完整展开。可以先把它作为后续整理经历与参考资料的入口。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上10月规划.md",
+      "_posts/《学生管理系统》.md"
+    ],
+    "aliases": [
+      "如何编写简历"
+    ]
+  },
+  "_posts/MySQL学习笔记.md": {
+    "title": "MySQL 学习笔记：待补充的提纲",
+    "subtitle": "保留问题、知识点与参考资料的位置，正文内容有待继续补充。",
+    "kind": "待补提纲",
+    "intro": "这是一份尚未填充的笔记模板。目前没有完整的 MySQL 知识讲解或操作记录，先保留提纲，便于后续按实际学习内容补齐。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/JDBC连接数据库.md",
+      "_posts/Mybatis动态SQL.md"
+    ],
+    "aliases": [
+      "MySQL学习笔记"
+    ]
+  },
+  "_posts/大二上10月规划.md": {
+    "title": "2025 年 10 月学习计划",
+    "subtitle": "围绕 Java 项目、算法与 Redis，安排大二上学期的阶段学习。",
+    "kind": "阶段计划",
+    "intro": "这篇保留了当月的目标与每周安排。阅读时可关注任务如何拆分；计划中的事项不等同于已经完成的成果。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上11月规划.md",
+      "_posts/大二上12月规划.md"
+    ],
+    "aliases": [
+      "大二上10月规划"
+    ]
+  },
+  "_posts/大二上11月规划.md": {
+    "title": "2025 年 11 月学习计划",
+    "subtitle": "从上月的未完成事项出发，调整算法与项目学习的节奏。",
+    "kind": "阶段计划",
+    "intro": "这份计划接续十月的学习记录，也留下了身体状态对进度的影响。目标、周安排与复盘按原样保留，呈现当时的取舍。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上10月规划.md",
+      "_posts/大二上12月规划.md"
+    ],
+    "aliases": [
+      "大二上11月规划"
+    ]
+  },
+  "_posts/大二上12月规划.md": {
+    "title": "2025 年 12 月学习计划",
+    "subtitle": "继续推进算法与苍穹外卖，记录任务积压后的重新安排。",
+    "kind": "阶段计划",
+    "intro": "先看上月遗留的问题，再看本月如何安排项目和算法。文中包含待填写的周计划位置，未填写的部分仍保留原状。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上11月规划.md",
+      "_posts/大二上1月规划.md"
+    ],
+    "aliases": [
+      "大二上12月规划"
+    ]
+  },
+  "_posts/Day03《修改菜品》.md": {
+    "title": "苍穹外卖：菜品管理与 OSS 笔记",
+    "subtitle": "记录菜品修改、分类与图片上传相关的课程内容。",
+    "kind": "课程笔记",
+    "intro": "这篇混合了 Day03 的学习记录、需求拆解与待补提纲。可以先沿菜品管理阅读，再查看 OSS 相关部分；空白章节尚未形成完整说明。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/Day07-01到12《缓存功能》.md",
+      "_posts/事务管理 @Transactional.md"
+    ],
+    "aliases": [
+      "Day03《修改菜品》"
+    ]
+  },
+  "_posts/《校园快递管理系统》项目.md": {
+    "title": "校园快递管理系统：两版设计提纲",
+    "subtitle": "对照 JSP 与 Spring Boot 两种方向，保留功能设计与 AI 提问材料。",
+    "kind": "方案草稿",
+    "intro": "这份材料主要是借助 AI 整理的设计提纲，包含不同技术方向和提问方式。它记录的是方案构思，不能直接视为已经实现并验证的项目。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/《快递物流管理系统SpringBoot》.md",
+      "_posts/《学生管理系统》.md"
+    ],
+    "aliases": [
+      "《校园快递管理系统》项目"
+    ]
+  },
+  "_posts/《学生管理系统》.md": {
+    "title": "学生管理系统：从数据表到增删改查",
+    "subtitle": "沿数据库连接、实体、Controller 与 JavaScript，梳理学生信息管理。",
+    "kind": "项目笔记",
+    "intro": "先了解功能和技术栈，再按数据库连接、后端入口、前端请求的顺序读代码。文末保留了对 JDBC 和 Controller 的回顾，以及后续想改进的地方。",
+    "jumps": [
+      {
+        "label": "数据库连接",
+        "prefix": "2.1 DatabaseConnector.java"
+      },
+      {
+        "label": "后端入口",
+        "prefix": "2.3 StudentController.java"
+      },
+      {
+        "label": "前端请求",
+        "prefix": "2.4 JavaScript代码"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JDBC连接数据库.md",
+      "_posts/spring项目三层架构.md"
+    ],
+    "aliases": [
+      "《学生管理系统》"
+    ]
+  },
+  "_posts/《快递物流管理系统SpringBoot》.md": {
+    "title": "快递物流系统：功能范围与待补提纲",
+    "subtitle": "梳理用户查询、管理员操作、物流状态与取件码等功能设想。",
+    "kind": "项目提纲",
+    "intro": "这篇目前以功能范围和模板章节为主，尚未展开完整实现。可以把它作为需求清单来读，后续再补充代码、流程与验证记录。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/《校园快递管理系统》项目.md",
+      "_posts/《学生管理系统》.md"
+    ],
+    "aliases": [
+      "《快递物流管理系统SpringBoot》"
+    ]
+  },
+  "_posts/大二上1月规划.md": {
+    "title": "2026 年 1 月学习计划",
+    "subtitle": "安排算法复习、蓝桥杯准备与苍穹外卖的阶段巩固。",
+    "kind": "阶段计划",
+    "intro": "这份月度安排承接前一阶段的学习任务。目标和检查项仍按当时的记录呈现，便于回看计划，而非作为完成情况的证明。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上12月规划.md",
+      "_posts/大二下2月规划.md"
+    ],
+    "aliases": [
+      "大二上1月规划"
+    ]
+  },
+  "_posts/Day05-02到14《关于redis》.md": {
+    "title": "Redis 入门：数据类型与常用命令",
+    "subtitle": "从基础概念到命令索引，整理课程中的 Redis 入门内容。",
+    "kind": "课程笔记",
+    "intro": "先辨认数据类型，再对照命令理解读写方式。这篇仍有课程模板留下的待补位置，适合作为基础内容的索引来使用。",
+    "jumps": [],
+    "headings": [
+      {
+        "prefix": "🎥 dayXX-XX 模块名称",
+        "title": "Redis 基础与命令索引"
+      }
+    ],
+    "related": [
+      "_posts/Day05-15到17《店铺营业状态》.md",
+      "_posts/Redis核心应用.md"
+    ],
+    "aliases": [
+      "Day05-02到14《关于redis》"
+    ]
+  },
+  "_posts/Day05-15到17《店铺营业状态》.md": {
+    "title": "店铺营业状态：Redis 实现思路",
+    "subtitle": "用营业与打烊状态，理解 RedisTemplate 在业务中的一次读写。",
+    "kind": "课程笔记",
+    "intro": "这是一份简短的模块记录，重点是营业状态与 Redis 的对应关系。完整代码和部分复盘章节尚未展开，可结合后面的缓存笔记继续读。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/Day05-02到14《关于redis》.md",
+      "_posts/Spring cache缓存和Redis缓存.md"
+    ],
+    "aliases": [
+      "Day05-15到17《店铺营业状态》"
+    ]
+  },
+  "_posts/Day06.md": {
+    "title": "HttpClient 与微信登录：课程笔记",
+    "subtitle": "记录 HTTP 请求的基本步骤，以及微信登录和菜品查询的学习线索。",
+    "kind": "课程笔记",
+    "intro": "本文保留了 Day06 的简要记录，内容从 HttpClient 调用延伸到微信登录与查询接口。各部分详略不同，适合按问题查阅。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/《苍穹外卖》解决微信登录模块.md",
+      "_posts/《苍穹外卖》登录模块.md"
+    ],
+    "aliases": [
+      "Day06"
+    ]
+  },
+  "_posts/《苍穹外卖》解决微信登录模块.md": {
+    "title": "微信登录失败：一次自动填充问题排查",
+    "subtitle": "从登录与菜品加载异常，追到 @AutoFill 对字段的假设。",
+    "kind": "排错记录",
+    "intro": "这篇记录的是当时微信登录模块的一次具体问题。先读现象与调用路径，再看自动填充逻辑和字段之间的关系，避免把这次原因套用到所有登录失败。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/无法登录前端页面问题-苍穹外卖.md",
+      "_posts/AOP切面编程.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》解决微信登录模块"
+    ]
+  },
+  "_posts/Day07-01到12《缓存功能》.md": {
+    "title": "菜品与套餐缓存：Redis 到 Spring Cache",
+    "subtitle": "对照手动操作 Redis 与缓存注解，理解两种课程实现。",
+    "kind": "课程笔记",
+    "intro": "先沿菜品查询读缓存逻辑，再看套餐模块如何使用 Spring Cache。注解说明和模块记录放在同一篇里，可以按当前需要跳读。",
+    "jumps": [
+      {
+        "label": "先看缓存逻辑",
+        "prefix": "缓存逻辑"
+      },
+      {
+        "label": "补充注解基础",
+        "prefix": "Part 1: 注解基础恶补"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Spring cache缓存和Redis缓存.md",
+      "_posts/Day07总结.md"
+    ],
+    "aliases": [
+      "Day07-01到12《缓存功能》"
+    ]
+  },
+  "_posts/Day07-13到19《购物车功能》.md": {
+    "title": "购物车：添加、减少与清空的处理",
+    "subtitle": "从数据结构和代码分布，梳理购物车四类操作。",
+    "kind": "模块笔记",
+    "intro": "这篇按购物车的功能拆分代码。先看模块全景，再沿添加、查看、减少与清空的流程阅读，最后结合问答检查理解。",
+    "jumps": [
+      {
+        "label": "模块全景",
+        "prefix": "购物车模块 - 全景图"
+      },
+      {
+        "label": "核心功能",
+        "prefix": "四大核心功能"
+      },
+      {
+        "label": "业务逻辑",
+        "prefix": "核心业务逻辑（最重要）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day07总结.md",
+      "_posts/Day08-01到11《用户下单》.md"
+    ],
+    "aliases": [
+      "Day07-13到19《购物车功能》"
+    ]
+  },
+  "_posts/Day07总结.md": {
+    "title": "缓存与购物车：Day07 学习复盘",
+    "subtitle": "把 RedisTemplate、Spring Cache 与购物车操作放回同一天的学习脉络。",
+    "kind": "学习复盘",
+    "intro": "这份复盘比单节笔记更长，先整理两种缓存写法，再回看购物车和相关问题。已知具体问题时，可以直接用目录定位。",
+    "jumps": [
+      {
+        "label": "手动缓存",
+        "prefix": "1.2 方式一：手动操作 RedisTemplate（菜品模块）"
+      },
+      {
+        "label": "缓存注解",
+        "prefix": "1.3 方式二：Spring Cache 注解（套餐模块）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day07-01到12《缓存功能》.md",
+      "_posts/Day07-13到19《购物车功能》.md",
+      "_posts/Spring cache缓存和Redis缓存.md"
+    ],
+    "aliases": [
+      "Day07总结"
+    ]
+  },
+  "_posts/Day08-01到11《用户下单》.md": {
+    "title": "用户下单：地址、订单与支付的衔接",
+    "subtitle": "从地址簿进入下单流程，再理解支付及相关线程上下文问题。",
+    "kind": "模块笔记",
+    "intro": "先顺着地址簿和下单模块建立业务顺序，再读后面的支付与问答。文中提出的并发与改进建议保留为学习讨论，不代表已经做过对应的性能验证。",
+    "jumps": [
+      {
+        "label": "地址簿",
+        "prefix": "一、地址簿模块"
+      },
+      {
+        "label": "用户下单",
+        "prefix": "二、用户下单模块"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day07-13到19《购物车功能》.md",
+      "_posts/Day08-12到18《订单支付》.md",
+      "_posts/事务管理 @Transactional.md"
+    ],
+    "aliases": [
+      "Day08-01到11《用户下单》"
+    ]
+  },
+  "_posts/Day08-12到18《订单支付》.md": {
+    "title": "订单支付：相关笔记索引",
+    "subtitle": "保留订单支付课程的入口，具体内容见用户下单笔记。",
+    "kind": "学习索引",
+    "intro": "这篇原稿只有一条指向用户下单笔记的关联。支付内容尚未单独展开，可以从下方相关阅读进入现有记录。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/Day08-01到11《用户下单》.md",
+      "_posts/《苍穹外卖》登录模块.md"
+    ],
+    "aliases": [
+      "Day08-12到18《订单支付》"
+    ]
+  },
+  "_posts/大二下2月规划.md": {
+    "title": "2026 年 2 月学习计划与验收方式",
+    "subtitle": "结合费曼复述、每日安排和项目任务，设计阶段学习节奏。",
+    "kind": "阶段计划",
+    "intro": "这份计划既写了要学什么，也写了如何通过复述与检查了解自己的掌握情况。任务清单保留了当时的状态，计划中的目标仍需与实际记录区分。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/大二上1月规划.md",
+      "_posts/AI学习流.md",
+      "_posts/《苍穹外卖》路线图.md"
+    ],
+    "aliases": [
+      "大二下2月规划"
+    ]
+  },
+  "_posts/AI学习流.md": {
+    "title": "用 AI 辅助学习：从蓝图到主动重构",
+    "subtitle": "先讲清流程，再尝试手写，最后用 AI 对照和纠错。",
+    "kind": "学习方法",
+    "intro": "这篇整理了一套主动重构的学习流程，并附有工具和 Git 操作线索。可以把它当作练习安排的参考；是否掌握，仍要靠自己的复述、手写与运行结果来判断。",
+    "jumps": [],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证code review.md",
+      "_posts/《苍穹外卖》阶段一.md"
+    ],
+    "aliases": [
+      "AI学习流"
+    ]
+  },
+  "_posts/Day02.md": {
+    "title": "员工管理：从接口流程到公共字段填充",
+    "subtitle": "把员工模块的增删改查、分页与 @AutoFill 放到同一条业务链路中。",
+    "kind": "模块笔记",
+    "intro": "开头是初期记录，后面补充了员工管理的业务解析。先读整体流程，再按需要进入具体功能，最后回看公共字段如何统一填充。",
+    "jumps": [
+      {
+        "label": "整体流程",
+        "prefix": "一、整体业务流程图"
+      },
+      {
+        "label": "业务拆解",
+        "prefix": "二、逐个业务详解"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/AOP切面编程.md",
+      "_posts/分页查询 PageHelper.md",
+      "_posts/spring项目三层架构.md"
+    ],
+    "aliases": [
+      "Day02"
+    ]
+  },
+  "_posts/spring核心注解.md": {
+    "title": "Spring 注解：从组件注册到业务调用",
+    "subtitle": "结合苍穹外卖中的类，理解常见注解各自负责什么。",
+    "kind": "基础笔记",
+    "intro": "本文按注解的用途整理说明、项目例子和问答。先区分组件注册与依赖注入，再查找自己在代码中遇到的注解。",
+    "jumps": [
+      {
+        "label": "组件注册",
+        "prefix": "一、组件注册类注解（告诉Spring”这是我的Bean”）"
+      },
+      {
+        "label": "依赖注入",
+        "prefix": "二、依赖注入类注解（告诉Spring”我需要这个Bean”）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/spring项目三层架构.md",
+      "_posts/AOP切面编程.md",
+      "_posts/事务管理 @Transactional.md"
+    ],
+    "aliases": [
+      "spring核心注解"
+    ]
+  },
+  "_posts/spring项目三层架构.md": {
+    "title": "Spring 项目：模块与三层架构的分工",
+    "subtitle": "以员工登录为例，串起 Controller、Service 与 Mapper。",
+    "kind": "架构笔记",
+    "intro": "先看 Maven 模块和包结构，再沿员工登录理解每层的职责。这里记录的是课程项目中的组织方式，可以对照源码逐层定位。",
+    "jumps": [
+      {
+        "label": "项目结构",
+        "prefix": "一、SpringBoot项目的典型结构"
+      },
+      {
+        "label": "为什么分层",
+        "prefix": "二、为什么要分三层架构？"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/DTO-VO-Entity 设计模式.md",
+      "_posts/Mybatis动态SQL.md",
+      "_posts/《苍穹外卖》登录模块.md"
+    ],
+    "aliases": [
+      "spring项目三层架构"
+    ]
+  },
+  "_posts/《苍穹外卖》概述.md": {
+    "title": "苍穹外卖：知识点与笔记入口",
+    "subtitle": "围绕注解、认证、缓存和订单，整理项目学习的知识地图。",
+    "kind": "学习索引",
+    "intro": "这篇把相关知识分层列出，并连接到单独的笔记。它适合用来规划复习和查漏补缺，清单中的内容不等同于已经能够独立实现。",
+    "jumps": [
+      {
+        "label": "基础知识",
+        "prefix": "第一层：基础知识"
+      }
+    ],
+    "headings": [
+      {
+        "prefix": "📚 苍穹外卖项目 - 面试必学知识点清单",
+        "title": "苍穹外卖：知识点清单"
+      },
+      {
+        "prefix": "🎯 第一层：必须掌握（面试必问）",
+        "title": "第一层：基础知识"
+      },
+      {
+        "prefix": "4️⃣ ThreadLocal（超高频考点！）",
+        "title": "4. ThreadLocal"
+      }
+    ],
+    "related": [
+      "_posts/《苍穹外卖》路线图.md",
+      "_posts/spring核心注解.md",
+      "_posts/《苍穹外卖》登录模块.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》概述"
+    ]
+  },
+  "_posts/《苍穹外卖》登录模块.md": {
+    "title": "苍穹外卖登录：从请求到身份上下文",
+    "subtitle": "对照管理员和微信用户的登录流程，查看核心类如何协作。",
+    "kind": "模块笔记",
+    "intro": "先用业务流程建立全貌，再按 Controller、Service、Mapper 和 JWT 相关类阅读。后半部分保留了学习问答，可与流程图交叉对照。",
+    "jumps": [
+      {
+        "label": "业务流程",
+        "prefix": "业务流程图（Mermaid）"
+      },
+      {
+        "label": "类的职责",
+        "prefix": "登录认证模块涉及的类（按职责梳理）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证.md",
+      "_posts/ThreadLocal核心应用.md",
+      "_posts/《苍穹外卖》解决微信登录模块.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》登录模块"
+    ]
+  },
+  "_posts/《苍穹外卖》项目魔改.md": {
+    "title": "苍穹外卖：后续改造的候选方向",
+    "subtitle": "整理测试、缓存、消息队列等改造建议，作为后续取舍的材料。",
+    "kind": "改造设想",
+    "intro": "这是一份历史改造建议，正文中的问题判断与收益预期仍需对照源码验证。先了解候选方向，再决定具体要做哪一项，不把建议写成已经完成的成果。",
+    "jumps": [
+      {
+        "label": "方案总览",
+        "prefix": "二、改造方案总览（按投入产出比排序）"
+      },
+      {
+        "label": "基础改造",
+        "prefix": "三、第一阶段：修内功 ——「面试官一看就知道你不是照抄的」"
+      },
+      {
+        "label": "扩展方向",
+        "prefix": "四、第二阶段：造亮点 ——「体现你有分布式和工程化思维」"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/《苍穹外卖》路线图.md",
+      "_posts/Spring cache缓存和Redis缓存.md",
+      "_posts/事务管理 @Transactional.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》项目魔改"
+    ]
+  },
+  "_posts/无法登录前端页面问题-苍穹外卖.md": {
+    "title": "苍穹外卖无法登录：从入口到 Nginx",
+    "subtitle": "记录 localhost 无法访问和登录失败后的排查过程与代理配置。",
+    "kind": "排错记录",
+    "intro": "本文按当时遇到的两个问题展开，并保留了 Nginx 配置和后续提问提纲。先区分页面入口与登录请求，再查看对应配置。",
+    "jumps": [
+      {
+        "label": "问题背景",
+        "prefix": "1. 前言 / 背景"
+      },
+      {
+        "label": "反向代理配置",
+        "prefix": "2.2 nginx反向代理配置"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/《苍穹外卖》解决微信登录模块.md",
+      "_posts/《苍穹外卖》登录模块.md",
+      "_posts/Debug能力.md"
+    ],
+    "aliases": [
+      "无法登录前端页面问题-苍穹外卖"
+    ]
+  },
+  "_posts/JWT登录认证.md": {
+    "title": "JWT 登录：签发、校验与请求清理",
+    "subtitle": "沿登录和受保护接口的请求，串起 JWT、拦截器与 ThreadLocal。",
+    "kind": "基础笔记",
+    "intro": "先读完整业务链路，再回到各个类的职责。后面的问答适合用于检查对令牌、拦截器和线程上下文的理解。",
+    "jumps": [
+      {
+        "label": "完整流程",
+        "prefix": "完整业务流程串联"
+      },
+      {
+        "label": "核心类",
+        "prefix": "核心类职责清单"
+      },
+      {
+        "label": "复习问答",
+        "prefix": "高频面试题与答案"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/《苍穹外卖》登录模块.md",
+      "_posts/JWT登录认证复盘.md",
+      "_posts/ThreadLocal核心应用.md"
+    ],
+    "aliases": [
+      "JWT登录认证"
+    ]
+  },
+  "_posts/JWT登录认证code review.md": {
+    "title": "JWT 手写练习：保留骨架，重写逻辑",
+    "subtitle": "将认证模块拆成工具类、配置、拦截器与 Controller 的练习顺序。",
+    "kind": "练习方案",
+    "intro": "这份材料规划了删除方法体后重新实现的练习。先看保留与重写的边界，再决定从哪个类开始；它是一份训练方案，不是练习已完成的记录。",
+    "jumps": [
+      {
+        "label": "练习范围",
+        "prefix": "一、删除策略（分层删除，保留框架）"
+      },
+      {
+        "label": "编写顺序",
+        "prefix": "二、推荐敲代码顺序（从底层到上层）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证.md",
+      "_posts/JWT登录模块架构设计.md",
+      "_posts/AI学习流.md"
+    ],
+    "aliases": [
+      "JWT登录认证code review"
+    ]
+  },
+  "_posts/JWT登录认证复盘.md": {
+    "title": "JWT 复盘：概念纠正与遗漏补充",
+    "subtitle": "从一次复述出发，重新区分配置、令牌字段和上下文清理的职责。",
+    "kind": "问答复盘",
+    "intro": "这篇保留了原始回答及逐条纠正。建议先读自己的表述，再对照补充部分，最后用文末问题检查是否能够重新讲清楚。",
+    "jumps": [
+      {
+        "label": "理解与遗漏",
+        "prefix": "你理解正确的部分"
+      },
+      {
+        "label": "逐条纠正",
+        "prefix": "逐条纠正与补充"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证.md",
+      "_posts/ThreadLocal核心应用.md",
+      "_posts/《苍穹外卖》阶段一.md"
+    ],
+    "aliases": [
+      "JWT登录认证复盘"
+    ]
+  },
+  "_posts/JWT登录模块架构设计.md": {
+    "title": "登录认证的设计推演：从需求到类",
+    "subtitle": "跟随一份示例推演，理解 JWT 模块如何选型、拆分职责并落到代码。",
+    "kind": "设计笔记",
+    "intro": "这是一份以模拟需求展开的设计讲解。文中的角色对白用于串联思路，可以重点对照需求、模块划分和依赖关系，不把它当作真实业务评审的记录。",
+    "jumps": [
+      {
+        "label": "模块设计",
+        "prefix": "阶段2：模块设计（画出脑海中的蓝图）"
+      },
+      {
+        "label": "职责拆分",
+        "prefix": "阶段3：职责拆分（定义每个类做什么）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证.md",
+      "_posts/JWT登录认证code review.md",
+      "_posts/spring项目三层架构.md"
+    ],
+    "aliases": [
+      "JWT登录模块架构设计"
+    ]
+  },
+  "_posts/ThreadLocal核心应用.md": {
+    "title": "ThreadLocal：请求中的身份如何传递",
+    "subtitle": "从基本 API 和线程隔离，读到 BaseContext 的使用与清理。",
+    "kind": "基础笔记",
+    "intro": "先理解 ThreadLocal 为每个线程保存值的方式，再沿 BaseContext 看用户 ID 如何进入业务代码。线程复用与清理问题可以结合 JWT 笔记一起读。",
+    "jumps": [
+      {
+        "label": "基本 API",
+        "prefix": "二、ThreadLocal 的核心API"
+      },
+      {
+        "label": "底层原理",
+        "prefix": "三、ThreadLocal 的底层原理"
+      },
+      {
+        "label": "项目中的使用",
+        "prefix": "第二部分：ThreadLocal在项目中的核心应用"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JWT登录认证.md",
+      "_posts/《苍穹外卖》阶段一.md",
+      "_posts/AOP切面编程.md"
+    ],
+    "aliases": [
+      "ThreadLocal核心应用"
+    ]
+  },
+  "_posts/RAG知识汇总.md": {
+    "title": "RAG 入门：文档处理、检索与生成",
+    "subtitle": "把离线入库和在线问答分开，建立检索增强生成的基本流程。",
+    "kind": "概念笔记",
+    "intro": "这篇是 RAG 的概念整理，按流程介绍文档处理、检索和回答生成。文中列出的技术选项与评估维度属于学习材料，不代表当前项目的实际配置或实验结果。",
+    "jumps": [
+      {
+        "label": "先理解概念",
+        "prefix": "1. 什么是 RAG？"
+      },
+      {
+        "label": "架构流程",
+        "prefix": "2. RAG 架构流程"
+      },
+      {
+        "label": "核心技术",
+        "prefix": "3. 核心技术"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/RAG项目概况.md",
+      "_posts/RAG前端开发.md"
+    ],
+    "aliases": [
+      "RAG知识汇总"
+    ]
+  },
+  "_posts/RAG项目概况.md": {
+    "title": "RAG 项目概况：入库与问答两条链路",
+    "subtitle": "对照历史项目笔记，了解文档如何进入知识库，以及问题如何得到回答。",
+    "kind": "项目导读",
+    "intro": "这份概况记录了当时对模块和技术点的梳理。先读知识库构建与问答流程，再查看模块划分；功能与性能描述需要对照相应版本的实现和验证记录。",
+    "jumps": [
+      {
+        "label": "核心业务流程",
+        "prefix": "核心业务流程"
+      },
+      {
+        "label": "模块划分",
+        "prefix": "模块划分（5个子模块）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/RAG知识汇总.md",
+      "_posts/RAG前端开发.md",
+      "_posts/RAG前端开发Bug.md"
+    ],
+    "aliases": [
+      "RAG项目概况"
+    ]
+  },
+  "_posts/全局异常处理.md": {
+    "title": "全局异常处理：从抛出到统一响应",
+    "subtitle": "沿登录、删除与下单的例子，观察异常如何离开业务层。",
+    "kind": "基础笔记",
+    "intro": "先定位 GlobalExceptionHandler，再沿具体场景追踪异常。后面的对比和问答用于理解统一处理的作用，可以与 Result 的响应结构一起阅读。",
+    "jumps": [
+      {
+        "label": "处理器入口",
+        "prefix": "核心类：GlobalExceptionHandler"
+      },
+      {
+        "label": "业务场景",
+        "prefix": "二、典型应用场景（带完整流程）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/统一封装Result.md",
+      "_posts/事务管理 @Transactional.md",
+      "_posts/Debug能力.md"
+    ],
+    "aliases": [
+      "全局异常处理"
+    ]
+  },
+  "_posts/统一封装Result.md": {
+    "title": "Result 响应封装：接口如何统一返回",
+    "subtitle": "从泛型、工厂方法与 PageResult，读到不同接口的返回形式。",
+    "kind": "基础笔记",
+    "intro": "先看 Result 的结构，再对照登录、分页、列表和异常的返回示例。正文保留了当时的设计解释，适合与 Controller 和全局异常处理器交叉查看。",
+    "jumps": [
+      {
+        "label": "Result 结构",
+        "prefix": "核心类：Result"
+      },
+      {
+        "label": "分页响应",
+        "prefix": "配套设计：PageResult"
+      },
+      {
+        "label": "接口示例",
+        "prefix": "第二部分：Result在项目中的完整应用场景"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/全局异常处理.md",
+      "_posts/分页查询 PageHelper.md",
+      "_posts/DTO-VO-Entity 设计模式.md"
+    ],
+    "aliases": [
+      "统一封装Result"
+    ]
+  },
+  "_posts/AOP切面编程.md": {
+    "title": "AOP：把公共逻辑从业务中抽出来",
+    "subtitle": "用 @AutoFill 的字段填充，理解注解、切面与业务方法的关系。",
+    "kind": "基础笔记",
+    "intro": "先从公共字段反复赋值的问题入手，再看自定义注解与切面如何配合。代码和流程图围绕课程项目展开，读完可回到 Mapper 找到实际入口。",
+    "jumps": [
+      {
+        "label": "为什么需要 AOP",
+        "prefix": "二、项目中的业务需求（为什么要用AOP？）"
+      },
+      {
+        "label": "实现设计",
+        "prefix": "三、AOP设计方案（项目中的实现）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day02.md",
+      "_posts/spring核心注解.md",
+      "_posts/《苍穹外卖》解决微信登录模块.md"
+    ],
+    "aliases": [
+      "AOP切面编程"
+    ]
+  },
+  "_posts/DTO-VO-Entity 设计模式.md": {
+    "title": "DTO、VO 与 Entity：请求中的对象分工",
+    "subtitle": "以员工登录为例，理解输入、输出和持久化对象为什么分开。",
+    "kind": "基础笔记",
+    "intro": "先区分三类对象，再沿一次登录查看字段如何在各层流动。后面的代码和问答可以帮助对照职责，而不是只记住三个缩写。",
+    "jumps": [
+      {
+        "label": "对象定义",
+        "prefix": "一、DTO-VO-Entity 是什么？"
+      },
+      {
+        "label": "业务场景",
+        "prefix": "二、业务场景：为什么要这样设计？"
+      },
+      {
+        "label": "代码流程",
+        "prefix": "三、代码实战流程"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/spring项目三层架构.md",
+      "_posts/《苍穹外卖》登录模块.md",
+      "_posts/统一封装Result.md"
+    ],
+    "aliases": [
+      "DTO-VO-Entity 设计模式"
+    ]
+  },
+  "_posts/Mybatis动态SQL.md": {
+    "title": "MyBatis 动态 SQL：从 Mapper 到条件查询",
+    "subtitle": "串起接口、XML、Service 与配置，整理动态查询的常见写法。",
+    "kind": "基础笔记",
+    "intro": "先看 Mapper 和 XML 如何对应，再回到具体的动态 SQL 写法。配置、代码位置和问答放在一起，适合边看源码边查阅。",
+    "jumps": [
+      {
+        "label": "调用流程",
+        "prefix": "二、MyBatis 在项目中的核心应用逻辑（业务流程）"
+      },
+      {
+        "label": "代码位置",
+        "prefix": "三、具体在哪些类和方法上体现？"
+      },
+      {
+        "label": "基础内容",
+        "prefix": "四、初学者需要掌握的核心内容"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/JDBC连接数据库.md",
+      "_posts/分页查询 PageHelper.md",
+      "_posts/spring项目三层架构.md"
+    ],
+    "aliases": [
+      "Mybatis动态SQL"
+    ]
+  },
+  "_posts/Spring cache缓存和Redis缓存.md": {
+    "title": "Redis 与 Spring Cache：写法和更新边界",
+    "subtitle": "对照营业状态、菜品与套餐，理解手动缓存和注解缓存的取舍。",
+    "kind": "缓存笔记",
+    "intro": "先用业务场景区分几种缓存入口，再对照实现与更新逻辑。有关一致性和改进方式的讨论保留为学习分析，不作为已经验证的运行效果。",
+    "jumps": [
+      {
+        "label": "代码全景",
+        "prefix": "一、缓存使用的核心类和方法（全景图）"
+      },
+      {
+        "label": "业务与设计",
+        "prefix": "二、业务需求与设计方案（白话解释）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day07-01到12《缓存功能》.md",
+      "_posts/Day07总结.md",
+      "_posts/Redis核心应用.md"
+    ],
+    "aliases": [
+      "Spring cache缓存和Redis缓存"
+    ]
+  },
+  "_posts/WebSocket 实时通信.md": {
+    "title": "WebSocket：订单提醒如何推送到浏览器",
+    "subtitle": "从配置与连接管理，追踪支付成功和催单消息的发送。",
+    "kind": "模块笔记",
+    "intro": "先看服务端与浏览器之间的通信方式，再沿 OrderServiceImpl 找到消息产生的位置。后面的学习步骤与问答可用于补充连接管理的理解。",
+    "jumps": [
+      {
+        "label": "业务逻辑",
+        "prefix": "一、核心业务逻辑（简单理解）"
+      },
+      {
+        "label": "实现位置",
+        "prefix": "二、具体实现的类和方法"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day08-01到11《用户下单》.md",
+      "_posts/定时任务 @Scheduled.md",
+      "_posts/《苍穹外卖》登录模块.md"
+    ],
+    "aliases": [
+      "WebSocket 实时通信"
+    ]
+  },
+  "_posts/事务管理 @Transactional.md": {
+    "title": "事务管理：多表操作如何保持一致",
+    "subtitle": "以菜品、口味和套餐关联为例，理解 @Transactional 的使用。",
+    "kind": "基础笔记",
+    "intro": "先看一项业务为什么要同时修改多张表，再对照 Service 上的事务配置。有关失败、回滚与失效的讨论，可以结合具体调用路径阅读。",
+    "jumps": [
+      {
+        "label": "业务角度",
+        "prefix": "一、@Transactional 的核心应用逻辑（业务角度）"
+      },
+      {
+        "label": "代码位置",
+        "prefix": "二、项目中具体使用的类和方法"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day08-01到11《用户下单》.md",
+      "_posts/Mybatis动态SQL.md",
+      "_posts/全局异常处理.md"
+    ],
+    "aliases": [
+      "事务管理 @Transactional"
+    ]
+  },
+  "_posts/分页查询 PageHelper.md": {
+    "title": "PageHelper：分页查询经过哪些步骤",
+    "subtitle": "从 startPage 到 Mapper 和返回结果，拆解一次分页调用。",
+    "kind": "基础笔记",
+    "intro": "先沿标准调用顺序阅读，再查看项目中的使用位置。后面的问答补充了拦截和线程上下文的理解，适合与 MyBatis 笔记一起查阅。",
+    "jumps": [
+      {
+        "label": "核心原理",
+        "prefix": "一、PageHelper 是什么？核心原理"
+      },
+      {
+        "label": "调用步骤",
+        "prefix": "二、项目中的核心应用逻辑"
+      },
+      {
+        "label": "项目位置",
+        "prefix": "三、项目中的具体应用位置"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Mybatis动态SQL.md",
+      "_posts/ThreadLocal核心应用.md",
+      "_posts/统一封装Result.md"
+    ],
+    "aliases": [
+      "分页查询 PageHelper"
+    ]
+  },
+  "_posts/定时任务 @Scheduled.md": {
+    "title": "定时任务：用 @Scheduled 处理订单状态",
+    "subtitle": "结合 OrderTask 的例子，整理任务开启、执行周期与状态变更。",
+    "kind": "基础笔记",
+    "intro": "先理解超时订单和派送订单为什么需要定时处理，再对照配置与任务方法。文中的运行方案与改进建议是学习讨论，需结合实际部署方式再验证。",
+    "jumps": [
+      {
+        "label": "业务逻辑",
+        "prefix": "一、业务逻辑的通俗理解"
+      },
+      {
+        "label": "实现位置",
+        "prefix": "二、项目中的具体应用位置"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Day08-01到11《用户下单》.md",
+      "_posts/WebSocket 实时通信.md",
+      "_posts/事务管理 @Transactional.md"
+    ],
+    "aliases": [
+      "定时任务 @Scheduled"
+    ]
+  },
+  "_posts/《苍穹外卖》路线图.md": {
+    "title": "苍穹外卖：从项目骨架到下单链路",
+    "subtitle": "按依赖关系安排登录、员工、菜品、缓存与订单的学习顺序。",
+    "kind": "学习路线",
+    "intro": "这是一份按模块递进的学习路线。先建立能运行的项目骨架，再逐步增加业务；阶段名称表达的是训练顺序，不能直接视为完成记录。",
+    "jumps": [
+      {
+        "label": "总体脉络",
+        "prefix": "总体脉络（先看这里）"
+      },
+      {
+        "label": "项目骨架",
+        "prefix": "第一阶段：项目骨架（地基，必须第一个完成）"
+      },
+      {
+        "label": "员工模块",
+        "prefix": "第二阶段：管理端-员工模块（CRUD + 分页）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/《苍穹外卖》概述.md",
+      "_posts/《苍穹外卖》登录模块.md",
+      "_posts/《苍穹外卖》阶段一.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》路线图"
+    ]
+  },
+  "_posts/《苍穹外卖》阶段一.md": {
+    "title": "ThreadLocal 与登录链路：一次问答复盘",
+    "subtitle": "保留原始回答、纠正与追问，检查对用户上下文和登录流程的理解。",
+    "kind": "问答复盘",
+    "intro": "这篇按问题保留回答与批改。建议先遮住批改部分试着复述，再对照 ThreadLocal、资源清理和登录链路中的遗漏。",
+    "jumps": [
+      {
+        "label": "ThreadLocal 的作用",
+        "prefix": "问题一（理解 ThreadLocal 的作用）"
+      },
+      {
+        "label": "资源清理",
+        "prefix": "问题二（理解资源清理的必要性）"
+      },
+      {
+        "label": "登录流程",
+        "prefix": "问题三（登录流程）"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/ThreadLocal核心应用.md",
+      "_posts/JWT登录认证复盘.md",
+      "_posts/《苍穹外卖》路线图.md"
+    ],
+    "aliases": [
+      "《苍穹外卖》阶段一"
+    ]
+  },
+  "_posts/《黑马点评》路线图.md": {
+    "title": "黑马点评：沿业务模块学习 Redis",
+    "subtitle": "从登录与缓存，走向秒杀、锁、排行榜和地理位置等应用。",
+    "kind": "学习路线",
+    "intro": "这份路线按业务模块组织 Redis 相关知识，方便安排学习顺序。每个阶段仍需要自己的代码、运行和复述来检验，路线本身不表示掌握程度。",
+    "jumps": [
+      {
+        "label": "模块路线",
+        "prefix": "Redis 知识点学习路线（按模块顺序）"
+      },
+      {
+        "label": "推荐顺序",
+        "prefix": "推荐学习顺序"
+      }
+    ],
+    "headings": [],
+    "related": [
+      "_posts/Redis核心应用.md",
+      "_posts/Day05-02到14《关于redis》.md",
+      "_posts/Spring cache缓存和Redis缓存.md"
+    ],
+    "aliases": [
+      "《黑马点评》路线图"
+    ]
+  },
+  "_posts/Redis核心应用.md": {
+    "title": "Redis 数据结构如何落到业务中",
+    "subtitle": "对照登录、缓存、秒杀与排行榜，整理数据结构的应用入口。",
+    "kind": "概念笔记",
+    "intro": "这篇从业务问题出发，连接到 Redis 的数据结构和常见方案。先找自己熟悉的场景，再回看对应的类型与操作；示例不代表这些方案都已在个人项目中实现。",
+    "jumps": [
+      {
+        "label": "登录态",
+        "prefix": "1. 用户登录态：替代 Session（Hash）"
+      },
+      {
+        "label": "商户缓存",
+        "prefix": "2. 商户缓存：解决穿透 / 击穿 / 雪崩（String）"
+      },
+      {
+        "label": "秒杀链路",
+        "prefix": "4. 秒杀：Lua 脚本 + Stream 消息队列（异步下单）"
+      }
+    ],
+    "headings": [
+      {
+        "prefix": "🗺️ Redis 在项目中的七大核心应用",
+        "title": "Redis 在项目中的业务应用"
+      }
+    ],
+    "related": [
+      "_posts/《黑马点评》路线图.md",
+      "_posts/Day05-02到14《关于redis》.md",
+      "_posts/Spring cache缓存和Redis缓存.md"
+    ],
+    "aliases": [
+      "Redis核心应用"
+    ]
+  }
+}

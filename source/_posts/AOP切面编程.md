@@ -1,5 +1,6 @@
 ---
-title: AOP切面编程
+title: "AOP：把公共逻辑从业务中抽出来"
+description: "用 @AutoFill 的字段填充，理解注解、切面与业务方法的关系。"
 tags: [苍穹外卖, AOP]
 date: 
 ---

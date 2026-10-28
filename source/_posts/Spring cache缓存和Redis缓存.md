@@ -1,5 +1,6 @@
 ---
-title: Spring cache缓存和Redis缓存
+title: "Redis 与 Spring Cache：写法和更新边界"
+description: "对照营业状态、菜品与套餐，理解手动缓存和注解缓存的取舍。"
 tags: [苍穹外卖, Redis, 缓存]
 date: 
 ---

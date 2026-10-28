@@ -1,5 +1,6 @@
 ---
-title: Debug能力
+title: "Java 调试：从异常栈到接口文档"
+description: "先形成假设，再用断点和变量验证；随后理解 Knife4j 如何从代码生成接口文档。"
 tags: [工程能力]
 date: 
 ---

@@ -1,5 +1,6 @@
 ---
-title: WebSocket 实时通信
+title: "WebSocket：订单提醒如何推送到浏览器"
+description: "从配置与连接管理，追踪支付成功和催单消息的发送。"
 tags: [苍穹外卖]
 date: 
 ---

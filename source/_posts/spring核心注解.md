@@ -1,5 +1,6 @@
 ---
-title: 《苍穹外卖》概述
+title: "Spring 注解：从组件注册到业务调用"
+description: "结合苍穹外卖中的类，理解常见注解各自负责什么。"
 tags: [苍穹外卖, spring]
 date:
 ---

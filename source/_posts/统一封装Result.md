@@ -1,5 +1,6 @@
 ---
-title: 统一封装Result
+title: "Result 响应封装：接口如何统一返回"
+description: "从泛型、工厂方法与 PageResult，读到不同接口的返回形式。"
 tags: [苍穹外卖, Result]
 date: 
 ---

@@ -1,5 +1,6 @@
 ---
-title: 《苍穹外卖》概述
+title: "Spring 项目：模块与三层架构的分工"
+description: "以员工登录为例，串起 Controller、Service 与 Mapper。"
 tags: [苍穹外卖, spring]
 date:
 ---

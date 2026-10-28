@@ -1,5 +1,6 @@
 ---
-title: 定时任务 @Scheduled
+title: "定时任务：用 @Scheduled 处理订单状态"
+description: "结合 OrderTask 的例子，整理任务开启、执行周期与状态变更。"
 tags: [苍穹外卖]
 date: 
 ---

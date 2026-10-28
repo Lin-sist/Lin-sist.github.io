@@ -1,9 +1,10 @@
 ---
-title: MySQL学习笔记
+title: "MySQL 学习笔记：待补充的提纲"
+description: "保留问题、知识点与参考资料的位置，正文内容有待继续补充。"
 date: 2025-09-01 19:14:08
 tags: [MySQL]
 categories: []               
-description:
+
 ---
 
 ## 1. 前言 / 背景

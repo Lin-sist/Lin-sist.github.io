@@ -1,5 +1,6 @@
 ---
-title: 苍穹外卖Day07总结
+title: "缓存与购物车：Day07 学习复盘"
+description: "把 RedisTemplate、Spring Cache 与购物车操作放回同一天的学习脉络。"
 tags: [一刷苍穹外卖]
 date: 2026-01-29
 ---

@@ -1,9 +1,10 @@
 ---
-title: 《快递物流系统SpringBoot》
+title: "快递物流系统：功能范围与待补提纲"
+description: "梳理用户查询、管理员操作、物流状态与取件码等功能设想。"
 tags: [Java,SpringBoot,MySQL]
 categories: [项目记录]
 date: 2025-12-21
-description:
+
 ---
 
 ## 1. 前言

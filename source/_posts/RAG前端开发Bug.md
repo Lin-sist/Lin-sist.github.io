@@ -1,5 +1,6 @@
 ---
-title: RAG前端开发Bug
+title: "IDEA 停了，8080 为什么还被占用？"
+description: "一次 RAG 项目启动记录：区分 IDE 管理的实例与命令行启动的 Java 进程。"
 tags: [RAG]
 date: 
 ---
