@@ -17,7 +17,9 @@
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
+  <link rel="stylesheet" href="/linsist/motion.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
+  <script src="/linsist/motion.js"></script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="reading-page has-editorial">
@@ -25,7 +27,7 @@
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
     <nav class="desktop-nav" aria-label="主导航">
-      <a href="/">首页</a><a href="/#work">作品</a><a href="/#writing" aria-current="page">文章</a><a href="/#about">关于</a>
+      <a href="/">首页</a><a href="/work/">作品</a><a href="/#writing" aria-current="page">文章</a><a href="/#about">关于</a>
     </nav>
     <div class="header-actions">
       <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd>/</kbd></button>
@@ -33,7 +35,7 @@
       <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
-    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="/">首页</a><a href="/#work">作品</a><a href="/#writing">文章</a><a href="/#about">关于</a></nav>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="/">首页</a><a href="/work/">作品</a><a href="/#writing">文章</a><a href="/#about">关于</a></nav>
     <div class="reading-track" aria-hidden="true"><span id="reading-progress"></span></div>
   </header>
 
@@ -230,7 +232,7 @@
         <p class="sidebar-note">让思考，留下轨迹。</p>
       </aside>
     </div>
-    <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/#work">查看作品 ↗</a></div></footer>
+    <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/work/">查看作品 ↗</a></div></footer>
   </main>
   <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint" role="status">搜索文章标题、标签与分类 · 按 Esc 关闭</p><div id="search-results"></div><a class="search-archive" href="/archives/">浏览完整文章归档 ↗</a></dialog>
   <div id="reading-status" class="sr-only" role="status" aria-live="polite"></div>

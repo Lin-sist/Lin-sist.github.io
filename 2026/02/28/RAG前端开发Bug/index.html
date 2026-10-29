@@ -17,7 +17,9 @@
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
   <link rel="stylesheet" href="/linsist/reading.css">
+  <link rel="stylesheet" href="/linsist/motion.css">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
+  <script src="/linsist/motion.js"></script>
   <script src="/linsist/reading.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="reading-page has-editorial">
@@ -25,7 +27,7 @@
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="/" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
     <nav class="desktop-nav" aria-label="主导航">
-      <a href="/">首页</a><a href="/#work">作品</a><a href="/#writing" aria-current="page">文章</a><a href="/#about">关于</a>
+      <a href="/">首页</a><a href="/work/">作品</a><a href="/#writing" aria-current="page">文章</a><a href="/#about">关于</a>
     </nav>
     <div class="header-actions">
       <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd>/</kbd></button>
@@ -33,7 +35,7 @@
       <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
-    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="/">首页</a><a href="/#work">作品</a><a href="/#writing">文章</a><a href="/#about">关于</a></nav>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="/">首页</a><a href="/work/">作品</a><a href="/#writing">文章</a><a href="/#about">关于</a></nav>
     <div class="reading-track" aria-hidden="true"><span id="reading-progress"></span></div>
   </header>
 
@@ -62,7 +64,7 @@
 <p><strong>以后遇到端口占用，一行命令搞定</strong>：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查谁占了8080</span></span><br><span class="line">netstat <span class="literal">-ano</span> | findstr <span class="string">&quot;:8080&quot;</span> | findstr <span class="string">&quot;LISTENING&quot;</span></span><br><span class="line"><span class="comment"># 杀掉它（把PID换成实际的）</span></span><br><span class="line"><span class="built_in">Stop-Process</span> <span class="literal">-Id</span> &lt;PID&gt; <span class="literal">-Force</span></span><br></pre></td></tr></table></figure></article>
         <div class="article-end"><span class="end-point" aria-hidden="true"></span><span>这一段思考，先记到这里。</span><button type="button" id="copy-article-link" hidden>复制文章链接 ↗</button></div>
-        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a target="_blank" rel="noopener" href="https://github.com/Lin-sist/RAG"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>查看项目源码，结合代码理解文档入库、检索与回答的流程。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/"><div><h3>Java 调试：从异常栈到接口文档</h3><p>先形成假设，再用断点和变量验证；随后理解 Knife4j 如何从代码生成接口文档。</p><time>2026.02.27</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG 前端如何组织路由、状态与请求</h3><p>从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
+        <aside class="reading-project" aria-label="相关项目"><p class="section-label">从文字到实践</p><a href="/work/rag/"><strong>RAG · 知识库问答</strong><span aria-hidden="true">↗</span></a><p>从文档上传、检索到流式回答，继续了解实现思路与工程取舍。</p></aside>        <section class="related-reading" aria-labelledby="related-title"><p class="section-label">继续沿途的思考</p><h2 id="related-title">也许你还想读。</h2><div><a class="related-row" href="/2026/02/27/Debug%E8%83%BD%E5%8A%9B/"><div><h3>Java 调试：从异常栈到接口文档</h3><p>先形成假设，再用断点和变量验证；随后理解 Knife4j 如何从代码生成接口文档。</p><time>2026.02.27</time></div><span aria-hidden="true">↗</span></a><a class="related-row" href="/2026/02/28/RAG%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/"><div><h3>RAG 前端如何组织路由、状态与请求</h3><p>从项目入口到一次聊天提问，梳理 Vue、Pinia、Axios 与流式接收的分工。</p><time>2026.02.28</time></div><span aria-hidden="true">↗</span></a></div></section>      </div>
       <aside class="reading-sidebar" aria-label="阅读工具">
         <details class="reading-toc" open>
           <summary>本篇目录 <span class="toc-position" id="reading-percent">阅读轨迹</span></summary>
@@ -72,7 +74,7 @@
         <p class="sidebar-note">让思考，留下轨迹。</p>
       </aside>
     </div>
-    <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/#work">查看作品 ↗</a></div></footer>
+    <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/work/">查看作品 ↗</a></div></footer>
   </main>
   <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint" role="status">搜索文章标题、标签与分类 · 按 Esc 关闭</p><div id="search-results"></div><a class="search-archive" href="/archives/">浏览完整文章归档 ↗</a></dialog>
   <div id="reading-status" class="sr-only" role="status" aria-live="polite"></div>

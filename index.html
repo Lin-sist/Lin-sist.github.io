@@ -10,7 +10,10 @@
   <title>Lin说 · 让思考留下轨迹</title>
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/linsist/style.css">
+  <link rel="stylesheet" href="/linsist/home-projects.css">
+  <link rel="stylesheet" href="/linsist/motion.css">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')||'dark'}catch{}</script>
+  <script src="/linsist/motion.js"></script>
   <script src="/linsist/app.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
@@ -18,7 +21,7 @@
   <header class="site-header">
     <a class="wordmark" href="#home" aria-label="Lin说，返回首页">Lin<span>说</span><i aria-hidden="true">✦</i></a>
     <nav class="desktop-nav" aria-label="主导航">
-      <a href="#home" aria-current="page">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a>
+      <a href="#home" aria-current="page">首页</a><a href="/work/">作品</a><a href="#writing">文章</a><a href="#about">关于</a>
     </nav>
     <div class="header-actions">
       <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd> / </kbd></button>
@@ -26,7 +29,7 @@
       <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
       <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
-    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="#home">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a></nav>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="#home">首页</a><a href="/work/">作品</a><a href="#writing">文章</a><a href="#about">关于</a></nav>
   </header>
 
   <main id="main">
@@ -37,7 +40,7 @@
         <p class="hero-name">Linsist</p>
         <h1 id="hero-title">让思考，<br>留下轨迹<span>。</span></h1>
         <p class="hero-description">在代码里构建，也在文字里记录。<br>关于 AI 应用、后端工程，和一路走来的好奇心。</p>
-        <div class="hero-links"><a class="primary-link" href="#work">探索我的作品 <span aria-hidden="true">↗</span></a><a class="quiet-link" href="#writing">读一些文字 <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-links"><a class="primary-link" href="/work/">探索我的作品 <span aria-hidden="true">↗</span></a><a class="quiet-link" href="#writing">读一些文字 <span aria-hidden="true">↗</span></a></div>
       </div>
       <div class="hero-foot"><p>重要的是叶子在飘落时划出的轨迹。</p><div class="video-tools"><span id="video-status" role="status">天台与流星</span><button id="video-toggle" type="button" aria-label="播放背景视频"><span class="play-symbol" aria-hidden="true">▷</span><span class="video-label">播放</span></button></div></div>
     </section>
@@ -51,14 +54,29 @@
       <section class="section work-section" id="work" aria-labelledby="work-title">
         <div class="section-heading reveal"><span class="section-label">精选作品</span><h2 id="work-title">把想法，做到具体。</h2><p>从知识问答到个人记录，探索技术如何成为可用的产品。</p></div>
         <div class="project-grid">
+          
           <article class="project project-rag reveal">
-            <a class="project-image rag-image" href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer" aria-label="查看企业知识库问答项目源码"><img src="/linsist/assets/rag-interface.webp" alt="RAG 应用的问答偏好设置界面，展示快捷键与来源片段选项" loading="lazy" width="1440" height="900"></a>
-            <div class="project-body"><p class="project-kind">AI 应用 / 全栈开发</p><h3><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">让知识，有据可循。<span aria-hidden="true">↗</span></a></h3><p>企业知识库问答系统。从文档上传、解析与检索，到流式回答，让信息能够被找到，也能够被追溯。</p><div class="project-bottom"><span>Spring Boot · Vue · Milvus</span><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：应用问答偏好界面</p></div>
+            <a class="project-image home-project-cover home-cover-rag" href="/work/rag/" aria-label="阅读知识库问答 RAG项目案例">
+              
+              <img src="/linsist/assets/work/rag-login.webp" alt="RAG 实际登录页面，黑色点阵背景、让每个回答都有出处的标题与纸飞机图样" loading="lazy" width="1908" height="952">
+              
+            </a>
+            <div class="project-body"><p class="project-kind">AI 应用 / 可运行的模块化学习原型</p><h3><a href="/work/rag/">知识库问答 RAG<span aria-hidden="true">↗</span></a></h3><p class="home-project-headline">让每个回答，都有出处。</p><p>把分散的文档整理为知识，让提问、检索与有来源的回答在同一处发生。</p><div class="project-bottom"><span>Java / Spring Boot · Vue / TypeScript</span><a href="/work/rag/">阅读案例 ↗</a></div><p class="image-note">本地应用实拍 · 登录入口</p></div>
           </article>
+          
           <article class="project project-flashback reveal">
-            <a class="project-image flashback-image" href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer" aria-label="查看时光回序项目源码"><img src="/linsist/assets/flashback-home.webp" alt="时光回序首页设计稿：今天的你，想留下些什么？" loading="lazy" width="583" height="1271"></a>
-            <div class="project-body"><p class="project-kind">微信小程序 / 产品实践</p><h3><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">时光回序<span aria-hidden="true">↗</span></a></h3><p>把此刻交给未来。一个关于个人表达、封存与延迟回看的记录空间，让理解留给时间。</p><div class="project-bottom"><span>Uni-app · Spring Boot</span><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：首页设计稿</p></div>
+            <a class="project-image home-project-cover home-cover-flashback" href="/work/flashback/" aria-label="阅读时光回序 Flashback项目案例">
+              
+              <img class="home-screen home-screen-0" src="/linsist/assets/work/flashback-writing.webp" alt="时光回序书写页 demo，文字、图片与原始声音组成一个片段" loading="lazy" width="390" height="844">
+              
+              <img class="home-screen home-screen-1" src="/linsist/assets/work/flashback-home.webp" alt="时光回序首页 demo，今天的你想留下些什么" loading="lazy" width="390" height="844">
+              
+              <img class="home-screen home-screen-2" src="/linsist/assets/work/flashback-look.webp" alt="时光回序回看页 demo，区分过去的片段与现在的回应" loading="lazy" width="390" height="1028">
+              
+            </a>
+            <div class="project-body"><p class="project-kind">产品实践 / 微信小程序实践 / 体验原型探索</p><h3><a href="/work/flashback/">时光回序 Flashback<span aria-hidden="true">↗</span></a></h3><p class="home-project-headline">给想留下的此刻，一个位置。</p><p>一个私人的生命片段记录空间，保存生命不同阶段的第一人称现场。别急着想明白，先把这一刻留下。</p><div class="project-bottom"><span>Uni-app / Vue · Java / Spring Boot</span><a href="/work/flashback/">阅读案例 ↗</a></div><p class="image-note">界面原型 · 用户提供的 HTML demo</p></div>
           </article>
+          
         </div>
       </section>
 

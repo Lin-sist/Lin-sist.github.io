@@ -74,10 +74,13 @@ reflectTheme();
 // In-page article filters and local title / description search.
 const articles=[...document.querySelectorAll('.article-row')];
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
+  const update=()=>{
   document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   let count=0;
   articles.forEach(row=>{row.hidden=button.dataset.filter!=='all'&&row.dataset.category!==button.dataset.filter;if(!row.hidden)count++});
   $('#filter-status').textContent=`显示 ${count} 篇文章`;
+  };
+  if(window.LinsistMotion)window.LinsistMotion.updateList(articles,update);else update();
 }));
 const searchDialog=$('#search-dialog');
 let searchRecords=null;
@@ -128,8 +131,4 @@ $('#search-input').addEventListener('input',renderSearch);
 searchDialog.addEventListener('click',e=>{if(e.target===searchDialog){const r=searchDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)searchDialog.close()}});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)&&!e.target.isContentEditable){e.preventDefault();openSearch()}});
 
-if(!reducedMotion.matches){
-  const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target)}}),{threshold:.05});
-  document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
-  document.documentElement.classList.add('has-motion');
-}
+// Shared motion.js handles entries without hiding content before JavaScript runs.

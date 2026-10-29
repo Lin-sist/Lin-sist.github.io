@@ -1,0 +1,20 @@
+@charset "UTF-8";
+/* Homepage uses the same project data and uncropped assets as the case pages. */
+.home-project-cover{padding:20px;border:1px solid var(--line)}
+.home-cover-rag{background:#152432}
+.home-cover-rag img{width:100%;height:auto;max-height:100%;object-fit:contain;border-radius:3px;box-shadow:0 10px 26px #030a1229}
+.home-cover-flashback{background:#e7e1d6;gap:14px;padding:22px 18px}
+.home-cover-flashback .home-screen{width:28%;height:auto;max-height:100%;object-fit:contain;border:0;border-radius:5px;box-shadow:0 9px 22px #51432c14;transform:none}
+.home-cover-flashback .home-screen-0{transform:rotate(-3deg)}
+.home-cover-flashback .home-screen-2{transform:rotate(3deg)}
+.home-cover-flashback:hover .home-screen-0{transform:translateY(-3px) rotate(-3deg)}
+.home-cover-flashback:hover .home-screen-1{transform:translateY(-3px)}
+.home-cover-flashback:hover .home-screen-2{transform:translateY(-3px) rotate(3deg)}
+.project .project-body>.home-project-headline{font-size:16px;color:var(--fg);line-height:1.8;margin-top:12px}
+.project .project-body>.home-project-headline+p{margin-top:9px}
+.home-project-cover~.project-body .project-bottom>span{min-width:0;line-height:1.9}
+.home-project-cover~.project-body .project-kind{min-height:20px;line-height:1.8}
+.home-project-cover~.project-body .project-bottom a{flex:none}
+@media(max-width:1000px){.home-project-cover{padding:16px}.home-cover-flashback{gap:10px;padding:20px 14px}}
+@media(max-width:700px){.home-project-cover{height:auto;aspect-ratio:1.8;padding:14px}.home-cover-rag img{max-height:none}.home-cover-flashback{height:280px;aspect-ratio:auto;gap:18px;padding:20px}.home-cover-flashback .home-screen{width:auto;max-width:28%;height:100%;object-fit:contain}.project .project-body>.home-project-headline{font-size:15px}.home-project-cover~.project-body .project-kind{min-height:0}}
+@media(max-width:360px){.home-cover-flashback{height:235px;gap:12px;padding:16px}}
