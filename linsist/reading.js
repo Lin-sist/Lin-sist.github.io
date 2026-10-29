@@ -155,14 +155,9 @@
     const query = input.value.trim().toLocaleLowerCase();
     const matches = records.filter(post => [post.title, ...(post.aliases || []), ...(post.tags || []), ...(post.categories || [])].join(' ').toLocaleLowerCase().includes(query));
     results.replaceChildren();
-    hint.textContent = matches.length ? `找到 ${matches.length} 篇文章${matches.length > 50 ? '，显示前 50 篇' : ''} · 按 Esc 关闭` : '没有找到相关文章，换个关键词试试。';
+    hint.textContent = matches.length ? `${matches.length} 篇文章 · 标题、标签与分类 · Esc 返回` : '没有找到相关文章，换个关键词试试。';
     const base = new URL(document.documentElement.dataset.siteRoot, location.origin);
-    matches.slice(0, 50).forEach(post => {
-      const link = document.createElement('a'); link.href = new URL(post.path, base).href;
-      const title = document.createElement('h3'); title.textContent = post.title;
-      const meta = document.createElement('p'); meta.textContent = [post.date, ...(post.tags || [])].filter(Boolean).join(' · ');
-      link.append(title, meta); results.append(link);
-    });
+    window.LinsistSearch.renderResults(results, matches, base);
   }
   async function openSearch() {
     closeMenu(); trigger = document.activeElement;
@@ -186,9 +181,7 @@
   input.addEventListener('input', renderSearch);
   dialog.addEventListener('close', () => trigger?.focus());
   dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+    if (event.target === dialog) dialog.close();
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {

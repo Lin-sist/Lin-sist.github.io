@@ -8,7 +8,9 @@
   <link rel="icon" href="/linsist/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/linsist/style.css"><link rel="stylesheet" href="/linsist/reading.css"><link rel="stylesheet" href="/linsist/work.css">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')==='light'?'light':'dark'}catch{}</script>
   <link rel="stylesheet" href="/linsist/motion.css">
+  <link rel="stylesheet" href="/linsist/overlays.css">
   <script src="/linsist/motion.js"></script>
+  <script src="/linsist/overlays.js" defer></script>
   <script src="/linsist/reading.js" defer></script><script src="/linsist/work.js" defer></script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="reading-page work-page">
@@ -61,7 +63,7 @@
     <section class="work-note"><h2>过程，也值得被看见。</h2><p>从最初的问题，到界面与代码中的取舍，这里也留下项目继续生长的方向。</p><a class="text-link" href="/#writing">读开发中的记录 <span aria-hidden="true">↗</span></a></section>
         <footer class="reading-footer"><a class="wordmark" href="/">Linsist<span class="brand-dot" aria-hidden="true">.</span></a><p>记录思考，保持好奇。</p><div><a href="/archives/">文章归档 ↗</a><a href="/work/">全部作品 ↗</a></div></footer>
   </main>
-  <dialog id="screen-dialog" class="screen-dialog" aria-labelledby="screen-dialog-title"><header><p id="screen-dialog-title"></p><button type="button" class="icon-button" id="screen-close" aria-label="关闭截图">×</button></header><div class="screen-dialog-body"><img id="screen-dialog-image" alt=""></div><p class="screen-dialog-hint">按 Esc 关闭 · 可滚动查看完整截图</p></dialog>
+  <dialog id="screen-dialog" class="screen-dialog" aria-labelledby="screen-dialog-title"><header><p id="screen-dialog-title"></p><div class="screen-actions"><button id="screen-size" type="button" aria-pressed="false">放大阅读</button><a class="screen-original" id="screen-original" target="_blank" rel="noopener noreferrer">查看原图 ↗</a><button type="button" class="icon-button" id="screen-close" aria-label="关闭截图">×</button></div></header><div class="screen-dialog-body" tabindex="0" role="region" aria-label="图片阅读区域"><img id="screen-dialog-image" alt=""></div><p class="screen-dialog-hint">按 Esc 关闭 · 点击图片外侧返回</p></dialog>
   <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint" role="status">搜索文章标题、标签与分类 · 按 Esc 关闭</p><div id="search-results"></div><a class="search-archive" href="/archives/">浏览完整文章归档 ↗</a></dialog><div id="reading-status" class="sr-only" role="status" aria-live="polite"></div>
 </body>
 </html>
