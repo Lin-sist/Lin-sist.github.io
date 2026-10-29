@@ -9,10 +9,10 @@
   <link rel="icon" href="<%= url_for('linsist/assets/favicon.svg') %>" type="image/svg+xml"><link rel="stylesheet" href="<%= url_for('linsist/style.css') %>"><link rel="stylesheet" href="<%= url_for('linsist/reading.css') %>"><link rel="stylesheet" href="<%= url_for('linsist/work.css') %>">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')==='light'?'light':'dark'}catch{}</script>
   <link rel="stylesheet" href="<%= url_for('linsist/motion.css') %>">
-  <link rel="stylesheet" href="<%= url_for('linsist/overlays.css') %>">
+  <link rel="stylesheet" href="<%= url_for('linsist/overlays.css') %>?v=ambient-20261029">
   <script src="<%= url_for('linsist/motion.js') %>"></script>
-  <script src="<%= url_for('linsist/overlays.js') %>" defer></script>
-  <script src="<%= url_for('linsist/reading.js') %>" defer></script><script src="<%= url_for('linsist/work.js') %>" defer></script>
+  <script src="<%= url_for('linsist/overlays.js') %>?v=ambient-20261029" defer></script>
+  <script src="<%= url_for('linsist/reading.js') %>?v=ambient-20261029" defer></script><script src="<%= url_for('linsist/work.js') %>?v=ambient-20261029" defer></script>
 </head>
 <body class="reading-page work-page">
   <a class="skip-link" href="#main">跳转到正文</a>
