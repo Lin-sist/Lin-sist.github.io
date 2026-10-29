@@ -1,0 +1,21 @@
+<div class="project-stage stage-<%= item.slug %>">
+  <div class="stage-heading"><span><%= item.short_name %></span><span><%= item.slug === 'rag' ? '本地应用实拍' : '界面原型 / HTML demo' %></span></div>
+  <% if (item.cover_screens) { -%>
+  <div class="phone-composition">
+    <% item.cover_screens.forEach(function(screen, index) { -%>
+    <div class="composition-phone phone-<%= index %>">
+      <% if (zoom) { %><a class="screen-link" href="<%= url_for('linsist/assets/work/' + screen.image) %>" data-screen-label="<%= screen.alt %>" aria-label="放大查看：<%= screen.alt %>"><% } %>
+      <img src="<%= url_for('linsist/assets/work/' + screen.image) %>" alt="<%= screen.alt %>" width="<%= screen.width %>" height="<%= screen.height %>" loading="lazy">
+      <% if (zoom) { %></a><% } %>
+    </div>
+    <% }); -%>
+  </div>
+  <p class="stage-bottom">给想留下的此刻，一个位置。<span>留下 / 保存 / 回看</span></p>
+  <% } else { -%>
+  <div class="desktop-composition">
+    <% if (zoom) { %><a class="screen-link" href="<%= url_for('linsist/assets/' + item.image) %>" data-screen-label="<%= item.caption %>" aria-label="放大查看 RAG 登录页面"><% } %>
+    <img src="<%= url_for('linsist/assets/' + item.image) %>" alt="<%= item.image_alt %>" width="<%= item.image_width %>" height="<%= item.image_height %>" fetchpriority="high">
+    <% if (zoom) { %></a><% } %>
+  </div>
+  <% } -%>
+</div>

@@ -62,8 +62,8 @@ hexo.extend.filter.register('before_generate', function () {
           summary: editorial[item.source]?.subtitle || home.featured_sources.find(record => record.source === item.source)?.summary || ''
         })),
         project: tags.some(tag => /rag/i.test(tag)) ? {
-          name: 'RAG · 知识库问答', url: 'https://github.com/Lin-sist/RAG',
-          description: '查看项目源码，结合代码理解文档入库、检索与回答的流程。'
+          name: 'RAG · 知识库问答', url: 'work/rag/',
+          description: '从文档上传、检索到流式回答，继续了解实现思路与工程取舍。'
         } : null
       };
       route.layout = ['linsist-reading'];

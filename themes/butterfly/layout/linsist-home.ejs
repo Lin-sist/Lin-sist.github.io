@@ -10,7 +10,10 @@
   <title>Lin说 · 让思考留下轨迹</title>
   <link rel="icon" href="<%= url_for('linsist/assets/favicon.svg') %>" type="image/svg+xml">
   <link rel="stylesheet" href="<%= url_for('linsist/style.css') %>">
+  <link rel="stylesheet" href="<%= url_for('linsist/home-projects.css') %>">
+  <link rel="stylesheet" href="<%= url_for('linsist/motion.css') %>">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')||'dark'}catch{}</script>
+  <script src="<%= url_for('linsist/motion.js') %>"></script>
   <script src="<%= url_for('linsist/app.js') %>" defer></script>
 </head>
 <body>
@@ -18,7 +21,7 @@
   <header class="site-header">
     <a class="wordmark" href="#home" aria-label="Lin说，返回首页">Lin<span>说</span><i aria-hidden="true">✦</i></a>
     <nav class="desktop-nav" aria-label="主导航">
-      <a href="#home" aria-current="page">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a>
+      <a href="#home" aria-current="page">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="#writing">文章</a><a href="#about">关于</a>
     </nav>
     <div class="header-actions">
       <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd> / </kbd></button>
@@ -26,7 +29,7 @@
       <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
       <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
-    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="#home">首页</a><a href="#work">作品</a><a href="#writing">文章</a><a href="#about">关于</a></nav>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="#home">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="#writing">文章</a><a href="#about">关于</a></nav>
   </header>
 
   <main id="main">
@@ -37,7 +40,7 @@
         <p class="hero-name">Linsist</p>
         <h1 id="hero-title">让思考，<br>留下轨迹<span>。</span></h1>
         <p class="hero-description">在代码里构建，也在文字里记录。<br>关于 AI 应用、后端工程，和一路走来的好奇心。</p>
-        <div class="hero-links"><a class="primary-link" href="#work">探索我的作品 <span aria-hidden="true">↗</span></a><a class="quiet-link" href="#writing">读一些文字 <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-links"><a class="primary-link" href="<%= url_for('work/') %>">探索我的作品 <span aria-hidden="true">↗</span></a><a class="quiet-link" href="#writing">读一些文字 <span aria-hidden="true">↗</span></a></div>
       </div>
       <div class="hero-foot"><p>重要的是叶子在飘落时划出的轨迹。</p><div class="video-tools"><span id="video-status" role="status">天台与流星</span><button id="video-toggle" type="button" aria-label="播放背景视频"><span class="play-symbol" aria-hidden="true">▷</span><span class="video-label">播放</span></button></div></div>
     </section>
@@ -51,14 +54,18 @@
       <section class="section work-section" id="work" aria-labelledby="work-title">
         <div class="section-heading reveal"><span class="section-label">精选作品</span><h2 id="work-title">把想法，做到具体。</h2><p>从知识问答到个人记录，探索技术如何成为可用的产品。</p></div>
         <div class="project-grid">
-          <article class="project project-rag reveal">
-            <a class="project-image rag-image" href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer" aria-label="查看企业知识库问答项目源码"><img src="<%= url_for('linsist/assets/rag-interface.webp') %>" alt="RAG 应用的问答偏好设置界面，展示快捷键与来源片段选项" loading="lazy" width="1440" height="900"></a>
-            <div class="project-body"><p class="project-kind">AI 应用 / 全栈开发</p><h3><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">让知识，有据可循。<span aria-hidden="true">↗</span></a></h3><p>企业知识库问答系统。从文档上传、解析与检索，到流式回答，让信息能够被找到，也能够被追溯。</p><div class="project-bottom"><span>Spring Boot · Vue · Milvus</span><a href="https://github.com/Lin-sist/RAG" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：应用问答偏好界面</p></div>
+          <% page.linsist.projects.forEach(function(project) { %>
+          <article class="project project-<%= project.slug %> reveal">
+            <a class="project-image home-project-cover home-cover-<%= project.slug %>" href="<%= url_for(project.path) %>" aria-label="阅读<%= project.name %>项目案例">
+              <% if (project.cover_screens) { project.cover_screens.forEach(function(screen,index) { %>
+              <img class="home-screen home-screen-<%= index %>" src="<%= url_for('linsist/assets/work/' + screen.image) %>" alt="<%= screen.alt %>" loading="lazy" width="<%= screen.width %>" height="<%= screen.height %>">
+              <% }); } else { %>
+              <img src="<%= url_for('linsist/assets/' + project.image) %>" alt="<%= project.image_alt %>" loading="lazy" width="<%= project.image_width %>" height="<%= project.image_height %>">
+              <% } %>
+            </a>
+            <div class="project-body"><p class="project-kind"><%= project.category %> / <%= project.kind %></p><h3><a href="<%= url_for(project.path) %>"><%= project.name %><span aria-hidden="true">↗</span></a></h3><p class="home-project-headline"><%= project.headline %></p><p><%= project.description %></p><div class="project-bottom"><span><%= project.stack.slice(0,2).join(' · ') %></span><a href="<%= url_for(project.path) %>">阅读案例 ↗</a></div><p class="image-note"><%= project.caption %></p></div>
           </article>
-          <article class="project project-flashback reveal">
-            <a class="project-image flashback-image" href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer" aria-label="查看时光回序项目源码"><img src="<%= url_for('linsist/assets/flashback-home.webp') %>" alt="时光回序首页设计稿：今天的你，想留下些什么？" loading="lazy" width="583" height="1271"></a>
-            <div class="project-body"><p class="project-kind">微信小程序 / 产品实践</p><h3><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">时光回序<span aria-hidden="true">↗</span></a></h3><p>把此刻交给未来。一个关于个人表达、封存与延迟回看的记录空间，让理解留给时间。</p><div class="project-bottom"><span>Uni-app · Spring Boot</span><a href="https://github.com/Lin-sist/Flashback" target="_blank" rel="noopener noreferrer">查看项目 ↗</a></div><p class="image-note">图：首页设计稿</p></div>
-          </article>
+          <% }); %>
         </div>
       </section>
 

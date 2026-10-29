@@ -3,6 +3,7 @@
 const published = require('../source/_data/published_dates.json').posts;
 const homeConfig = require('../source/_data/linsist.json');
 const editorial = require('../source/_data/editorial.json');
+const workProjects = require('../source/_data/works.json').projects;
 // Hexo 7 / Warehouse also reconstruct Moment values in the process timezone.
 // Align that timezone before source processing, including UTC CI environments.
 process.env.TZ = hexo.config.timezone || 'Asia/Shanghai';
@@ -45,7 +46,8 @@ hexo.extend.filter.register('before_generate', function () {
     const root = routes.find(route => route.path === '' || route.path === 'index.html');
     if (!root) throw new Error('Expected root index.html route was not generated');
     root.layout = ['linsist-home'];
-    root.data = { ...root.data, linsist: { ...homeConfig, posts: selected } };
+    root.data = { ...root.data, linsist: { ...homeConfig, posts: selected,
+      projects: workProjects.map(project => ({ ...project, path: `work/${project.slug}/` })) } };
     return routes;
   });
   wrapped = true;
