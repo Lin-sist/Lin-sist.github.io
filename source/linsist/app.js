@@ -83,6 +83,7 @@ document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListen
   if(window.LinsistMotion)window.LinsistMotion.updateList(articles,update);else update();
 }));
 const searchDialog=$('#search-dialog');
+let searchTrigger=null;
 let searchRecords=null;
 let searchLoading=null;
 async function loadSearchIndex(){
@@ -107,14 +108,10 @@ function renderSearch(){
   if(searchRecords){
     const matches=searchRecords.filter(post=>[post.title,...(post.aliases||[]),...(post.tags||[]),...(post.categories||[])].join(' ').toLocaleLowerCase().includes(q));
     const root=$('#search-results');root.replaceChildren();
-    if(!matches.length){const empty=document.createElement('p');empty.className='search-empty';empty.textContent='没有找到相关文章，换个关键词试试。';root.append(empty);return}
+    if(!matches.length){$('.search-hint').textContent='0 篇文章 · Esc 返回';const empty=document.createElement('p');empty.className='search-empty';empty.textContent='没有找到相关文章，换个关键词试试。';root.append(empty);return}
     const base=new URL(document.documentElement.dataset.siteRoot||'/',location.origin);
-    matches.forEach(post=>{
-      const link=document.createElement('a');link.href=new URL(post.path,base).href;
-      const title=document.createElement('h3');title.textContent=post.title;
-      const meta=document.createElement('p');meta.textContent=[post.date,...(post.tags||[])].filter(Boolean).join(' · ');
-      link.append(title,meta);root.append(link);
-    });
+    $('.search-hint').textContent=`${matches.length} 篇文章 · 标题、标签与分类 · Esc 返回`;
+    window.LinsistSearch.renderResults(root,matches,base);
     return;
   }
   const matches=articles.filter(row=>(row.dataset.search+' '+row.innerText).toLocaleLowerCase().includes(q));
@@ -124,11 +121,12 @@ function renderSearch(){
     const link=row.querySelector('a').cloneNode(true);root.append(link);
   });
 }
-function openSearch(){if(!searchDialog.open){closeMenu();searchDialog.showModal();renderSearch();loadSearchIndex();$('#search-input').focus()}}
+function openSearch(){if(!searchDialog.open){searchTrigger=document.activeElement;closeMenu();searchDialog.showModal();renderSearch();loadSearchIndex();$('#search-input').focus()}}
 $('.search-trigger').addEventListener('click',openSearch);
 $('#search-close').addEventListener('click',()=>searchDialog.close());
 $('#search-input').addEventListener('input',renderSearch);
-searchDialog.addEventListener('click',e=>{if(e.target===searchDialog){const r=searchDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)searchDialog.close()}});
+searchDialog.addEventListener('click',e=>{if(e.target===searchDialog)searchDialog.close()});
+searchDialog.addEventListener('close',()=>searchTrigger?.focus({preventScroll:true}));
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)&&!e.target.isContentEditable){e.preventDefault();openSearch()}});
 
 // Shared motion.js handles entries without hiding content before JavaScript runs.

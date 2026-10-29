@@ -19,8 +19,10 @@
   <link rel="stylesheet" href="<%= url_for('linsist/style.css') %>">
   <link rel="stylesheet" href="<%= url_for('linsist/reading.css') %>">
   <link rel="stylesheet" href="<%= url_for('linsist/motion.css') %>">
+  <link rel="stylesheet" href="<%= url_for('linsist/overlays.css') %>">
   <script>try{const t=localStorage.getItem('lin-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';const s=Number(localStorage.getItem('lin-reading-size'));if(s>=16&&s<=22)document.documentElement.style.setProperty('--reading-size',s+'px')}catch{}</script>
   <script src="<%= url_for('linsist/motion.js') %>"></script>
+  <script src="<%= url_for('linsist/overlays.js') %>" defer></script>
   <script src="<%= url_for('linsist/reading.js') %>" defer></script>
 </head>
 <body class="reading-page<%= reading.editorial ? ' has-editorial' : '' %>">
