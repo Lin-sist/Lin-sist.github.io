@@ -1,0 +1,48 @@
+name: Blog Pages
+
+on:
+  push:
+    branches: [hexo]
+  pull_request:
+    branches: [hexo]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blog-pages-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run verify
+        env:
+          TZ: UTC
+      - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/hexo'
+        with:
+          path: .build/site
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/hexo'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - name: Publish
+        id: publish
+        uses: actions/deploy-pages@v4

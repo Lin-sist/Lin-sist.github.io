@@ -60,8 +60,10 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--port',type=int,default=5187)
+    parser.add_argument('--directory',default='public')
     args=parser.parse_args()
-    server=ThreadingHTTPServer(('127.0.0.1',args.port),partial(Handler,directory=str(ROOT)))
+    preview_root = Path(__file__).resolve().parents[1] / args.directory
+    server=ThreadingHTTPServer(('127.0.0.1',args.port),partial(Handler,directory=str(preview_root)))
     print(f'Lin homepage: http://127.0.0.1:{args.port}',flush=True)
     try:server.serve_forever()
     except KeyboardInterrupt:pass

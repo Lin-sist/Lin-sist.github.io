@@ -30,7 +30,7 @@
   <header class="site-header is-scrolled reading-header">
     <a class="wordmark" href="<%= url_for('/') %>" aria-label="Linsist，返回首页">Linsist<span class="brand-dot" aria-hidden="true">.</span></a>
     <nav class="desktop-nav" aria-label="主导航">
-      <a href="<%= url_for('/') %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= url_for('/#writing') %>" aria-current="page">文章</a><a href="<%= url_for('/#about') %>">关于</a>
+      <a href="<%= url_for('/') %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= url_for('/#writing') %>" aria-current="page">文章</a><a href="<%= url_for('archives/') %>" data-trail-entry><span class="trail-origin" aria-hidden="true"></span>轨迹</a><a href="<%= url_for('/#about') %>">关于</a>
     </nav>
     <div class="header-actions">
       <button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd>/</kbd></button>
@@ -38,7 +38,7 @@
       <a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
-    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="<%= url_for('/') %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= url_for('/#writing') %>">文章</a><a href="<%= url_for('/#about') %>">关于</a></nav>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="<%= url_for('/') %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= url_for('/#writing') %>">文章</a><a href="<%= url_for('archives/') %>" data-trail-entry><span class="trail-origin" aria-hidden="true"></span>轨迹</a><a href="<%= url_for('/#about') %>">关于</a></nav>
     <div class="reading-track" aria-hidden="true"><span id="reading-progress"></span></div>
   </header>
 

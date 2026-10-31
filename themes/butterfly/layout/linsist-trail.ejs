@@ -1,0 +1,44 @@
+<% const trail = page.trail; const root = url_for('/'); -%>
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-search-index="<%= url_for('linsist/search.json') %>" data-site-root="<%= root %>">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="theme-color" content="#0c0c0d">
+  <title>文章轨迹 · Lin说</title><meta name="description" content="沿着时间，回看开发中的理解、踩过的坑，以及重新想明白的瞬间。">
+  <link rel="canonical" href="<%= config.url + url_for('archives/') %>">
+  <link rel="icon" href="<%= url_for('linsist/assets/favicon.svg') %>" type="image/svg+xml">
+  <link rel="stylesheet" href="<%= url_for('linsist/style.css') %>"><link rel="stylesheet" href="<%= url_for('linsist/motion.css') %>"><link rel="stylesheet" href="<%= url_for('linsist/overlays.css') %>?v=ambient-20261029"><link rel="stylesheet" href="<%= url_for('linsist/trail.css') %>">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('lin-theme')==='light'?'light':'dark'}catch{}</script>
+  <script src="<%= url_for('linsist/motion.js') %>"></script><script src="<%= url_for('linsist/overlays.js') %>?v=ambient-20261029" defer></script><script src="<%= url_for('linsist/reading.js') %>?v=ambient-20261029" defer></script><script src="<%= url_for('linsist/trail.js') %>" defer></script>
+</head>
+<body class="trail-page">
+  <a class="skip-link" href="#trail-list">跳转到文章轨迹</a>
+  <canvas id="trail-canvas" aria-hidden="true"></canvas><span class="trail-guide" aria-hidden="true"></span>
+  <header class="site-header is-scrolled">
+    <a class="wordmark" href="<%= root %>" aria-label="Lin说，返回首页">Lin<span>说</span><i aria-hidden="true">✦</i></a>
+    <nav class="desktop-nav" aria-label="主导航"><a href="<%= root %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= root %>#writing">文章</a><a href="<%= url_for('archives/') %>" aria-current="page">轨迹</a><a href="<%= root %>#about">关于</a></nav>
+    <div class="header-actions"><button class="icon-button search-trigger" type="button" aria-label="搜索文章"><span class="search-icon" aria-hidden="true"></span><kbd>/</kbd></button><button class="icon-button theme-toggle" type="button" aria-label="切换为浅色主题"><span aria-hidden="true">◐</span></button><a class="github-link" href="https://github.com/Lin-sist" target="_blank" rel="noopener noreferrer">GitHub ↗</a><button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航菜单"><span class="menu-icon" aria-hidden="true"></span></button></div>
+    <nav id="mobile-nav" aria-label="手机导航" hidden><a href="<%= root %>">首页</a><a href="<%= url_for('work/') %>">作品</a><a href="<%= root %>#writing">文章</a><a href="<%= url_for('archives/') %>" aria-current="page">轨迹</a><a href="<%= root %>#about">关于</a></nav>
+  </header>
+  <main id="main">
+    <header class="trail-heading"><div class="trail-title"><h1>轨迹</h1><span><%= trail.records.length %> 篇记录</span></div><p>沿途的理解、弯路，和重新想明白的瞬间。</p>
+      <div class="trail-tools">
+        <details class="trail-dates"><summary>按年月</summary><nav aria-label="按年月定位文章"><% trail.months.forEach(function(month) { %><a href="#month-<%= month %>"><%= month.replace('-', ' / ') %><span><%= trail.records.filter(post => post.month === month).length %></span></a><% }); %></nav></details>
+        <button id="trail-mode" type="button" aria-pressed="false" hidden>紧凑列表</button><button id="trail-pause" type="button" aria-pressed="false" hidden>暂停动效</button>
+      </div>
+    </header>
+    <div class="trail-field"><ol id="trail-list" class="trail-list" aria-label="按时间倒序的全部文章">
+      <% let month = ''; let year = ''; trail.records.forEach(function(post, index) { const newMonth = month !== post.month; const newYear = year !== post.year; month = post.month; year = post.year; %>
+      <li class="trail-entry"<% if (newMonth) { %> id="month-<%= post.month %>"<% } %> data-month="<%= post.month %>" data-year="<%= post.year %>">
+        <span class="trail-node" aria-hidden="true"></span>
+        <article class="trail-entry-body"><div class="trail-meta"><span><%= newYear ? post.year : 'Linsist' %></span><time datetime="<%= post.date %>"><%= post.shortDate %></time></div>
+          <h2><a href="<%= url_for(post.path) %>"><%= post.title %></a></h2>
+          <% if (post.summary) { %><p class="trail-summary"><%= post.summary %></p><% } %>
+          <a class="trail-read" href="<%= url_for(post.path) %>" aria-label="阅读全文：<%= post.title %>">阅读全文 <span aria-hidden="true">↗</span></a>
+        </article>
+      </li><% }); %>
+    </ol></div>
+    <footer class="trail-footer"><p>每一次回看，都有新的理解。</p><div><a href="<%= root %>#writing">返回精选文章</a><a href="#main">回到起点 ↑</a></div><small>字符轨迹的灵感来自 <a href="https://koimsurai.com/en/thinking" target="_blank" rel="noopener noreferrer">Koimsurai</a></small></footer>
+  </main>
+  <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">搜索文章</h2><button class="icon-button" id="search-close" aria-label="关闭搜索" type="button">×</button></div><label class="sr-only" for="search-input">文章标题或关键词</label><input id="search-input" type="search" placeholder="试试 RAG、调试、Vue…" autocomplete="off"><p class="search-hint" role="status">搜索文章标题、标签与分类 · 按 Esc 关闭</p><div id="search-results"></div><a class="search-archive" href="<%= url_for('archives/') %>">浏览完整文章轨迹 ↗</a></dialog><div id="reading-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

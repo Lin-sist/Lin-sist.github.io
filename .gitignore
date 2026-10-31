@@ -5,4 +5,13 @@ db.json
 node_modules/
 public/
 .deploy_git/
-package-lock.json
+public-reading/
+_multiconfig.yml
+qa/reading/*.log
+qa/reading/*.png
+qa/reading/source-before.json
+qa/reading/browser-round-*.mjs
+.build/
+qa/publishing-20261031/*
+!qa/publishing-20261031/review.md
+source/.obsidian/

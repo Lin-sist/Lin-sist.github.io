@@ -1,0 +1,11 @@
+{
+  "reason": "Existing article references to local project source files or a legacy relative note link. Recorded explicitly during the Node migration; new broken references are rejected.",
+  "links": [
+    ["2026/02/10/spring项目三层架构/index.html", "%E3%80%8A%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E3%80%8B%E6%A6%82%E8%BF%B0"],
+    ["2026/02/17/Mybatis动态SQL/index.html", "sky-server/src/main/resources/mapper/EmployeeMapper.xml"],
+    ["2026/02/17/Mybatis动态SQL/index.html", "sky-server/src/main/resources/mapper/DishFlavorMapper.xml#L7-L11"],
+    ["2026/02/21/《苍穹外卖》路线图/index.html", "sky-common/src/main/java/com/sky/properties/JwtProperties.java"],
+    ["2026/02/21/《苍穹外卖》路线图/index.html", "sky-common/src/main/java/com/sky/context/BaseContext.java"],
+    ["2026/02/26/Redis核心应用/index.html", "src/main/java/com/hmdp/service/impl/ShopServiceImpl.java"]
+  ]
+}
