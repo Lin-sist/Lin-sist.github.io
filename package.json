@@ -3,17 +3,28 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
+    "build": "node tools/build.cjs",
     "clean": "hexo clean",
-    "deploy": "hexo deploy",
-    "server": "hexo server"
+    "deploy": "node tools/write.cjs push",
+    "server": "hexo server",
+    "dev": "hexo server --draft",
+    "new": "node tools/write.cjs new",
+    "publish": "node tools/write.cjs publish",
+    "ship": "node tools/write.cjs push",
+    "check": "node tools/check-site.cjs",
+    "verify": "npm run build && npm run check",
+    "test": "node --test tools/writing.test.cjs"
+  },
+  "engines": {
+    "node": ">=24 <25"
   },
   "hexo": {
-    "version": "7.3.0"
+    "version": "8.1.2"
   },
   "dependencies": {
-    "hexo": "^7.0.0",
-    "hexo-deployer-git": "^4.0.0",
+    "hexo": "8.1.2",
+    "hexo-front-matter": "4.2.1",
+    "hexo-util": "3.3.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
     "hexo-generator-index": "^3.0.0",

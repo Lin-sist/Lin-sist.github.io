@@ -5,6 +5,7 @@
   const running = new Map();
   const seen = new WeakSet();
   let observer;
+  let trailSource;
   const inView = element => {
     const rect = element.getBoundingClientRect();
     return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < innerHeight;
@@ -57,6 +58,28 @@
     document.documentElement.dataset.motionNavigation = 'page';
     const end = () => { delete document.documentElement.dataset.motionNavigation; };
     transition.finished.then(end, end);
+    if (/\/archives\/$/.test(to?.pathname || '') && from?.pathname !== to.pathname) {
+      let selected;
+      try { selected = JSON.parse(sessionStorage.getItem('lin-trail-entry') || 'null'); } catch {}
+      const fresh = selected && Date.now() - selected.time < 10000;
+      const light = incoming ? document.querySelector('.trail-guide') : trailSource;
+      // pagereveal may precede the deferred renderer: expose its landing point
+      // before the browser captures the new document's shared-element snapshot.
+      if (fresh && incoming && light) light.style.display = 'block';
+      if (fresh && light && inView(light)) {
+        light.style.viewTransitionName = 'trail-light';
+        document.documentElement.dataset.motionNavigation = 'trail';
+        const cleanup = () => {
+          light.style.removeProperty('view-transition-name');
+          if (incoming) {
+            light.style.removeProperty('display');
+            try { sessionStorage.removeItem('lin-trail-entry'); } catch {}
+          }
+        };
+        (incoming ? transition.ready : transition.finished).then(cleanup, cleanup);
+      }
+      return;
+    }
     const cover = sharedCover(from, to);
     if (!cover || !inView(cover)) return;
     cover.style.viewTransitionName = 'project-cover';
@@ -76,6 +99,16 @@
     if (!activation?.from || !event.viewTransition) return;
     nameCover(event.viewTransition, new URL(activation.from.url), new URL(location.href), true);
   });
+
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[data-trail-entry]');
+    if (!link || link.target || preference.matches) return;
+    const light = link.querySelector('.trail-origin');
+    if (!light) return;
+    trailSource = light;
+    try { sessionStorage.setItem('lin-trail-entry', JSON.stringify({ href: link.href, top: light.getBoundingClientRect().top, time: Date.now() })); } catch {}
+  }, { capture: true });
 
   function init() {
     // Content is visible by default. Missing JS/WAAPI/IntersectionObserver remains readable.

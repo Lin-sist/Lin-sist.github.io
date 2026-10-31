@@ -43,10 +43,23 @@ hexo.extend.filter.register('before_generate', function () {
         shortDate: post.date.format('MM.DD'), year: post.date.format('YYYY'),
         summary: editorial[item.source]?.subtitle || item.summary, group: item.group, groupLabel: item.group_label };
     });
+    const recent = posts.slice(0, 6).map(post => {
+      const featured = selected.find(item => item.path === post.path);
+      const project = post.tags.toArray().some(tag => /rag|flashback|苍穹|黑马/i.test(tag.name));
+      return { title: post.title, path: post.path, date: post.date.format('YYYY-MM-DD'),
+        shortDate: post.date.format('MM.DD'), year: post.date.format('YYYY'),
+        summary: editorial[post.source]?.subtitle || post.description ||
+          require('hexo-util').stripHTML(post.excerpt || post.content || '').replace(/\s+/g, ' ').slice(0, 100),
+        group: featured?.group || (project ? 'project' : 'engineering'),
+        groupLabel: featured?.groupLabel || (project ? '项目实践' : '工程笔记'),
+        recent: true, featured: Boolean(featured) };
+    });
+    const articles = [...recent, ...selected.filter(post => !recent.some(item => item.path === post.path))
+      .map(post => ({ ...post, recent: false, featured: true }))];
     const root = routes.find(route => route.path === '' || route.path === 'index.html');
     if (!root) throw new Error('Expected root index.html route was not generated');
     root.layout = ['linsist-home'];
-    root.data = { ...root.data, linsist: { ...homeConfig, posts: selected,
+    root.data = { ...root.data, linsist: { ...homeConfig, posts: articles,
       projects: workProjects.map(project => ({ ...project, path: `work/${project.slug}/` })) } };
     return routes;
   });

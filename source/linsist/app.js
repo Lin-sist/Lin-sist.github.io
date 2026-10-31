@@ -77,7 +77,7 @@ document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListen
   const update=()=>{
   document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   let count=0;
-  articles.forEach(row=>{row.hidden=button.dataset.filter!=='all'&&row.dataset.category!==button.dataset.filter;if(!row.hidden)count++});
+  articles.forEach(row=>{const filter=button.dataset.filter;row.hidden=filter==='recent'?row.dataset.recent!=='true':filter==='featured'?row.dataset.featured!=='true':row.dataset.category!==filter;if(!row.hidden)count++});
   $('#filter-status').textContent=`显示 ${count} 篇文章`;
   };
   if(window.LinsistMotion)window.LinsistMotion.updateList(articles,update);else update();

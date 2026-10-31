@@ -3,7 +3,10 @@
 html{scroll-behavior:auto}
 @view-transition{navigation:auto}
 .site-header{view-transition-name:site-header}
+.trail-launch{gap:10px!important}.trail-origin{display:inline-block;width:5px;height:5px;flex:none;border-radius:50%;background:#e3bd79;box-shadow:0 0 8px 2px #e3bd7940;vertical-align:middle;margin-right:7px}
+::view-transition-old(trail-light),::view-transition-new(trail-light){height:100%;animation:none;mix-blend-mode:normal}
 ::view-transition-group(*){animation-duration:420ms;animation-timing-function:var(--motion-ease)}
+::view-transition-group(trail-light){animation-duration:440ms;animation-timing-function:cubic-bezier(.4,0,.2,1);z-index:10}
 ::view-transition-old(root){animation:lin-page-out 140ms ease-out both}
 ::view-transition-new(root){animation:lin-page-in 300ms var(--motion-ease) both}
 ::view-transition-group(site-header){animation-duration:240ms}

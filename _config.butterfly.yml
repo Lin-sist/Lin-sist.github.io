@@ -22,10 +22,8 @@ menu:
    时间轴: /archives/ || fas fa-archive
    标签: /tags/ || fas fa-tags
    分类: /categories/ || fas fa-folder-open
-   List||fas fa-list: 
-    音乐: /music/ || fas fa-music
-    Movie: /movies/ || fas fa-video
-    关于: /about/ || fas fa-heart
+   作品: /work/ || fas fa-code
+   关于: /#about || fas fa-heart
 
 # --------------------------------------
 # Code Blocks Settings
@@ -58,7 +56,7 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: /linsist/assets/favicon.svg
 
 avatar:
   img: /img/Lin.jpg

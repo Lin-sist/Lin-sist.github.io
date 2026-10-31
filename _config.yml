@@ -81,7 +81,7 @@ meta_generator: true
 date_format: YYYY-MM-DD
 time_format: HH:mm:ss
 ## updated_option supports 'mtime', 'date', 'empty'
-updated_option: 'mtime'
+updated_option: 'date'
 
 # Pagination
 ## Set per_page to 0 to disable pagination
@@ -93,6 +93,19 @@ pagination_dir: page
 include:
 exclude:
 ignore:
+  - '**/.obsidian/**'
+  # Existing notes not present in the deployed article index. Leave their source untouched.
+  - '**/_posts/151-反转字符串中的单词.md'
+  - '**/_posts/206-反转链表.md'
+  - '**/_posts/FlashBack费曼输出.md'
+  - '**/_posts/RAG企业智能问答系统.md'
+  - '**/_posts/RAG学习日志1.md'
+  - '**/_posts/RAG问答优化plan.md'
+  - '**/_posts/test.md'
+  - '**/_posts/《苍穹外卖》阶段二.md'
+  - '**/_posts/一个 JSON 问答请求怎样进入 RAG 项目.md'
+  - '**/_posts/暑期每日学习固定闭环 SOP.md'
+  - '**/All in RAG 1-01.md'
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
@@ -102,6 +115,4 @@ theme: butterfly
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: git@github.com:Lin-sist/Lin-sist.github.io.git
-  branch: main
+  # Publishing is handled by .github/workflows/pages.yml from the hexo branch.

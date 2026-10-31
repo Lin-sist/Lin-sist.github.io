@@ -7,7 +7,7 @@ date:
 
 ## 一、DTO-VO-Entity 是什么？
 
-**用最简单的话说**：这是一种对象分层设计模式，将数据在不同的层级用不同的对象来承载。
+**用最简单的话说**：这是一种对象分层设计模式，将数据在不同的层级用不同的对象来承载。Entity负责对内（数据库），VO负责对外（前端），DTO负责中间传输。
 
 ```mermaid
 graph LR
@@ -28,9 +28,9 @@ graph LR
 
 | 对象类型 | 全称 | 作用层 | 核心作用 | 项目中的例子 |
 |---------|------|--------|---------|------------|
-| **DTO** | Data Transfer Object | Controller接收请求 | 前端→后端，传输数据 | EmployeeLoginDTO.java - 只有username和password |
-| **Entity** | 实体类 | Service/Mapper操作数据库 | 数据库表的映射对象 | Employee.java - 完整的数据库字段（含createTime、updateTime等） |
-| **VO** | View Object | Controller返回响应 | 后端→前端，展示数据 | EmployeeLoginVO.java - 只返回id、name、token（不返回密码！） |
+| **DTO** | Data Transfer Object | Controller接收请求 | 前端→后端，传输数据，用于在层与层（如 Service 与 Controller）或服务与服务之间传递数据。它只包含业务需要的字段。 | EmployeeLoginDTO.java - 只有username和password |
+| **Entity** | 实体类 | Service/Mapper操作数据库 | 数据库表的映射对象，与数据库表结构**一一对应**。它的字段反映了数据库真实的列名和数据类型。 | Employee.java - 完整的数据库字段（含createTime、updateTime等） |
+| **VO** | View Object | Controller返回响应 | 后端→前端，展示数据，为**前端展示**设计。它不仅包含展示数据，还可能包含状态描述、格式化后的时间等。 | EmployeeLoginVO.java - 只返回id、name、token（不返回密码！） |
 
 ---
 
@@ -46,7 +46,7 @@ sequenceDiagram
     participant M as Mapper
     participant DB as 数据库
 
-    F->>C: POST /login<br/>{username, password}
+    F->>C: POST /login<br/>{username, password}<br/>前端发起的请求对应DTO只包含用户名和密码
     Note over C: 接收EmployeeLoginDTO
     C->>S: login(employeeLoginDTO)
     S->>M: getByUsername(username)
