@@ -24,7 +24,7 @@
   "dependencies": {
     "hexo": "8.1.2",
     "hexo-front-matter": "4.2.1",
-    "hexo-util": "3.3.0",
+    "hexo-util": "4.0.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
     "hexo-generator-index": "^3.0.0",
