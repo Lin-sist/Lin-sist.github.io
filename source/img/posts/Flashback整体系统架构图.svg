@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1631.7390833333334 1637.4" width="1631.7390833333334" height="1637.4" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="ClientLayer" data-label="客户端 (WeChat Mini Program)">
+  <rect x="40" y="40" width="974.4119999999999" height="266.70000000000005" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="40" width="974.4119999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">客户端 (WeChat Mini Program)</text>
+</g>
+<g class="subgraph" data-id="GatewayAuth" data-label="网关与安全拦截层">
+  <rect x="293.125" y="435.00000000000006" width="364.42199999999997" height="266.70000000000005" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="293.125" y="435.00000000000006" width="364.42199999999997" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="305.125" y="449.00000000000006" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">网关与安全拦截层</text>
+</g>
+<g class="subgraph" data-id="BackendApp" data-label="后端业务层 (Spring Boot 3)">
+  <rect x="156.12499999999994" y="761.7" width="1435.6140833333334" height="579.6" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="156.12499999999994" y="761.7" width="1435.6140833333334" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="168.12499999999994" y="775.7" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">后端业务层 (Spring Boot 3)</text>
+<g class="subgraph" data-id="Controllers" data-label="Controller 层 (53 REST Endpoints)">
+  <rect x="172.12499999999994" y="956.6" width="783.234" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="172.12499999999994" y="956.6" width="783.234" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="184.12499999999994" y="970.6" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Controller 层 (53 REST Endpoints)</text>
+</g>
+<g class="subgraph" data-id="CoreServices" data-label="Service 核心业务层">
+  <rect x="547.4304999999999" y="1113.5" width="952.38425" height="205.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="547.4304999999999" y="1113.5" width="952.38425" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="559.4304999999999" y="1127.5" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Service 核心业务层</text>
+</g>
+<g class="subgraph" data-id="Schedulers" data-label="定时调度引擎 (Spring @Scheduled)">
+  <rect x="843.4850833333333" y="805.7" width="732.2539999999999" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="843.4850833333333" y="805.7" width="732.2539999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="855.4850833333333" y="819.7" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">定时调度引擎 (Spring @Scheduled)</text>
+</g>
+</g>
+<g class="subgraph" data-id="StorageInfra" data-label="存储与基础设施层">
+  <rect x="695.0408333333332" y="1469.6000000000001" width="880.0089999999999" height="127.80000000000001" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="695.0408333333332" y="1469.6000000000001" width="880.0089999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="707.0408333333332" y="1483.6000000000001" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">存储与基础设施层</text>
+</g>
+<polyline class="edge" data-from="PreviewGuard" data-to="JwtFilter" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="真实网络请求" points="475.3359999999999,290.70000000000005 475.336,479.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="OwnershipGuard" data-to="Controllers" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="475.336,685.7 475.336,956.6000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RC" data-to="R_Service" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="505.577,275.8 505.577,309.79999999999995 868.734,309.79999999999995 868.7339999999999,407.8000000000002 1135.2168333333332,407.8000000000002 1135.2168333333332,419.8000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UnlockScheduler" data-to="R_Service" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="轮询调用 runUnlockJob" points="1237.0325833333334,124.9 1237.0325833333332,158.89999999999995 1231.2041666666664,158.89999999999995 1231.2041666666664,419.8000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="DraftScheduler" data-to="Cleanup_Service" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="轮询调用 runBatch" points="872.9055833333333,124.9 872.9055833333333,158.89999999999995 878.7339999999999,158.89999999999995 878.7339999999999,419.8000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="R_Service" data-to="MySQL" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1267.3449999999998,1218.4000000000003 1267.3449999999998,1230.4000000000003 1193.85975,1230.4000000000003 1193.85975,1451.6000000000001 1186.164625,1451.6000000000001 1186.164625,1451.6000000000001 1178.4694999999997,1451.6000000000001 1178.4694999999997,1513.6000000000004" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Cleanup_Service" data-to="MySQL" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1034.859,1218.4 1034.859,1366 1128.7468333333331,1366 1128.7468333333331,1513.6000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Cleanup_Service" data-to="DualOSS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1034.859,1218.4 1034.859,1366 831.3098333333332,1366 831.3098333333332,1513.6000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ATC" data-to="DualOSS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="456.14899999999994,1037.5000000000002 456.14899999999994,1451.6000000000001 623.6845833333333,1451.6000000000001 623.6845833333333,1451.6000000000001 791.2201666666667,1451.6000000000001 791.2201666666665,1513.6000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="R_Service" data-to="WeChatAPI" data-style="dotted" data-arrow-start="false" data-arrow-end="true" data-label="解锁事件产生微信提醒" points="1411.326,1218.4000000000003 1411.326,1230.4000000000003 1482.81475,1230.4000000000003 1482.81475,1383.3000000000002 1457.6485416666667,1383.3000000000002 1457.6485416666667,1451.6000000000001 1432.4823333333331,1451.6000000000001 1432.4823333333331,1513.6000000000004" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UI_Home" data-to="ClientService" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="355.88699999999994,120.9 355.88699999999994,144.9 475.3359999999999,144.9 475.3359999999999,168.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UI_Editor" data-to="ClientService" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="594.7849999999999,120.9 594.7849999999999,144.9 475.3359999999999,144.9 475.3359999999999,168.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UI_Detail" data-to="ClientService" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="872.5854999999999,120.9 872.5854999999999,144.9 475.3359999999999,144.9 475.3359999999999,168.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UI_Timeline" data-to="ClientService" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="148.48149999999998,120.9 148.48149999999998,144.9 475.3359999999999,144.9 475.3359999999999,168.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ClientService" data-to="PreviewGuard" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="475.3359999999999,205.8 475.3359999999999,253.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="JwtFilter" data-to="UserContext" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="475.336,515.9000000000001 475.336,563.9000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UserContext" data-to="OwnershipGuard" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="475.336,600.8000000000001 475.336,648.8000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="R_Service" data-to="Eligibility" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1339.3355,1218.4 1339.3355,1230.4 1338.83725,1230.4 1338.83725,1266.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="PreviewGuard" data-to="JwtFilter" data-label="真实网络请求">
+  <rect x="430.8359999999999" y="355.70000000000005" width="88.93" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="475.30099999999993" y="370.85" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">真实网络请求</text>
+</g>
+<g class="edge-label" data-from="UnlockScheduler" data-to="R_Service" data-label="轮询调用 runUnlockJob">
+  <rect x="1163.2041666666669" y="231.2" width="135.85600000000005" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1231.132166666667" y="246.35" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">轮询调用 runUnlockJob</text>
+</g>
+<g class="edge-label" data-from="DraftScheduler" data-to="Cleanup_Service" data-label="轮询调用 runBatch">
+  <rect x="823.2339999999999" y="231.2" width="110.90800000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="878.6879999999999" y="246.35" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">轮询调用 runBatch</text>
+</g>
+<g class="edge-label" data-from="R_Service" data-to="WeChatAPI" data-label="解锁事件产生微信提醒">
+  <rect x="1389.1485416666665" y="1390.3000000000004" width="136.45000000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1457.3735416666664" y="1405.4500000000005" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">解锁事件产生微信提醒</text>
+</g>
+<g class="node" data-id="UI_Home" data-label="首页 (我的记录/草稿)" data-shape="rectangle">
+  <rect x="268.96299999999997" y="84" width="173.84799999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="355.88699999999994" y="102.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">首页 (我的记录/草稿)</text>
+</g>
+<g class="node" data-id="UI_Editor" data-label="记录编辑器 (实时草稿/封存确认)" data-shape="rectangle">
+  <rect x="470.8109999999999" y="84" width="247.94799999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="594.7849999999999" y="102.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">记录编辑器 (实时草稿/封存确认)</text>
+</g>
+<g class="node" data-id="UI_Detail" data-label="记录详情 (倒计时/到期回看/追记)" data-shape="rectangle">
+  <rect x="746.7589999999999" y="84" width="251.653" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="872.5854999999999" y="102.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">记录详情 (倒计时/到期回看/追记)</text>
+</g>
+<g class="node" data-id="UI_Timeline" data-label="时光轴 (生命节点聚合)" data-shape="rectangle">
+  <rect x="56" y="84" width="184.96299999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="148.48149999999998" y="102.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">时光轴 (生命节点聚合)</text>
+</g>
+<g class="node" data-id="ClientService" data-label="前端 Service 层 (httpClient + recordService)" data-shape="rectangle">
+  <rect x="324.31549999999993" y="168.9" width="302.041" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.3359999999999" y="187.35000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">前端 Service 层 (httpClient + recordService)</text>
+</g>
+<g class="node" data-id="PreviewGuard" data-label="Preview 隔离拦截器 (已登录 / 演示态隔离)" data-shape="rectangle">
+  <rect x="323.57449999999994" y="253.8" width="303.52299999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.3359999999999" y="272.25" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Preview 隔离拦截器 (已登录 / 演示态隔离)</text>
+</g>
+<g class="node" data-id="JwtFilter" data-label="JWT 鉴权过滤器 (Bearer Token)" data-shape="rectangle">
+  <rect x="355.067" y="479.00000000000006" width="240.53799999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.336" y="497.45000000000005" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">JWT 鉴权过滤器 (Bearer Token)</text>
+</g>
+<g class="node" data-id="UserContext" data-label="ThreadLocal CurrentUser 绑定" data-shape="rectangle">
+  <rect x="360.254" y="563.9000000000001" width="230.164" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.336" y="582.3500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">ThreadLocal CurrentUser 绑定</text>
+</g>
+<g class="node" data-id="OwnershipGuard" data-label="DataOwnershipMutationGuard (防越权数据守卫)" data-shape="rectangle">
+  <rect x="309.125" y="648.8000000000001" width="332.42199999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.336" y="667.2500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">DataOwnershipMutationGuard (防越权数据守卫)</text>
+</g>
+<g class="node" data-id="RC" data-label="RecordController" data-shape="rectangle">
+  <rect x="588.857" y="1000.6" width="145.69" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="661.702" y="1019.0500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">RecordController</text>
+</g>
+<g class="node" data-id="AC" data-label="AgentController" data-shape="rectangle">
+  <rect x="188.12499999999994" y="1000.6" width="135.31600000000003" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="255.78299999999996" y="1019.0500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">AgentController</text>
+</g>
+<g class="node" data-id="ATC" data-label="RecordAttachmentController" data-shape="rectangle">
+  <rect x="351.44100000000003" y="1000.6" width="209.41599999999994" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="456.149" y="1019.0500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">RecordAttachmentController</text>
+</g>
+<g class="node" data-id="TC" data-label="TimeChapterController" data-shape="rectangle">
+  <rect x="762.547" y="1000.6" width="176.81199999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="850.953" y="1019.0500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">TimeChapterController</text>
+</g>
+<g class="node" data-id="R_Service" data-label="RecordServiceImpl (主线业务/状态流转)" data-shape="rectangle">
+  <rect x="1195.3545" y="1181.5" width="287.962" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1339.3355" y="1199.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">RecordServiceImpl (主线业务/状态流转)</text>
+</g>
+<g class="node" data-id="Eligibility" data-label="RecordSaveEligibility (内容合规判定)" data-shape="rectangle">
+  <rect x="1204.85975" y="1266.4" width="267.9549999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1338.83725" y="1284.8500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">RecordSaveEligibility (内容合规判定)</text>
+</g>
+<g class="node" data-id="Cleanup_Service" data-label="DraftCleanupService (草稿垃圾清理)" data-shape="rectangle">
+  <rect x="902.3634999999999" y="1181.5" width="264.991" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1034.859" y="1199.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">DraftCleanupService (草稿垃圾清理)</text>
+</g>
+<g class="node" data-id="Agent_Service" data-label="AgentChatServiceImpl (自研轻量 Agent Loop)" data-shape="rectangle">
+  <rect x="563.4304999999999" y="1181.5" width="310.933" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="718.8969999999999" y="1199.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">AgentChatServiceImpl (自研轻量 Agent Loop)</text>
+</g>
+<g class="node" data-id="UnlockScheduler" data-label="RecordUnlockScheduler (每分钟扫描到期记录)" data-shape="rectangle">
+  <rect x="1226.5760833333334" y="849.7" width="333.16299999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1393.1575833333334" y="868.1500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">RecordUnlockScheduler (每分钟扫描到期记录)</text>
+</g>
+<g class="node" data-id="DraftScheduler" data-label="DraftCleanupScheduler (每天定时扫描过期草稿)" data-shape="rectangle">
+  <rect x="859.4850833333333" y="849.7" width="339.091" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1029.0305833333332" y="868.1500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">DraftCleanupScheduler (每天定时扫描过期草稿)</text>
+</g>
+<g class="node" data-id="MySQL" data-label="MySQL 8.0 数据库
+record / record_attachment / agent_session" data-shape="cylinder">
+  <rect x="979.5788333333333" y="1520.6000000000001" width="298.33599999999996" height="53.80000000000001" fill="var(--_node-fill)" stroke="none" />
+  <line x1="979.5788333333333" y1="1520.6000000000001" x2="979.5788333333333" y2="1574.4" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="1277.9148333333333" y1="1520.6000000000001" x2="1277.9148333333333" y2="1574.4" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="1128.7468333333331" cy="1574.4" rx="149.16799999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="1128.7468333333331" cy="1520.6000000000001" rx="149.16799999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1128.7468333333331" y="1547.5000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1128.7468333333331" dy="-3.9000000000000012">MySQL 8.0 数据库</tspan><tspan x="1128.7468333333331" dy="16.900000000000002">record / record_attachment / agent_session</tspan></text>
+</g>
+<g class="node" data-id="DualOSS" data-label="双对象存储
+七牛云 / AWS S3 (预签名防盗链)" data-shape="rectangle">
+  <rect x="711.0408333333332" y="1513.6000000000001" width="240.53799999999995" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="831.3098333333332" y="1540.5000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="831.3098333333332" dy="-3.9000000000000012">双对象存储</tspan><tspan x="831.3098333333332" dy="16.900000000000002">七牛云 / AWS S3 (预签名防盗链)</tspan></text>
+</g>
+<g class="node" data-id="WeChatAPI" data-label="微信开放平台 API
+code2session / 订阅消息模板发送" data-shape="rectangle">
+  <rect x="1305.9148333333333" y="1513.6000000000001" width="253.13499999999996" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1432.4823333333331" y="1540.5000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1432.4823333333331" dy="-3.9000000000000012">微信开放平台 API</tspan><tspan x="1432.4823333333331" dy="16.900000000000002">code2session / 订阅消息模板发送</tspan></text>
+</g>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.7955000000001 722.3499999999999" width="584.7955000000001" height="722.3499999999999" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="_start" data-to="DRAFT" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="POST /api/records (创建灵感草稿)" points="310.399,68 310.399,184.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="DRAFT" data-to="DRAFT" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="PUT /api/records/{id} (持续修改/自动保存)" points="267.1940000000001,196.60000000000002 257.1940000000001,196.60000000000002 257.1940000000001,208.89999999999998 267.1940000000001,208.89999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="DRAFT" data-to="_end" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="DraftCleanupScheduler (7天未转正自动级联清理)" points="295.99733333333336,221.2 295.99733333333336,257.2 179.45450000000002,257.2 179.45450000000002,567.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="DRAFT" data-to="SAVED" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="POST /api/records/{id}/save (保存确认)" points="324.8006666666667,221.2 324.8006666666667,257.2 441.34350000000006,257.2 441.34350000000006,337.5" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SAVED" data-to="SAVED" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="PUT /api/records/{id} (继续修改)" points="398.1385,349.8 388.1385,349.80000000000007 388.1385,362.1000000000001 398.1385,362.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SAVED" data-to="SEALED" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="POST /api/records/{id}/seal (显式封存)" points="441.34350000000006,374.4 441.34350000000006,490.70000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SEALED" data-to="UNLOCKED" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="RecordUnlockScheduler (到期自动解锁)" points="441.34350000000006,527.6 441.34350000000006,643.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UNLOCKED" data-to="UNLOCKED" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="PUT /api/records/{id}/later-reflection (后来其实追记)" points="384.80050000000006,656.1999999999999 374.80050000000006,656.1999999999999 374.80050000000006,668.5 384.80050000000006,668.5" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="_start" data-to="DRAFT" data-label="POST /api/records (创建灵感草稿)">
+  <rect x="216.899" y="111" width="186.34600000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="310.072" y="126.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">POST /api/records (创建灵感草稿)</text>
+</g>
+<g class="edge-label" data-from="DRAFT" data-to="DRAFT" data-label="PUT /api/records/{id} (持续修改/自动保存)">
+  <rect x="36.02000000000001" y="187.60000000000002" width="223.17400000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="147.60700000000003" y="202.75000000000003" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">PUT /api/records/{id} (持续修改/自动保存)</text>
+</g>
+<g class="edge-label" data-from="DRAFT" data-to="_end" data-label="DraftCleanupScheduler (7天未转正自动级联清理)">
+  <rect x="48.454500000000024" y="264.2" width="261.784" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="179.34650000000002" y="279.34999999999997" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">DraftCleanupScheduler (7天未转正自动级联清理)</text>
+</g>
+<g class="edge-label" data-from="DRAFT" data-to="SAVED" data-label="POST /api/records/{id}/save (保存确认)">
+  <rect x="337.84350000000006" y="264.2" width="206.54200000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="441.1145000000001" y="279.34999999999997" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">POST /api/records/{id}/save (保存确认)</text>
+</g>
+<g class="edge-label" data-from="SAVED" data-to="SAVED" data-label="PUT /api/records/{id} (继续修改)">
+  <rect x="217.45450000000002" y="340.8" width="172.68400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="303.79650000000004" y="355.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">PUT /api/records/{id} (继续修改)</text>
+</g>
+<g class="edge-label" data-from="SAVED" data-to="SEALED" data-label="POST /api/records/{id}/seal (显式封存)">
+  <rect x="339.84350000000006" y="417.40000000000003" width="202.978" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="441.3325000000001" y="432.55" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">POST /api/records/{id}/seal (显式封存)</text>
+</g>
+<g class="edge-label" data-from="SEALED" data-to="UNLOCKED" data-label="RecordUnlockScheduler (到期自动解锁)">
+  <rect x="333.34350000000006" y="570.6" width="215.452" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="441.06950000000006" y="585.75" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">RecordUnlockScheduler (到期自动解锁)</text>
+</g>
+<g class="edge-label" data-from="UNLOCKED" data-to="UNLOCKED" data-label="PUT /api/records/{id}/later-reflection (后来其实追记)">
+  <rect x="109.0765000000001" y="647.1999999999999" width="267.72399999999993" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="242.93850000000006" y="662.3499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">PUT /api/records/{id}/later-reflection (后来其实追记)</text>
+</g>
+<g class="node" data-id="_start" data-label="" data-shape="state-start">
+  <circle cx="310.399" cy="54" r="12" fill="var(--_text)" stroke="none" />
+</g>
+<g class="node" data-id="DRAFT" data-label="DRAFT" data-shape="rounded">
+  <rect x="267.1940000000001" y="184.3" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="310.39900000000006" y="202.75" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">DRAFT</text>
+</g>
+<g class="node" data-id="_end" data-label="" data-shape="state-end">
+  <circle cx="179.45450000000002" cy="581.9" r="12" fill="none" stroke="var(--_text)" stroke-width="1.5" />
+  <circle cx="179.45450000000002" cy="581.9" r="8" fill="var(--_text)" stroke="none" />
+</g>
+<g class="node" data-id="SAVED" data-label="SAVED" data-shape="rounded">
+  <rect x="398.1385" y="337.5" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="441.3435" y="355.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">SAVED</text>
+</g>
+<g class="node" data-id="SEALED" data-label="SEALED" data-shape="rounded">
+  <rect x="393.6925" y="490.70000000000005" width="95.30199999999999" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="441.3435" y="509.15000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">SEALED</text>
+</g>
+<g class="node" data-id="UNLOCKED" data-label="UNLOCKED" data-shape="rounded">
+  <rect x="384.80050000000006" y="643.9" width="113.086" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="441.34350000000006" y="662.35" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">UNLOCKED</text>
+</g>
+</svg>

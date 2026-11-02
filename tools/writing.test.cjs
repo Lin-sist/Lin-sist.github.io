@@ -5,6 +5,33 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { filename, timestamp, newDraft, publish } = require('./writing.cjs');
+const { pushCommittedSource } = require('./shipping.cjs');
+test('empty push is rejected after refreshing the remote; uncommitted posts are never pushed', () => {
+  const calls = [];
+  const git = (...args) => { calls.push(args); return ''; };
+  assert.throws(() => pushCommittedSource(git, () => {}), /没有新的 Git 提交/);
+  assert.deepEqual(calls.map(args => args[0]), ['fetch', 'log']);
+});
+test('push sends existing commits without staging files and reports deployment as pending', () => {
+  const calls = [], messages = [];
+  const git = (...args) => {
+    calls.push(args);
+    return args[0] === 'log' ? 'abc123 publish one article' : args[0] === 'status' ? '?? source/_posts/other.md' : '';
+  };
+  pushCommittedSource(git, message => messages.push(message));
+  assert.deepEqual(calls.map(args => args[0]), ['fetch', 'log', 'status', 'push']);
+  assert(messages.join('\n').includes('未提交'));
+  assert(messages.at(-1).includes('云端构建和部署成功后'));
+});
+test('push failures do not produce a success message', () => {
+  const messages = [];
+  const git = (...args) => {
+    if (args[0] === 'push') throw new Error('network failed');
+    return args[0] === 'log' ? 'abc123 publish one article' : '';
+  };
+  assert.throws(() => pushCommittedSource(git, message => messages.push(message)), /network failed/);
+  assert(!messages.some(message => message.includes('已推送')));
+});
 test('filenames cannot escape the article directory or collide with Windows devices', () => {
   for (const title of ['../secret', 'x/y', '..', 'NUL', 'con.md', 'hello.', 'a:b', '']) assert.throws(() => filename(title));
   assert.equal(filename('一次 RAG 排查'), '一次 RAG 排查.md');

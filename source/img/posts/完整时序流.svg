@@ -1,0 +1,311 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1975.981 1564.45" width="1975.981" height="1564.45" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="seq-arrow" markerWidth="8" markerHeight="5" refX="8" refY="2.5" orient="auto-start-reverse">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" />
+  </marker>
+  <marker id="seq-arrow-open" markerWidth="8" markerHeight="5" refX="8" refY="2.5" orient="auto-start-reverse">
+    <polyline points="0 0, 8 2.5, 0 5" fill="none" stroke="var(--_arrow)" stroke-width="1" />
+  </marker>
+</defs>
+<line class="lifeline" data-actor="User" x1="98.8415" y1="92.45" x2="98.8415" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Editor" x1="371.9935" y1="70" x2="371.9935" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="API" x1="562.5795" y1="70" x2="562.5795" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Svc" x1="745.4565" y1="70" x2="745.4565" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="DB" x1="1245.5165000000002" y1="70" x2="1245.5165000000002" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Cron" x1="1474.7060000000001" y1="70" x2="1474.7060000000001" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Wx" x1="1682.036" y1="70" x2="1682.036" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Detail" x1="1867.136" y1="70" x2="1867.136" y2="1534.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<g class="block" data-type="rect" data-label="rgb(240, 248, 255)">
+  <rect x="30" y="100.44999999999999" width="1323.631" height="450.00000000000006" rx="0" ry="0" fill="rgb(240, 248, 255)" stroke="none" stroke-width="1" opacity="0.3" />
+</g>
+<g class="block" data-type="rect" data-label="rgb(255, 250, 240)">
+  <rect x="30" y="573.45" width="1323.631" height="250" rx="0" ry="0" fill="rgb(255, 250, 240)" stroke="none" stroke-width="1" opacity="0.3" />
+</g>
+<g class="block" data-type="alt" data-label="发现到期记录">
+  <rect x="661.4245" y="981.45" width="1106.8665" height="140" rx="0" ry="0" fill="none" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="661.4245" y="981.45" width="136" height="20" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="669.4245" y="991.45" font-size="11" font-weight="600" fill="var(--_text-sec)" dy="3.8499999999999996">alt [发现到期记录]</text>
+</g>
+<g class="block" data-type="loop" data-label="每 1 分钟调度一次">
+  <rect x="661.4245" y="873.45" width="1106.8665" height="248" rx="0" ry="0" fill="none" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="661.4245" y="873.45" width="170" height="20" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="669.4245" y="883.45" font-size="11" font-weight="600" fill="var(--_text-sec)" dy="3.8499999999999996">loop [每 1 分钟调度一次]</text>
+</g>
+<g class="block" data-type="rect" data-label="rgb(245, 255, 245)">
+  <rect x="661.4245" y="873.45" width="1106.8665" height="248" rx="0" ry="0" fill="rgb(245, 255, 245)" stroke="none" stroke-width="1" opacity="0.3" />
+</g>
+<g class="block" data-type="rect" data-label="rgb(255, 240, 245)">
+  <rect x="30" y="1144.45" width="1915.981" height="370" rx="0" ry="0" fill="rgb(255, 240, 245)" stroke="none" stroke-width="1" opacity="0.3" />
+</g>
+<g class="message" data-from="User" data-to="Editor" data-label="输入第一句话或上传一张照片" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="1">
+  <line x1="98.8415" y1="140.45" x2="371.9935" y2="140.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="146.4175" y="122.29999999999998" width="178" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="235.4175" y="130.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">输入第一句话或上传一张照片</text>
+  <circle class="sequence-number" cx="98.8415" cy="140.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="98.8415" y="140.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">1</text>
+</g>
+<g class="message" data-from="Editor" data-to="API" data-label="POST /api/records (创建草稿)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="2">
+  <line x1="371.9935" y1="180.45" x2="562.5795" y2="180.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="383.28650000000005" y="162.29999999999998" width="168" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="467.28650000000005" y="170.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">POST /api/records (创建草稿)</text>
+  <circle class="sequence-number" cx="371.9935" cy="180.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="371.9935" y="180.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">2</text>
+</g>
+<g class="message" data-from="API" data-to="Svc" data-label="create(userId, request)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="3">
+  <line x1="562.5795" y1="220.45" x2="745.4565" y2="220.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="590.018" y="202.29999999999998" width="128" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="654.018" y="210.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">create(userId, request)</text>
+  <circle class="sequence-number" cx="562.5795" cy="220.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="562.5795" y="220.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">3</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="INSERT record (status='DRAFT', draft_expires_at=now+7d)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="4">
+  <line x1="745.4565" y1="260.45" x2="1245.5165000000002" y2="260.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="836.9865000000001" y="242.29999999999998" width="317" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="250.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">INSERT record (status=&#39;DRAFT&#39;, draft_expires_at=now+7d)</text>
+  <circle class="sequence-number" cx="745.4565" cy="260.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="260.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">4</text>
+</g>
+<g class="message" data-from="DB" data-to="Editor" data-label="返回 recordId (草稿就绪)" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="5">
+  <line x1="1245.5165000000002" y1="300.45" x2="371.9935" y2="300.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="737.2550000000001" y="282.3" width="143" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="808.7550000000001" y="290.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">返回 recordId (草稿就绪)</text>
+  <circle class="sequence-number" cx="1245.5165000000002" cy="300.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1245.5165000000002" y="300.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">5</text>
+</g>
+<g class="message" data-from="User" data-to="Editor" data-label="点击“保存”完成当下记录" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="6">
+  <line x1="98.8415" y1="340.45" x2="371.9935" y2="340.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="159.4175" y="322.3" width="152" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="235.4175" y="330.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">点击“保存”完成当下记录</text>
+  <circle class="sequence-number" cx="98.8415" cy="340.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="98.8415" y="340.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">6</text>
+</g>
+<g class="message" data-from="Editor" data-to="API" data-label="POST /api/records/{id}/save" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="7">
+  <line x1="371.9935" y1="380.45" x2="562.5795" y2="380.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="389.78650000000005" y="362.3" width="155" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="467.28650000000005" y="370.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">POST /api/records/{id}/save</text>
+  <circle class="sequence-number" cx="371.9935" cy="380.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="371.9935" y="380.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">7</text>
+</g>
+<g class="message" data-from="Svc" data-to="Svc" data-label="RecordSaveEligibility.isEligible (校验内容非空)" data-line-style="solid" data-arrow-head="filled" data-self="true" data-step="8">
+  <polyline points="745.4565,420.45 775.4565,420.45 775.4565,440.45 745.4565,440.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="780.4565" y="422.3" width="257" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="783.4565" y="430.45" font-size="11" text-anchor="start" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">RecordSaveEligibility.isEligible (校验内容非空)</text>
+  <circle class="sequence-number" cx="745.4565" cy="420.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="420.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">8</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="UPDATE record SET status='SAVED', draft_expires_at=NULL" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="9">
+  <line x1="745.4565" y1="490.45" x2="1245.5165000000002" y2="490.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="829.4865000000001" y="472.3" width="332" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="480.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">UPDATE record SET status=&#39;SAVED&#39;, draft_expires_at=NULL</text>
+  <circle class="sequence-number" cx="745.4565" cy="490.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="490.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">9</text>
+</g>
+<g class="message" data-from="DB" data-to="Editor" data-label="保存成功 (状态转为 SAVED)" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="10">
+  <line x1="1245.5165000000002" y1="530.45" x2="371.9935" y2="530.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="727.2550000000001" y="512.3000000000001" width="163" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="808.7550000000001" y="520.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">保存成功 (状态转为 SAVED)</text>
+  <circle class="sequence-number" cx="1245.5165000000002" cy="530.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1245.5165000000002" y="530.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">10</text>
+</g>
+<g class="message" data-from="User" data-to="Editor" data-label="选定未来解锁时间 (例如 1 年后)，点击“封存”" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="11">
+  <line x1="98.8415" y1="613.45" x2="371.9935" y2="613.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="105.91749999999999" y="595.3000000000001" width="259" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="235.4175" y="603.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">选定未来解锁时间 (例如 1 年后)，点击“封存”</text>
+  <circle class="sequence-number" cx="98.8415" cy="613.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="98.8415" y="613.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">11</text>
+</g>
+<g class="message" data-from="Editor" data-to="API" data-label="POST /api/records/{id}/seal" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="12">
+  <line x1="371.9935" y1="653.45" x2="562.5795" y2="653.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="391.78650000000005" y="635.3000000000001" width="151" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="467.28650000000005" y="643.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">POST /api/records/{id}/seal</text>
+  <circle class="sequence-number" cx="371.9935" cy="653.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="371.9935" y="653.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">12</text>
+</g>
+<g class="message" data-from="Svc" data-to="Svc" data-label="校验：status==SAVED &amp;&amp; unlockAt &gt; now" data-line-style="solid" data-arrow-head="filled" data-self="true" data-step="13">
+  <polyline points="745.4565,693.45 775.4565,693.45 775.4565,713.45 745.4565,713.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="780.4565" y="695.3000000000001" width="225" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="783.4565" y="703.45" font-size="11" text-anchor="start" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">校验：status==SAVED &amp;&amp; unlockAt &gt; now</text>
+  <circle class="sequence-number" cx="745.4565" cy="693.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="693.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">13</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="UPDATE record SET status='SEALED', sealed_at=now WHERE id=? AND status='SAVED'" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="14">
+  <line x1="745.4565" y1="763.45" x2="1245.5165000000002" y2="763.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="759.4865000000001" y="745.3000000000001" width="472" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="753.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">UPDATE record SET status=&#39;SEALED&#39;, sealed_at=now WHERE id=? AND status=&#39;SAVED&#39;</text>
+  <circle class="sequence-number" cx="745.4565" cy="763.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="763.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">14</text>
+</g>
+<g class="message" data-from="DB" data-to="Editor" data-label="封存成功" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="15">
+  <line x1="1245.5165000000002" y1="803.45" x2="371.9935" y2="803.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="778.2550000000001" y="785.3000000000001" width="61" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="808.7550000000001" y="793.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">封存成功</text>
+  <circle class="sequence-number" cx="1245.5165000000002" cy="803.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1245.5165000000002" y="803.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">15</text>
+</g>
+<g class="message" data-from="Cron" data-to="Svc" data-label="runUnlockJob()" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="16">
+  <line x1="1474.7060000000001" y1="913.45" x2="745.4565" y2="913.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="1064.5812500000002" y="895.3000000000001" width="91" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="1110.0812500000002" y="903.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">runUnlockJob()</text>
+  <circle class="sequence-number" cx="1474.7060000000001" cy="913.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1474.7060000000001" y="913.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">16</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="SELECT ... WHERE status='SEALED' AND unlock_at &lt;= now() LIMIT 100" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="17">
+  <line x1="745.4565" y1="953.45" x2="1245.5165000000002" y2="953.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="808.4865000000001" y="935.3000000000001" width="374" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="943.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">SELECT ... WHERE status=&#39;SEALED&#39; AND unlock_at &lt;= now() LIMIT 100</text>
+  <circle class="sequence-number" cx="745.4565" cy="953.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="953.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">17</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="UPDATE record SET status='UNLOCKED', unlocked_at=now WHERE id=? AND status='SEALED'" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="18">
+  <line x1="745.4565" y1="1021.45" x2="1245.5165000000002" y2="1021.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="741.4865000000001" y="1003.3000000000001" width="508" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="1011.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">UPDATE record SET status=&#39;UNLOCKED&#39;, unlocked_at=now WHERE id=? AND status=&#39;SEALED&#39;</text>
+  <circle class="sequence-number" cx="745.4565" cy="1021.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="1021.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">18</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="INSERT INTO unlock_notice_log (SYSTEM_UNLOCK)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="19">
+  <line x1="745.4565" y1="1061.45" x2="1245.5165000000002" y2="1061.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="851.9865000000001" y="1043.3" width="287" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="1051.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">INSERT INTO unlock_notice_log (SYSTEM_UNLOCK)</text>
+  <circle class="sequence-number" cx="745.4565" cy="1061.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="1061.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">19</text>
+</g>
+<g class="message" data-from="Svc" data-to="Wx" data-label="发送微信模版订阅消息 (提醒时光胶囊已到期)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="20">
+  <line x1="745.4565" y1="1101.45" x2="1682.036" y2="1101.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="1081.2462500000001" y="1083.3" width="265" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="1213.7462500000001" y="1091.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">发送微信模版订阅消息 (提醒时光胶囊已到期)</text>
+  <circle class="sequence-number" cx="745.4565" cy="1101.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="1101.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">20</text>
+</g>
+<g class="message" data-from="User" data-to="Detail" data-label="点击通知或时光轴进入详情页 (GET /api/records/{id})" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="21">
+  <line x1="98.8415" y1="1184.45" x2="1867.136" y2="1184.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="834.98875" y="1166.3" width="296" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="982.98875" y="1174.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">点击通知或时光轴进入详情页 (GET /api/records/{id})</text>
+  <circle class="sequence-number" cx="98.8415" cy="1184.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="98.8415" y="1184.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">21</text>
+</g>
+<g class="message" data-from="DB" data-to="Detail" data-label="返回完整正文、当时笃信 (beliefThen)、原声附件" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="22">
+  <line x1="1245.5165000000002" y1="1224.45" x2="1867.136" y2="1224.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="1415.82625" y="1206.3" width="281" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="1556.32625" y="1214.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">返回完整正文、当时笃信 (beliefThen)、原声附件</text>
+  <circle class="sequence-number" cx="1245.5165000000002" cy="1224.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1245.5165000000002" y="1224.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">22</text>
+</g>
+<g class="message" data-from="Detail" data-to="User" data-label="展开当年现场对比卡片" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="23">
+  <line x1="1867.136" y1="1264.45" x2="98.8415" y2="1264.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="913.48875" y="1246.3" width="139" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="982.98875" y="1254.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">展开当年现场对比卡片</text>
+  <circle class="sequence-number" cx="1867.136" cy="1264.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1867.136" y="1264.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">23</text>
+</g>
+<g class="message" data-from="User" data-to="Detail" data-label="输入“后来其实发生的事”，点击提交" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="24">
+  <line x1="98.8415" y1="1304.45" x2="1867.136" y2="1304.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="874.48875" y="1286.3" width="217" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="982.98875" y="1294.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">输入“后来其实发生的事”，点击提交</text>
+  <circle class="sequence-number" cx="98.8415" cy="1304.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="98.8415" y="1304.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">24</text>
+</g>
+<g class="message" data-from="Detail" data-to="API" data-label="PUT /api/records/{id}/later-reflection" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="25">
+  <line x1="1867.136" y1="1344.45" x2="562.5795" y2="1344.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="1116.8577500000001" y="1326.3" width="196" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="1214.8577500000001" y="1334.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">PUT /api/records/{id}/later-reflection</text>
+  <circle class="sequence-number" cx="1867.136" cy="1344.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1867.136" y="1344.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">25</text>
+</g>
+<g class="message" data-from="Svc" data-to="Svc" data-label="校验 status==UNLOCKED &amp;&amp; reality_later_submit_count &lt; 2" data-line-style="solid" data-arrow-head="filled" data-self="true" data-step="26">
+  <polyline points="745.4565,1384.45 775.4565,1384.45 775.4565,1404.45 745.4565,1404.45" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="780.4565" y="1386.3" width="315" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="783.4565" y="1394.45" font-size="11" text-anchor="start" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">校验 status==UNLOCKED &amp;&amp; reality_later_submit_count &lt; 2</text>
+  <circle class="sequence-number" cx="745.4565" cy="1384.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="1384.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">26</text>
+</g>
+<g class="message" data-from="Svc" data-to="DB" data-label="UPDATE record SET reality_later=?, submit_count = submit_count + 1" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="27">
+  <line x1="745.4565" y1="1454.45" x2="1245.5165000000002" y2="1454.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="814.9865000000001" y="1436.3" width="361" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="995.4865000000001" y="1444.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">UPDATE record SET reality_later=?, submit_count = submit_count + 1</text>
+  <circle class="sequence-number" cx="745.4565" cy="1454.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="745.4565" y="1454.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">27</text>
+</g>
+<g class="message" data-from="DB" data-to="User" data-label="对比闭环达成（岁月见证完成）" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="28">
+  <line x1="1245.5165000000002" y1="1494.45" x2="98.8415" y2="1494.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="576.6790000000001" y="1476.3" width="191" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="672.1790000000001" y="1484.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">对比闭环达成（岁月见证完成）</text>
+  <circle class="sequence-number" cx="1245.5165000000002" cy="1494.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="1245.5165000000002" y="1494.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">28</text>
+</g>
+<g class="note" data-position="over" data-actors="User,DB">
+  <polygon points="584.2130000000001,538.45 754.1450000000001,538.45 760.1450000000001,544.45 760.1450000000001,561.45 584.2130000000001,561.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="754.1450000000001,538.45 760.1450000000001,544.45 754.1450000000001,544.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="672.1790000000001" y="549.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">阶段 2：设定未来时间并封存</text>
+</g>
+<g class="note" data-position="over" data-actors="Editor">
+  <polygon points="240.36849999999998,811.45 497.6185,811.45 503.6185,817.45 503.6185,834.45 240.36849999999998,834.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="497.6185,811.45 503.6185,817.45 497.6185,817.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="371.9935" y="822.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">页面切换为封存倒计时；正文脱敏，冻结修改</text>
+</g>
+<g class="note" data-position="over" data-actors="Cron,Wx">
+  <polygon points="1496.345,838.45 1654.397,838.45 1660.397,844.45 1660.397,861.45 1496.345,861.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="1654.397,838.45 1660.397,844.45 1654.397,844.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1578.371" y="849.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">阶段 3：后台定时解锁引擎</text>
+</g>
+<g class="note" data-position="over" data-actors="User,Detail">
+  <polygon points="877.2027499999999,1109.45 1082.77475,1109.45 1088.77475,1115.45 1088.77475,1132.45 877.2027499999999,1132.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="1082.77475,1109.45 1088.77475,1115.45 1082.77475,1115.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="982.98875" y="1120.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">阶段 4：到期回看与“后来其实”追记</text>
+</g>
+<g class="actor" data-id="User" data-label="用户 (小程序)" data-type="actor">
+  <g transform="translate(80.8415,32) scale(1.5)">
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M5.62842 18.3563C7.08963 17.0398 9.39997 16 12 16C14.6 16 16.9104 17.0398 18.3716 18.3563" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+  </g>
+  <text x="98.8415" y="84" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">用户 (小程序)</text>
+</g>
+<g class="actor" data-id="Editor" data-label="记录编辑页" data-type="participant">
+  <rect x="317.9685" y="30" width="108.05" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="371.9935" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">记录编辑页</text>
+</g>
+<g class="actor" data-id="API" data-label="RecordController" data-type="participant">
+  <rect x="493.7345" y="30" width="137.69" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="562.5795" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">RecordController</text>
+</g>
+<g class="actor" data-id="Svc" data-label="RecordServiceImpl" data-type="participant">
+  <rect x="671.4245" y="30" width="148.06400000000002" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="745.4565" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">RecordServiceImpl</text>
+</g>
+<g class="actor" data-id="DB" data-label="MySQL (record/attachment)" data-type="participant">
+  <rect x="1147.4020000000003" y="30" width="196.22899999999996" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1245.5165000000002" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">MySQL (record/attachment)</text>
+</g>
+<g class="actor" data-id="Cron" data-label="RecordUnlockScheduler" data-type="participant">
+  <rect x="1383.631" y="30" width="182.14999999999995" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1474.7060000000001" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">RecordUnlockScheduler</text>
+</g>
+<g class="actor" data-id="Wx" data-label="微信订阅消息服务" data-type="participant">
+  <rect x="1605.781" y="30" width="152.51" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1682.036" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">微信订阅消息服务</text>
+</g>
+<g class="actor" data-id="Detail" data-label="记录详情回看页" data-type="participant">
+  <rect x="1798.291" y="30" width="137.69" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1867.136" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">记录详情回看页</text>
+</g>
+</svg>
