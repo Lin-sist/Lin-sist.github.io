@@ -47,7 +47,7 @@ request.enableCache() != null? request.enableCache(): true;
 
 SpringMVC会通过HTTP消息转换器调用Jackson，把JSON数据转换成可以在Java代码内部流转的Java DTO对象。在RAG系统中，就是`AskRequest` 对象。
 
-![[Pasted image 20261117152050.png]]
+![HTTP 请求](/img/posts/HTTP%E8%AF%B7%E6%B1%82.png)
 
 ### 补充：什么是DTO？
 

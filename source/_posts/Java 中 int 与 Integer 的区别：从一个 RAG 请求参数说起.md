@@ -26,7 +26,7 @@ Integer b = null;
 总的来说，基本数据类型如int属于基本类型，而包装类型如Integer属于引用类型。
 ### 什么是引用类型？
 
-[[Java类型.png]]
+![Java 类型](/img/posts/Java%E7%B1%BB%E5%9E%8B.png)
 
 定义：引用类型是Java类型系统中的一大类型。引用类型的变量可以保存只想对象的引用，也可以保存null。
 
